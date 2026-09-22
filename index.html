@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Matriculator · Propuesta técnica RA1</title>
+  <meta name="description" content="Propuesta técnica fundamentada de una aplicación de IA para detectar matrículas en imágenes de prueba. Trabajo grupal RA1 — Programación de Inteligencia Artificial.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🚗</text></svg>">
+</head>
+<body>
+  <!-- Barra de progreso de lectura -->
+  <div class="progress" id="progress"></div>
+
+  <!-- ============ NAVEGACIÓN ============ -->
+  <header class="nav" id="nav">
+    <a href="#inicio" class="nav__brand"><span class="plate-mini">RA1</span> Matriculator</a>
+    <nav class="nav__links" id="navLinks">
+      <a href="#paso1">1 · App</a>
+      <a href="#paso2">2 · Lenguajes</a>
+      <a href="#paso3">3 · Programa</a>
+      <a href="#paso4">4 · Formatos</a>
+      <a href="#paso5">5 · Preguntas</a>
+      <a href="#equipo">Equipo</a>
+    </nav>
+    <div class="nav__actions">
+      <button class="icon-btn" id="themeToggle" aria-label="Cambiar tema">🌙</button>
+      <button class="icon-btn nav__burger" id="burger" aria-label="Abrir menú">☰</button>
+    </div>
+  </header>
+
+  <!-- ============ HERO ============ -->
+  <section class="hero" id="inicio">
+    <div class="hero__text reveal">
+      <p class="eyebrow">Trabajo grupal · Programación de IA · RA1</p>
+      <h1>Matriculator<span class="accent">.</span></h1>
+      <p class="lead">Propuesta técnica fundamentada para una aplicación que <strong>detecta matrículas en imágenes de prueba</strong> de un parking. No se implementa ni se entrena ningún modelo: analizamos <em>qué lenguajes</em>, <em>qué estructura</em> y <em>qué formatos</em> usaríamos, y por qué.</p>
+      <div class="chips">
+        <span class="chip">🎓 Curso IA y Big Data</span>
+        <span class="chip">👥 Julen Altuna · <span class="todo-inline">Compañero/a</span></span>
+        <span class="chip">🅱️ Opción B</span>
+      </div>
+      <div class="hero__cta">
+        <a href="#paso1" class="btn btn--primary">Empezar recorrido ↓</a>
+        <a href="https://github.com/altu44/proyecto-ra1" class="btn btn--ghost" target="_blank" rel="noopener">Ver repositorio ↗</a>
+      </div>
+    </div>
+
+    <!-- Animación: cámara escaneando una matrícula ficticia -->
+    <div class="hero__visual reveal" aria-hidden="true">
+      <div class="scanner">
+        <div class="car">
+          <div class="car__body">
+            <div class="car__window"></div>
+            <div class="plate" id="heroPlate">
+              <span class="plate__eu">E</span>
+              <span class="plate__num" id="plateText">0000 XXX</span>
+            </div>
+            <div class="car__light car__light--l"></div>
+            <div class="car__light car__light--r"></div>
+          </div>
+        </div>
+        <div class="bbox" id="bbox"><span class="bbox__label" id="bboxLabel">matrícula · 0.00</span></div>
+        <div class="scanline"></div>
+      </div>
+      <div class="terminal">
+        <div class="terminal__bar"><i></i><i></i><i></i><span>inferencia.log</span></div>
+        <pre id="terminal"></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- Mapa de pasos -->
+  <section class="steps-map reveal">
+    <a href="#paso1" class="step-pill"><b>1</b><span>Aplicación</span></a>
+    <a href="#paso2" class="step-pill"><b>2</b><span>Lenguajes</span></a>
+    <a href="#paso3" class="step-pill"><b>3</b><span>Programa</span></a>
+    <a href="#paso4" class="step-pill"><b>4</b><span>Formatos</span></a>
+    <a href="#paso5" class="step-pill"><b>5</b><span>Preguntas</span></a>
+  </section>
+
+  <main>
+    <!-- ================================================= -->
+    <!-- PASO 1                                            -->
+    <!-- ================================================= -->
+    <section class="section" id="paso1">
+      <div class="section__head reveal">
+        <span class="section__num">01</span>
+        <div>
+          <h2>Define una aplicación hipotética</h2>
+          <p class="section__sub">Problema, entradas, datos, procesamiento, salida, límites y la decisión que sigue siendo humana. <span class="ce">CE a · b</span></p>
+        </div>
+      </div>
+
+      <div class="problem reveal">
+        <h3>🎯 El problema</h3>
+        <p>Una empresa de aparcamientos quiere <strong>evaluar</strong> si una aplicación de visión por computador podría leer matrículas en imágenes de su banco de pruebas para agilizar el registro de entradas y salidas. <span class="todo">✏️ Completad con vuestras palabras: para quién es, qué necesidad resuelve y qué NO pretende hacer.</span></p>
+      </div>
+
+      <p class="hint reveal">👆 Pulsa cada bloque del flujo para ver el detalle.</p>
+      <div class="ipo reveal" id="ipo">
+        <button class="ipo__card is-active" data-ipo="entrada"><span class="ipo__icon">📷</span><b>Entradas</b><small>Imagen + config. cámara</small></button>
+        <span class="ipo__arrow">➜</span>
+        <button class="ipo__card" data-ipo="datos"><span class="ipo__icon">🗂️</span><b>Datos</b><small>Imágenes anotadas</small></button>
+        <span class="ipo__arrow">➜</span>
+        <button class="ipo__card" data-ipo="proceso"><span class="ipo__icon">⚙️</span><b>Procesamiento</b><small>Validar · preparar · modelo</small></button>
+        <span class="ipo__arrow">➜</span>
+        <button class="ipo__card" data-ipo="salida"><span class="ipo__icon">🧾</span><b>Salida</b><small>Registro o aviso</small></button>
+        <span class="ipo__arrow">➜</span>
+        <button class="ipo__card ipo__card--human" data-ipo="humano"><span class="ipo__icon">🧑‍⚖️</span><b>Decisión humana</b><small>Lo que no se automatiza</small></button>
+      </div>
+      <div class="ipo__detail reveal" id="ipoDetail"></div>
+
+      <div class="grid-2 reveal">
+        <div class="card card--warn">
+          <h3>⚠️ Riesgos y límites</h3>
+          <ul class="check">
+            <li><b>Privacidad:</b> una matrícula es un dato personal indirecto. Solo imágenes ficticias o de banco de pruebas, sin personas identificables.</li>
+            <li><b>Retención mínima:</b> se guarda el resultado, no la imagen; borrado tras un plazo corto.</li>
+            <li><b>Errores de lectura:</b> confusiones 0/O, 8/B, suciedad, noche, ángulo… → umbral de confianza + revisión.</li>
+            <li><span class="todo">✏️ Añadid algún límite más (p. ej. matrículas extranjeras, sesgo del dataset).</span></li>
+          </ul>
+        </div>
+        <div class="card card--ok">
+          <h3>🧑‍⚖️ Qué sigue siendo humano</h3>
+          <ul class="check">
+            <li>Cualquier <b>cobro, sanción o denegación de acceso</b> basada en la lectura.</li>
+            <li>Validar lecturas con <b>confianza baja</b> o imágenes no válidas.</li>
+            <li>Decidir qué datos se guardan y durante cuánto tiempo.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================================================= -->
+    <!-- PASO 2                                            -->
+    <!-- ================================================= -->
+    <section class="section" id="paso2">
+      <div class="section__head reveal">
+        <span class="section__num">02</span>
+        <div>
+          <h2>Compara lenguajes y toma una decisión</h2>
+          <p class="section__sub">Python · JavaScript/Node.js · R · C++ · PHP · Java. Diferenciamos el lenguaje para <b>construir la aplicación</b> del lenguaje para <b>la parte de IA</b>. <span class="ce">CE a · b · c · d</span></p>
+        </div>
+      </div>
+
+      <!-- 2.1 Google Trends -->
+      <h3 class="sub reveal">2.1 · Interés relativo en Google Trends</h3>
+      <div class="card chart-card reveal">
+        <div class="chart-card__top">
+          <div class="tabs" id="trendsTabs" role="tablist">
+            <button class="tab is-active" data-source="web">🔎 Búsqueda web</button>
+            <button class="tab" data-source="youtube">▶️ YouTube</button>
+          </div>
+          <div class="chart-card__tools">
+            <label class="switch"><input type="checkbox" id="smoothToggle" checked><span></span> Media anual</label>
+            <label class="btn btn--small btn--ghost file-btn">📂 Cargar CSV<input type="file" id="csvInput" accept=".csv" hidden></label>
+          </div>
+        </div>
+        <div class="banner" id="trendsBanner" hidden></div>
+        <div class="chart-wrap"><canvas id="trendsChart" aria-label="Gráfico de Google Trends"></canvas></div>
+        <div class="legend-toggles" id="trendsLegend"></div>
+        <p class="meta">Fuente: Google Trends · Todo el mundo · 2004–presente · Datos leídos de <code id="trendsFile">data/trends_web.csv</code> (no es una captura).</p>
+      </div>
+      <div class="card reveal">
+        <h3>📈 Interpretación y conclusiones</h3>
+        <p class="todo">✏️ Escribid aquí qué muestra el gráfico: tendencia de cada lenguaje, cruces, diferencias entre búsqueda web y YouTube, y qué os sugiere para Matriculator. Recordad que Trends mide <em>interés relativo de búsqueda</em>, no uso real.</p>
+      </div>
+
+      <!-- 2.2 Características -->
+      <h3 class="sub reveal">2.2 · Características de cada lenguaje</h3>
+      <p class="hint reveal">👆 Pulsa una tarjeta para darle la vuelta.</p>
+      <div class="lang-grid reveal" id="langGrid"></div>
+
+      <!-- 2.3 Comparativa por criterios (heatmap) -->
+      <h3 class="sub reveal">2.3 · Comparativa por criterios</h3>
+      <div class="card reveal table-card">
+        <div class="table-scroll"><table class="heat" id="heatTable"></table></div>
+        <p class="meta">Escala 1 (poco adecuado) – 5 (muy adecuado) para <b>este caso</b>. <span class="todo-inline">✏️ Borrador: revisad y justificad cada puntuación.</span></p>
+      </div>
+
+      <!-- 2.4 Matriz de decisión -->
+      <h3 class="sub reveal">2.4 · Matriz de decisión ponderada</h3>
+      <div class="card reveal matrix">
+        <div class="matrix__presets">
+          <span>Perfil de pesos:</span>
+          <button class="btn btn--small preset is-active" data-preset="ia">🤖 Parte de IA</button>
+          <button class="btn btn--small preset" data-preset="app">🖥️ Aplicación</button>
+          <button class="btn btn--small preset" data-preset="equal">⚖️ Iguales</button>
+        </div>
+        <div class="matrix__body">
+          <div class="matrix__weights" id="weights"></div>
+          <div class="matrix__result">
+            <div class="weight-total" id="weightTotal">Σ pesos = 100 %</div>
+            <div class="ranking" id="ranking"></div>
+          </div>
+        </div>
+        <p class="meta">Mueve los pesos: la puntuación final = Σ (peso × nota). Cambiar de perfil muestra por qué el mejor lenguaje para la app no tiene por qué ser el mejor para la IA.</p>
+      </div>
+
+      <!-- 2.5 Decisiones -->
+      <h3 class="sub reveal">2.5 · Decisiones</h3>
+      <div class="grid-2 reveal">
+        <div class="decision">
+          <span class="decision__tag">🖥️ Lenguaje principal · Aplicación</span>
+          <div class="decision__lang" style="--c: var(--js)">JavaScript <small>(Node.js + HTML/CSS)</small></div>
+          <p><span class="todo-inline">✏️ Borrador —</span> Mismo lenguaje en navegador y servidor, gran ecosistema web (Express, APIs REST), fácil integración con bases de datos y despliegue sencillo.</p>
+        </div>
+        <div class="decision">
+          <span class="decision__tag">🤖 Lenguaje principal · IA</span>
+          <div class="decision__lang" style="--c: var(--py)">Python</div>
+          <p><span class="todo-inline">✏️ Borrador —</span> Ecosistema de visión y deep learning (OpenCV, PyTorch, YOLO, OCR), modelos preentrenados reutilizables y notebooks para documentar.</p>
+        </div>
+      </div>
+      <div class="card reveal">
+        <h3>🔀 ¿Por qué dos lenguajes distintos?</h3>
+        <p><span class="todo-inline">✏️</span> La interfaz y la lógica web se benefician de JavaScript, mientras que la IA depende de librerías que están en Python. Se conectan mediante una <b>API</b> (el servicio de IA en Python recibe la imagen y devuelve un <b>JSON</b>). Alternativa válida: toda la app en Python (FastAPI/Flask) con un front mínimo en HTML/JS — <span class="todo-inline">decidid y justificad.</span></p>
+      </div>
+      <div class="discard reveal" id="discard"></div>
+    </section>
+
+    <!-- ================================================= -->
+    <!-- PASO 3                                            -->
+    <!-- ================================================= -->
+    <section class="section" id="paso3">
+      <div class="section__head reveal">
+        <span class="section__num">03</span>
+        <div>
+          <h2>Explica las partes del programa</h2>
+          <p class="section__sub">Flujo general, etapas antes y después de integrar el modelo, y pseudocódigo comentado. <span class="ce">CE e</span> <span class="owner">👤 Julen</span></p>
+        </div>
+      </div>
+
+      <h3 class="sub reveal">3.1 · Flujo general</h3>
+      <div class="flow-controls reveal">
+        <button class="btn btn--primary btn--small" id="flowPlay">▶ Reproducir flujo</button>
+        <button class="btn btn--ghost btn--small" id="flowPrev">←</button>
+        <button class="btn btn--ghost btn--small" id="flowNext">→</button>
+        <span class="flow-counter" id="flowCounter">Etapa 1 / 8</span>
+      </div>
+      <ol class="flow reveal" id="flow"></ol>
+      <div class="flow-detail reveal" id="flowDetail"></div>
+
+      <h3 class="sub reveal">3.2 · Etapas y componentes del programa</h3>
+      <div class="tabs tabs--big reveal" id="phaseTabs">
+        <button class="tab is-active" data-phase="antes">🛠️ Antes de integrar el modelo</button>
+        <button class="tab" data-phase="despues">🚀 Después de integrar el modelo</button>
+      </div>
+      <div class="phase reveal" id="phase"></div>
+
+      <h3 class="sub reveal">3.3 · Pseudocódigo <small>(Python · completo en <a href="pseudocodigo.ipynb">pseudocodigo.ipynb</a>)</small></h3>
+      <div class="code reveal">
+        <div class="code__bar">
+          <span>matriculator.py · pseudocódigo</span>
+          <div class="code__legend">
+            <span class="lg lg--in">entrada</span><span class="lg lg--fn">función</span><span class="lg lg--if">condición/error</span><span class="lg lg--out">salida</span>
+          </div>
+          <button class="btn btn--small btn--ghost" id="copyCode">Copiar</button>
+        </div>
+        <pre id="pseudo"></pre>
+      </div>
+    </section>
+
+    <!-- ================================================= -->
+    <!-- PASO 4                                            -->
+    <!-- ================================================= -->
+    <section class="section" id="paso4">
+      <div class="section__head reveal">
+        <span class="section__num">04</span>
+        <div>
+          <h2>Marcado y formatos de datos</h2>
+          <p class="section__sub">HTML · XML · JSON · Markdown · CSV: qué son, para qué sirven y dónde intervienen en Matriculator. <span class="ce">CE f</span> <span class="owner">👤 <span class="todo-inline">Compañero/a</span></span></p>
+        </div>
+      </div>
+
+      <div class="arch reveal" id="arch">
+        <div class="arch__node" data-f="html"><span>🖥️</span>Interfaz web</div>
+        <div class="arch__link" data-f="json">JSON</div>
+        <div class="arch__node" data-f="json"><span>🟨</span>Servidor Node.js</div>
+        <div class="arch__link" data-f="json">JSON</div>
+        <div class="arch__node" data-f="xml"><span>🐍</span>Servicio IA Python</div>
+        <div class="arch__link" data-f="csv">CSV</div>
+        <div class="arch__node" data-f="csv"><span>🗄️</span>Registros / informes</div>
+      </div>
+      <p class="hint reveal">👆 Elige un formato: se ilumina dónde interviene.</p>
+
+      <div class="tabs reveal" id="fmtTabs"></div>
+      <div class="fmt reveal" id="fmt"></div>
+
+      <div class="card reveal">
+        <h3>📓 Notebook <a href="demo_lenguajes.ipynb">demo_lenguajes.ipynb</a></h3>
+        <ul class="check">
+          <li>Librerías principales de Python para leer HTML, CSV y JSON.</li>
+          <li>Celda Markdown con tabla de librerías equivalentes en R.</li>
+          <li>HTML inventado de la interfaz de Matriculator, parseado.</li>
+          <li>JSON inventado con datos de entrada sintéticos, parseado.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ================================================= -->
+    <!-- PASO 5                                            -->
+    <!-- ================================================= -->
+    <section class="section" id="paso5">
+      <div class="section__head reveal">
+        <span class="section__num">05</span>
+        <div>
+          <h2>Preguntas adicionales</h2>
+          <p class="section__sub">Conectan los módulos del curso. Respuesta completa también en el README. <span class="ce">CE c · d</span></p>
+        </div>
+      </div>
+
+      <div class="qa reveal">
+        <details class="qa__item" open>
+          <summary>🧠 ¿La solución es IA débil o se aproxima a IA fuerte?</summary>
+          <div class="gauge">
+            <span>IA débil</span>
+            <div class="gauge__bar"><div class="gauge__fill" id="gaugeFill"></div><div class="gauge__dot" id="gaugeDot"></div></div>
+            <span>IA fuerte</span>
+          </div>
+          <p class="todo">✏️ Justificad: ¿resuelve una única tarea concreta? ¿Entiende lo que ve o reconoce patrones? ¿Puede razonar o generalizar fuera de su tarea?</p>
+        </details>
+        <details class="qa__item">
+          <summary>🧩 ¿Modelo preentrenado o entrenar desde cero?</summary>
+          <div class="versus">
+            <div class="versus__col versus__col--win">
+              <h4>♻️ Preentrenado + ajuste fino</h4>
+              <ul><li>Menos datos y menos tiempo</li><li>Menos coste de cómputo</li><li>Resultados probados</li><li>Ajustable a matrículas españolas</li></ul>
+            </div>
+            <div class="versus__vs">VS</div>
+            <div class="versus__col">
+              <h4>🏗️ Desde cero</h4>
+              <ul><li>Miles de imágenes anotadas</li><li>GPU y semanas de entrenamiento</li><li>Más control total</li><li>Riesgo alto de peor resultado</li></ul>
+            </div>
+          </div>
+          <p class="todo">✏️ Razonad vuestra elección con fuentes.</p>
+        </details>
+        <details class="qa__item">
+          <summary>🚧 Límites de la solución</summary>
+          <p class="todo">✏️ Qué no puede hacer, en qué condiciones falla y por qué la revisión humana es necesaria.</p>
+        </details>
+      </div>
+    </section>
+
+    <!-- ================================================= -->
+    <!-- EQUIPO                                            -->
+    <!-- ================================================= -->
+    <section class="section" id="equipo">
+      <div class="section__head reveal">
+        <span class="section__num">👥</span>
+        <div>
+          <h2>Organización del equipo</h2>
+          <p class="section__sub">Detalle completo, tiempos reales, fuentes y evidencias de IA en el <a href="https://github.com/altu44/proyecto-ra1#readme" target="_blank" rel="noopener">README</a>.</p>
+        </div>
+      </div>
+      <div class="team reveal">
+        <div class="member">
+          <div class="avatar">J</div>
+          <h3>Julen Altuna</h3>
+          <p>Pasos 1, 2, 5 (compartidos) · <b>Paso 3</b></p>
+          <div class="bar"><div style="--w: 50%"></div></div>
+          <small>Rama <code>julen</code> · ≈ 9 h previstas</small>
+        </div>
+        <div class="member">
+          <div class="avatar avatar--2">?</div>
+          <h3 class="todo-inline">Compañero/a</h3>
+          <p>Pasos 1, 2, 5 (compartidos) · <b>Paso 4</b></p>
+          <div class="bar"><div style="--w: 50%"></div></div>
+          <small>Rama <code>companero</code> · ≈ 9 h previstas</small>
+        </div>
+      </div>
+      <div class="timeline reveal" id="timeline"></div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>Trabajo grupal RA1 · Programación de Inteligencia Artificial · Curso de Especialización en IA y Big Data</p>
+    <p>Datos ficticios o abiertos · Sin datos personales · <a href="https://github.com/altu44/proyecto-ra1" target="_blank" rel="noopener">Repositorio</a></p>
+  </footer>
+
+  <button class="to-top" id="toTop" aria-label="Volver arriba">↑</button>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
