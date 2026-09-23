@@ -412,13 +412,163 @@ const PRESETS = {
   equal: [10, 10, 10, 10, 10, 10, 10, 10, 10, 10],
 };
 
+/* Justificación de cada puntuación (mismo orden que CRITERIA).
+   ✏️ BORRADOR: revisad cada texto, ajustadlo a vuestra nota y apoyadlo en fuentes. */
+const JUSTIF = {
+  python: [
+    "Sintaxis muy sencilla y cercana al pseudocódigo, sin compilar y con tipado dinámico. Es el lenguaje de iniciación en muchas universidades y el que usan casi todos los cursos de IA.",
+    "La indentación obligatoria obliga a estructurar el código, y la guía de estilo PEP 8 y el «Zen de Python» priorizan la legibilidad («Readability counts»).",
+    "El código es corto y claro, y las dependencias se gestionan fácilmente con pip/venv. Pierde un punto porque el tipado dinámico puede esconder errores en proyectos grandes (se mitiga con type hints).",
+    "FastAPI, Flask o Django permiten crear APIs REST en pocas líneas y SQLAlchemy conecta con cualquier base de datos. No llega al 5 porque no se ejecuta en el navegador: la parte web necesita JavaScript.",
+    "OpenCV, Pillow y NumPy para imágenes, y pandas para tablas: cubre exactamente lo que necesita Matriculator (leer, recortar, redimensionar y normalizar imágenes).",
+    "pandas, SciPy, statsmodels y scikit-learn cubren casi todo el análisis estadístico. R sigue siendo algo más completo en estadística pura, por eso un 4.",
+    "Es el ecosistema principal de deep learning: PyTorch, TensorFlow, Ultralytics YOLO (detección) y EasyOCR/PaddleOCR (lectura de texto).",
+    "Hugging Face Hub, torchvision y Ultralytics permiten descargar un modelo ya entrenado y usarlo o ajustarlo con pocas líneas de código.",
+    "Documentación y comunidad enormes y despliegue sencillo con Docker. El intérprete es más lento que C++, aunque las librerías pesadas (NumPy, PyTorch) están escritas en C/C++ por debajo.",
+    "No se ejecuta en el navegador. Streamlit o Gradio sirven para demos rápidas, pero una interfaz web real para el parking necesita HTML, CSS y JavaScript.",
+  ],
+  js: [
+    "Basta con un navegador para empezar y los resultados se ven al instante. Algunas rarezas (conversión automática de tipos, asincronía) complican el aprendizaje.",
+    "Se puede escribir código legible, pero hay muchas formas de hacer lo mismo y el código asíncrono (callbacks, promesas) cuesta de seguir. TypeScript lo mejora.",
+    "El ecosistema npm cambia muy rápido y los proyectos acumulan muchas dependencias que hay que actualizar. TypeScript ayuda, pero añade complejidad.",
+    "Es el lenguaje nativo de la web: fetch, JSON nativo, Express para APIs y drivers para todas las bases de datos. Es la pieza ideal para unir interfaz, servidor y servicio de IA.",
+    "Puede manipular imágenes con canvas o librerías como sharp, pero el procesamiento de imagen avanzado es muy limitado comparado con OpenCV en Python.",
+    "Hay pocas librerías estadísticas maduras (p. ej. simple-statistics). El análisis estadístico no es su terreno.",
+    "Existen TensorFlow.js, ONNX Runtime Web, transformers.js y Tesseract.js, pero con muchos menos modelos de visión y OCR, y menos ejemplos que en Python.",
+    "Puede cargar modelos convertidos a ONNX o TF.js, pero normalmente hay que convertirlos antes y no todos los modelos están disponibles.",
+    "El motor V8 es rápido y Node.js escala muy bien en peticiones web. Tiene una comunidad enorme, pero no está pensado para cómputo intensivo de IA.",
+    "Es el único lenguaje que los navegadores ejecutan de forma nativa. Junto con HTML y CSS construye toda la interfaz de Matriculator.",
+  ],
+  r: [
+    "Con RStudio es fácil empezar con análisis de datos, pero su sintaxis es poco convencional para quien viene de otros lenguajes.",
+    "Los scripts con tidyverse son legibles, pero conviven varios sistemas de objetos (S3, S4, R6) y estilos muy distintos.",
+    "Los paquetes de CRAN están bien documentados, pero R está pensado para análisis, no para mantener aplicaciones grandes.",
+    "Plumber permite crear APIs y Shiny aplicaciones web, pero es poco habitual en servicios web de producción.",
+    "Excelente con tablas (data.frame, dplyr). Para imágenes existen magick e imager, pero con muchas menos posibilidades que Python.",
+    "Fue diseñado para la estadística: modelos, contrastes de hipótesis y gráficos (ggplot2). Es la referencia en el ámbito académico.",
+    "Existen torch para R y keras, pero con pocos modelos de visión y una comunidad de deep learning muy reducida.",
+    "Hay poco acceso directo a modelos preentrenados de visión; a menudo se acaba llamando a Python por debajo (paquete reticulate).",
+    "Buena comunidad académica y documentación en CRAN, pero es lento y rara vez se despliega en producción.",
+    "Shiny permite crear interfaces web, útiles para paneles internos, pero no para una aplicación pensada para clientes.",
+  ],
+  cpp: [
+    "Curva de aprendizaje alta: punteros, gestión manual de memoria, compilación y plantillas.",
+    "Sintaxis extensa y compleja; el código es difícil de leer para alguien que empieza.",
+    "La gestión de memoria y la compilación en varias plataformas encarecen el mantenimiento, y los errores son difíciles de depurar.",
+    "Se pueden crear APIs (Crow, Drogon) y conectar con bases de datos, pero cuesta mucho más que en JavaScript o Python.",
+    "OpenCV está escrito en C++, así que el procesamiento de imagen es muy eficiente. Menos cómodo para trabajar con tablas.",
+    "Hay librerías (Boost, Eigen), pero no está pensado para el análisis estadístico interactivo.",
+    "El núcleo de PyTorch (LibTorch), TensorRT y el módulo DNN de OpenCV están en C++: muy potente, pero menos cómodo que usarlos desde Python.",
+    "Ejecuta modelos exportados (ONNX Runtime, LibTorch, TensorRT) a máxima velocidad, aunque entrenarlos o ajustarlos se hace normalmente en Python.",
+    "Máximo rendimiento y bajo consumo, ideal si el modelo se ejecutara dentro de la cámara o en un dispositivo embebido. Comunidad y documentación enormes.",
+    "No se usa para interfaces web, salvo casos muy concretos compilando a WebAssembly.",
+  ],
+  php: [
+    "Es fácil empezar con cualquier hosting y hay mucho material para principiantes.",
+    "PHP 8 moderno es legible, pero circula mucho código antiguo con malas prácticas.",
+    "Frameworks como Laravel ordenan el proyecto y lo hacen mantenible, sin destacar.",
+    "Nació para la web: formularios, sesiones y MySQL/PostgreSQL. Funciona en casi cualquier servidor.",
+    "Las extensiones GD o Imagick permiten redimensionar imágenes, pero no hacer visión por computador real.",
+    "Prácticamente no tiene librerías estadísticas.",
+    "Apenas hay ecosistema de IA (PHP-ML y Rubix ML son básicos) y nada moderno para detección de objetos u OCR.",
+    "No hay forma práctica de ejecutar modelos preentrenados de visión sin llamar a otro servicio escrito en otro lenguaje.",
+    "Rendimiento correcto para web, despliegue muy sencillo y gran comunidad web, pero no apto para cómputo intensivo.",
+    "Genera HTML en el servidor con facilidad; la interactividad en el navegador sigue necesitando JavaScript.",
+  ],
+  java: [
+    "Tipado estático y programación orientada a objetos desde el primer programa: hay más conceptos que aprender que en Python.",
+    "Claro y estructurado, pero extenso: requiere mucho código repetitivo.",
+    "Tipado fuerte, herramientas como Maven/Gradle e IDEs que refactorizan de forma segura: muy mantenible en proyectos grandes.",
+    "Spring Boot para APIs y JDBC/JPA para bases de datos: es el estándar en entornos empresariales.",
+    "ImageIO y los bindings de OpenCV funcionan, pero son menos cómodos y tienen menos ejemplos que en Python.",
+    "Apache Commons Math o Smile existen, pero se usa poco para estadística.",
+    "Deep Java Library (DJL), DL4J y Tribuo: un ecosistema de IA real, pero mucho menor que el de Python.",
+    "DJL puede cargar modelos de PyTorch y ONNX y tiene un catálogo de modelos, con menos variedad y documentación.",
+    "La JVM es rápida y estable, con despliegue robusto y gran comunidad, aunque consume más memoria.",
+    "Existen JSP, Thymeleaf o Vaadin, pero la interfaz web moderna se sigue haciendo con JavaScript.",
+  ],
+};
+
 (function heatmap() {
   const head = `<thead><tr><th>Criterio</th>${LANGS.map((l) => `<th style="color:var(${l.color})">${l.short || l.name}</th>`).join("")}</tr></thead>`;
   const body = CRITERIA.map((c, k) => `<tr><th>${c.name}</th>${LANGS.map((l) => {
     const v = SCORES[l.id][k];
-    return `<td style="--v:${v}" title="${l.name} · ${c.name}: ${v}/5">${v}</td>`;
+    return `<td style="--v:${v}" data-l="${l.id}" data-k="${k}" tabindex="0" role="button" aria-label="${l.name}, ${c.name}: ${v} de 5. Ver justificación">${v}</td>`;
   }).join("")}</tr>`).join("");
   $("#heatTable").innerHTML = head + "<tbody>" + body + "</tbody>";
+
+  // ---- Ventana (modal) con la justificación ----
+  const modal = document.createElement("div");
+  modal.className = "modal";
+  modal.hidden = true;
+  modal.innerHTML = `
+    <div class="modal__backdrop" data-close></div>
+    <div class="modal__card" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <button class="modal__x" data-close aria-label="Cerrar">✕</button>
+      <div class="modal__head">
+        <span class="modal__logo" id="modalLogo"></span>
+        <div><p class="modal__crit" id="modalCrit"></p><h3 id="modalTitle"></h3></div>
+      </div>
+      <div class="modal__score"><b id="modalScore"></b><span>/ 5</span><div class="modal__dots" id="modalDots"></div></div>
+      <p class="modal__text" id="modalText"></p>
+      <p class="modal__note">✏️ Borrador: revisad la justificación y apoyadla en una fuente.</p>
+      <div class="modal__nav">
+        <button class="btn btn--small btn--ghost" data-move="-1,0">↑ Criterio anterior</button>
+        <button class="btn btn--small btn--ghost" data-move="1,0">↓ Criterio siguiente</button>
+        <button class="btn btn--small btn--ghost" data-move="0,-1">← Lenguaje</button>
+        <button class="btn btn--small btn--ghost" data-move="0,1">Lenguaje →</button>
+      </div>
+    </div>`;
+  document.body.appendChild(modal);
+
+  let cur = { li: 0, k: 0 };
+  let lastFocus = null;
+
+  function show(li, k) {
+    cur = { li: (li + LANGS.length) % LANGS.length, k: (k + CRITERIA.length) % CRITERIA.length };
+    const l = LANGS[cur.li];
+    const v = SCORES[l.id][cur.k];
+    const card = $(".modal__card", modal);
+    card.style.setProperty("--c", `var(${l.color})`);
+    $("#modalLogo").textContent = l.logo;
+    $("#modalCrit").textContent = CRITERIA[cur.k].name;
+    $("#modalTitle").textContent = l.name;
+    $("#modalScore").textContent = v;
+    $("#modalDots").innerHTML = [1, 2, 3, 4, 5].map((i) => `<i class="${i <= v ? "on" : ""}"></i>`).join("");
+    $("#modalText").textContent = (JUSTIF[l.id] || [])[cur.k] || "✏️ Pendiente de justificar.";
+    $$("#heatTable td").forEach((td) => td.classList.toggle("is-selected", td.dataset.l === l.id && +td.dataset.k === cur.k));
+    card.style.animation = "none"; void card.offsetWidth; card.style.animation = "";
+  }
+  function open(li, k) {
+    lastFocus = document.activeElement;
+    modal.hidden = false;
+    document.body.classList.add("no-scroll");
+    show(li, k);
+    $(".modal__x", modal).focus();
+  }
+  function close() {
+    modal.hidden = true;
+    document.body.classList.remove("no-scroll");
+    $$("#heatTable td").forEach((td) => td.classList.remove("is-selected"));
+    if (lastFocus) lastFocus.focus();
+  }
+
+  $$("#heatTable td").forEach((td) => {
+    const go = () => open(LANGS.findIndex((l) => l.id === td.dataset.l), +td.dataset.k);
+    td.addEventListener("click", go);
+    td.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); go(); } });
+  });
+  modal.addEventListener("click", (e) => {
+    if (e.target.closest("[data-close]")) return close();
+    const mv = e.target.closest("[data-move]");
+    if (mv) { const [dk, dl] = mv.dataset.move.split(",").map(Number); show(cur.li + dl, cur.k + dk); }
+  });
+  document.addEventListener("keydown", (e) => {
+    if (modal.hidden) return;
+    const moves = { ArrowUp: [-1, 0], ArrowDown: [1, 0], ArrowLeft: [0, -1], ArrowRight: [0, 1] };
+    if (e.key === "Escape") close();
+    else if (moves[e.key]) { e.preventDefault(); show(cur.li + moves[e.key][1], cur.k + moves[e.key][0]); }
+  });
 })();
 
 (function matrix() {
