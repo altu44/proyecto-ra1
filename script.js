@@ -1083,7 +1083,7 @@ const PSEUDO = [
         <span class="src__cat">${cat}</span>
         <h4><a href="${s.url}" target="_blank" rel="noopener">${escapeHTML(s.title)} <span aria-hidden="true">↗</span></a></h4>
         <p class="src__org">${escapeHTML(s.org)}</p>
-        <div class="src__meta"><span>🔗 ${domain}</span><span>📅 Consultado el ${FECHA_CONSULTA}</span><span>📍 Citada en ${s.used}</span></div>
+        <div class="src__meta"><span>🔗 ${domain}</span><span>📍 Citada en ${s.used}</span></div>
       </div>
     </article>`;
   }).join("");
@@ -1092,11 +1092,34 @@ const PSEUDO = [
   const counts = SOURCES.reduce((a, s) => ((a[s.cat] = (a[s.cat] || 0) + 1), a), {});
   $("#srcFilter").innerHTML = `<button class="is-active" data-cat="all">Todas <b>${SOURCES.length}</b></button>` +
     Object.entries(SRC_CATS).map(([k, [n, c]]) => `<button data-cat="${k}" style="--c: var(${c})"><i></i>${n} <b>${counts[k] || 0}</b></button>`).join("");
-  const filter = (cat) => {
-    $$("#srcFilter button").forEach((b) => b.classList.toggle("is-active", b.dataset.cat === cat));
-    $$("#srcGrid .src").forEach((c) => (c.hidden = cat !== "all" && c.dataset.cat !== cat));
+  // Solo se muestran las primeras VISIBLES fuentes; el botón «Ver más» despliega el resto
+  const VISIBLES = 3;
+  const more = $("#srcMore");
+  let current = "all", expanded = false;
+  const render = () => {
+    const match = $$("#srcGrid .src").filter((c) => current === "all" || c.dataset.cat === current);
+    $$("#srcGrid .src").forEach((c) => (c.hidden = true));
+    match.forEach((c, i) => {
+      c.hidden = !expanded && i >= VISIBLES;
+      if (!c.hidden && i >= VISIBLES) { c.classList.remove("is-in"); void c.offsetWidth; c.classList.add("is-in"); }
+    });
+    const rest = match.length - VISIBLES;
+    more.hidden = rest <= 0;
+    more.innerHTML = expanded ? "Ver menos <span>▴</span>" : `Ver más… <b>+${rest}</b> <span>▾</span>`;
+    more.setAttribute("aria-expanded", expanded);
   };
-  $$("#srcFilter button").forEach((b) => b.addEventListener("click", () => filter(b.dataset.cat)));
+  const filter = (cat, open = expanded) => {
+    current = cat; expanded = open;
+    $$("#srcFilter button").forEach((b) => b.classList.toggle("is-active", b.dataset.cat === cat));
+    render();
+  };
+  $$("#srcFilter button").forEach((b) => b.addEventListener("click", () => filter(b.dataset.cat, false)));
+  more.addEventListener("click", () => {
+    expanded = !expanded;
+    render();
+    if (!expanded) $("#fuentes").scrollIntoView({ behavior: "smooth", block: "start" });
+  });
+  render();
 
   // Clic en una cita [n] → baja a la fuente y la resalta
   document.addEventListener("click", (e) => {
@@ -1106,7 +1129,7 @@ const PSEUDO = [
     e.stopPropagation();
     const card = document.getElementById("src-" + a.dataset.src);
     if (!card) return;
-    if (card.hidden) filter("all");
+    if (card.hidden) filter("all", true);
     card.scrollIntoView({ behavior: "smooth", block: "center" });
     card.classList.remove("is-flash"); void card.offsetWidth; card.classList.add("is-flash");
   }, true);

@@ -690,3 +690,8 @@ body.no-scroll { overflow: hidden; }
 @keyframes flash { 0%, 40% { box-shadow: 0 0 0 4px var(--accent); } 100% { box-shadow: none; } }
 @media (max-width: 760px) { .src-grid { grid-template-columns: 1fr; } }
 .section__num--emoji { background: none; -webkit-background-clip: border-box; background-clip: border-box; color: inherit; -webkit-text-fill-color: initial; }
+.src-more-wrap { display: flex; justify-content: center; margin-top: 1.2rem; }
+.src-more[hidden] { display: none; }
+.src-more b { font-family: var(--mono); font-size: .8rem; padding: .05rem .45rem; border-radius: 999px; background: var(--accent); color: #06231b; }
+.src-more span { color: var(--accent); }
+.src.is-in { animation: fadeUp .35s ease both; }
