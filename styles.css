@@ -582,3 +582,58 @@ body.no-scroll { overflow: hidden; }
 .modal__nav .btn { justify-content: center; }
 @keyframes fadeIn { from { opacity: 0; } }
 @keyframes popIn { from { opacity: 0; transform: translateY(16px) scale(.97); } }
+
+/* ---------- Paso 1: perfiles, simulador y viabilidad ---------- */
+.problem p { margin: .4rem 0 .8rem; }
+.problem .check { margin-bottom: .8rem; }
+.zones { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+.zone {
+  position: relative; display: flex; flex-direction: column; padding: 1.3rem 1.3rem 1.1rem; border-radius: var(--radius);
+  background: var(--surface); border: 1px solid var(--border); box-shadow: var(--shadow); overflow: hidden; transition: transform .25s;
+}
+.zone:hover { transform: translateY(-4px); }
+.zone::before { content: ""; position: absolute; inset: 0 0 auto 0; height: 5px; background: var(--c); }
+.zone__icon { font-size: 2rem; }
+.zone h4 { margin: .4rem 0 .3rem; font-size: 1.1rem; }
+.zone p { margin: 0 0 1rem; color: var(--muted); font-size: .9rem; flex: 1; }
+.zone__rule { display: flex; flex-direction: column; gap: .1rem; padding: .6rem .8rem; border-radius: 10px; background: color-mix(in srgb, var(--c) 14%, var(--surface-2)); }
+.zone__rule > span { font-size: .7rem; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); font-weight: 700; }
+.zone__rule b { font-size: .9rem; }
+
+.sim { display: grid; grid-template-columns: 1fr 1.15fr; gap: 1.8rem; }
+.sim__controls { display: grid; gap: 1.2rem; align-content: start; }
+.sim__field { display: grid; gap: .5rem; transition: opacity .3s; }
+.sim__field > label:first-child { font-size: .88rem; font-weight: 600; }
+.sim__field b { color: var(--accent); font-family: var(--mono); }
+.sim__field.is-off { opacity: .35; pointer-events: none; }
+.seg { display: grid; grid-template-columns: repeat(3, 1fr); gap: .3rem; padding: .3rem; border-radius: 12px; background: var(--surface-2); border: 1px solid var(--border); }
+.seg button { border: 0; border-radius: 9px; padding: .55rem .4rem; background: transparent; color: var(--muted); font: 600 .85rem var(--font); cursor: pointer; transition: all .2s; }
+.seg button:hover { color: var(--text); }
+.seg button.is-active { background: var(--surface); color: var(--text); box-shadow: 0 2px 8px rgba(0, 0, 0, .18); }
+.sim__result { display: grid; gap: 1rem; align-content: start; }
+.sim__trace { list-style: none; margin: 0; padding: 0; display: grid; gap: .45rem; }
+.sim__trace li {
+  display: grid; grid-template-columns: 30px 1fr; gap: .6rem; align-items: start; padding: .55rem .75rem; border-radius: 10px;
+  background: var(--surface-2); border: 1px solid var(--border); font-size: .88rem; animation: fadeUp .35s both; animation-delay: calc(var(--i) * 70ms);
+}
+.sim__trace li p { margin: 0; }
+.sim__trace li span { font-size: 1.1rem; text-align: center; }
+.verdict { display: flex; gap: .9rem; align-items: center; padding: 1rem 1.2rem; border-radius: var(--radius-sm); border: 2px solid var(--vc); background: color-mix(in srgb, var(--vc) 12%, var(--surface)); animation: popIn .35s ease; }
+.verdict--ok { --vc: var(--ok); } .verdict--pay { --vc: var(--java); } .verdict--warn { --vc: var(--warn); }
+.verdict__icon { font-size: 2rem; }
+.verdict b { font-size: 1.1rem; }
+.verdict p { margin: .15rem 0 0; color: var(--muted); font-size: .88rem; }
+
+.feas { margin-top: 1.4rem; }
+.feas__split { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: .8rem 0 0; }
+.feas__split > div { padding: 1rem 1.1rem; border-radius: var(--radius-sm); background: var(--surface-2); border: 1px solid var(--border); }
+.feas__split p { margin: .5rem 0 0; font-size: .9rem; }
+.feas__tag { font-size: .75rem; font-weight: 700; padding: .2rem .6rem; border-radius: 999px; }
+.feas__tag--ia { background: color-mix(in srgb, var(--py) 22%, transparent); }
+.feas__tag--app { background: color-mix(in srgb, var(--js) 24%, transparent); }
+
+@media (max-width: 1000px) { .sim { grid-template-columns: 1fr; } }
+@media (max-width: 760px) {
+  .zones, .feas__split { grid-template-columns: 1fr; }
+  .seg { grid-template-columns: 1fr; }
+}

@@ -4,7 +4,7 @@
      0. Utilidades
      1. Tema, navegación, progreso, reveal
      2. Hero: escáner animado
-     3. Paso 1: entradas → salida
+     3. Paso 1: escenario, simulador y entradas → salida
      4. Paso 2: Google Trends, lenguajes, heatmap, matriz, descartes
      5. Paso 3: flujo, fases, pseudocódigo
      6. Paso 4: formatos
@@ -139,15 +139,28 @@ const langById = Object.fromEntries(LANGS.map((l) => [l.id, l]));
   window.addEventListener("resize", placeBox);
 })();
 
-/* ---------- 3. Paso 1: entradas → salida ---------- */
+/* ---------- 3. Paso 1: escenario, simulador y entradas → salida ---------- */
+
+// ✏️ Reglas de negocio de ejemplo: decidid vuestros valores
+const REGLAS = {
+  UMBRAL: 0.80,            // confianza mínima de la lectura
+  MIN_GRATIS_CLIENTE: 90,  // minutos gratis si el cajero validó la matrícula
+  TARIFA_HORA: 2.40,       // €/hora para público (se cobra por minuto)
+  TOPE_DIARIO: 18,         // € máximo por día
+};
+
 (function paso1() {
+  const eur = (n) => n.toLocaleString("es-ES", { style: "currency", currency: "EUR" });
+  $$(".js-free").forEach((e) => (e.textContent = REGLAS.MIN_GRATIS_CLIENTE));
+  $$(".js-rate").forEach((e) => (e.textContent = REGLAS.TARIFA_HORA.toFixed(2).replace(".", ",")));
+
   // ✏️ Borrador: ampliad o corregid cada bloque
   const info = {
-    entrada: { t: "📷 Entradas", d: "Imagen ficticia o de un banco de pruebas público (JPG/PNG) y la configuración de la cámara: resolución, ángulo, distancia, iluminación (día/noche) e identificador del punto de captura.", tags: ["imagen .jpg/.png", "config. cámara (JSON)", "sin personas identificables"] },
-    datos: { t: "🗂️ Datos necesarios", d: "Conjunto de imágenes de prueba anotadas: caja (bounding box) de la matrícula y el texto correcto. Sirven para validar y, si hiciera falta, ajustar un modelo preentrenado. Datos abiertos o sintéticos, nunca imágenes reales de clientes.", tags: ["anotaciones (XML/JSON)", "dataset abierto", "datos sintéticos"] },
-    proceso: { t: "⚙️ Procesamiento", d: "1) Validar el fichero (tipo, tamaño, que no esté corrupto). 2) Preparar la imagen (redimensionar, normalizar, mejorar contraste). 3) Modelo ya entrenado detecta la matrícula. 4) OCR lee los caracteres. 5) Se comprueba el formato y la confianza.", tags: ["OpenCV", "detector (YOLO)", "OCR", "umbral de confianza"] },
-    salida: { t: "🧾 Salida", d: "Si la confianza supera el umbral: registro de prueba (matrícula, confianza, fecha/hora, cámara). Si no: aviso de validación humana con la región recortada. Nunca se toma una decisión automática sobre la persona.", tags: ["registro (JSON/CSV)", "aviso de revisión"] },
-    humano: { t: "🧑‍⚖️ Decisión que sigue siendo humana", d: "Confirmar lecturas dudosas y cualquier acción con consecuencias (cobro, sanción, denegar acceso). La IA propone; la persona decide.", tags: ["human-in-the-loop", "RGPD", "AI Act"] },
+    entrada: { t: "📷 Entradas", d: "Imágenes de las cámaras de entrada y de salida (en el estudio, imágenes ficticias o de un banco de pruebas) con la configuración de cada cámara. Además, dos entradas que no son imágenes: la matrícula que el cajero teclea en el TPV del supermercado y el alta de matrículas de empleados que hace Recursos Humanos.", tags: ["imagen .jpg/.png", "config. cámara (JSON)", "validación TPV", "registro de empleados"] },
+    datos: { t: "🗂️ Datos necesarios", d: "Para la IA: imágenes de prueba anotadas (caja de la matrícula + texto correcto), sin personas identificables. Para la aplicación: registro de empleados (matrícula + id interno), validaciones del día del supermercado, registro de entradas/salidas y tabla de tarifas. Todo ficticio en este trabajo.", tags: ["anotaciones (XML/JSON)", "BBDD empleados", "validaciones del día", "tarifas"] },
+    proceso: { t: "⚙️ Procesamiento", d: "1) Validar la imagen. 2) Preparar la imagen. 3) El modelo detecta la matrícula y el OCR la lee (parte de IA). 4) Se comprueba formato y confianza. 5) Se busca la matrícula: ¿está en empleados? ¿se validó hoy en caja? si no, es público (reglas). 6) En la salida se calcula el tiempo de estancia y el importe.", tags: ["OpenCV", "detector (YOLO)", "OCR", "reglas de negocio", "cálculo de tarifa"] },
+    salida: { t: "🧾 Salida", d: "Empleado → barrera abierta. Cliente validado → gratis si no supera el tiempo gratuito; si lo supera, paga el exceso. Público → importe a pagar en el cajero automático o en la barrera. Confianza baja o matrícula sin entrada registrada → aviso al personal. Siempre se guarda un registro mínimo (matrícula, perfil, horas, importe).", tags: ["barrera", "importe", "aviso al personal", "registro JSON/CSV"] },
+    humano: { t: "🧑‍⚖️ Decisión que sigue siendo humana", d: "El cajero decide validar la matrícula; el personal del parking resuelve lecturas dudosas y reclamaciones; Recursos Humanos da de alta y de baja a los empleados. La IA solo lee la matrícula: no decide cobros ni sanciones.", tags: ["human-in-the-loop", "RGPD", "AI Act"] },
   };
   const detail = $("#ipoDetail");
   const show = (k) => {
@@ -158,6 +171,63 @@ const langById = Object.fromEntries(LANGS.map((l) => [l.id, l]));
   };
   $$(".ipo__card").forEach((c) => c.addEventListener("click", () => show(c.dataset.ipo)));
   show("entrada");
+
+  // ---- Simulador ----
+  const PLACAS = { empleado: "1234 BCD", cliente: "5678 FGH", publico: "9012 JKL" }; // ficticias
+  let perfil = "empleado";
+  const tiempo = $("#simTiempo"), conf = $("#simConf"), caja = $("#simCaja");
+
+  function tarifa(min) { return Math.min(REGLAS.TOPE_DIARIO, (min / 60) * REGLAS.TARIFA_HORA); }
+  const fmtMin = (m) => (m < 60 ? `${m} min` : `${Math.floor(m / 60)} h ${String(m % 60).padStart(2, "0")} min`);
+
+  function simular() {
+    const min = +tiempo.value, c = +conf.value, validada = caja.checked;
+    const placa = PLACAS[perfil];
+    $("#simTiempoOut").textContent = fmtMin(min);
+    $("#simConfOut").textContent = c.toFixed(2);
+    $("#simCajaField").classList.toggle("is-off", perfil !== "cliente");
+    $("#simCajaTxt").textContent = validada ? "Sí, validada en caja" : "No (se le olvidó o no compró)";
+
+    const steps = [];
+    let verdict;
+    steps.push(["📷", `Entrada: la cámara lee <code>${placa}</code> y se guarda la hora de entrada.`]);
+    if (perfil === "cliente") {
+      steps.push(["🛒", validada ? `El cajero apunta <code>${placa}</code> en el TPV al cobrar.` : "El cajero <b>no</b> apunta la matrícula."]);
+    }
+    steps.push(["📷", `Salida tras ${fmtMin(min)}: lectura con confianza <b>${c.toFixed(2)}</b>.`]);
+
+    if (c < REGLAS.UMBRAL) {
+      steps.push(["⚠️", `Confianza &lt; ${REGLAS.UMBRAL.toFixed(2)}: no se puede asegurar qué matrícula es.`]);
+      verdict = { cls: "warn", icon: "🧑‍⚖️", t: "Revisión humana", d: "La barrera no se abre sola: el personal comprueba la matrícula por el interfono o la cámara." };
+    } else if (perfil === "empleado") {
+      steps.push(["🔎", "Consulta: la matrícula <b>está</b> en el registro de empleados."]);
+      verdict = { cls: "ok", icon: "👔", t: "Empleado · barrera abierta", d: "No paga. Se guarda solo la hora de salida." };
+    } else {
+      steps.push(["🔎", "Consulta: la matrícula <b>no</b> está en el registro de empleados."]);
+      if (perfil === "cliente" && validada) {
+        steps.push(["🛒", "Consulta: la matrícula <b>se validó hoy</b> en el supermercado."]);
+        const exceso = Math.max(0, min - REGLAS.MIN_GRATIS_CLIENTE);
+        verdict = exceso === 0
+          ? { cls: "ok", icon: "🛒", t: "Cliente · gratis", d: `Ha estado ${fmtMin(min)}, dentro de los ${REGLAS.MIN_GRATIS_CLIENTE} min gratuitos.` }
+          : { cls: "pay", icon: "🛒", t: `Cliente · paga ${eur(tarifa(exceso))}`, d: `Supera el tiempo gratuito en ${fmtMin(exceso)}; se cobra solo el exceso.` };
+      } else {
+        if (perfil === "cliente") steps.push(["🛒", "Consulta: la matrícula <b>no</b> se validó en caja → se trata como público."]);
+        verdict = { cls: "pay", icon: "🅿️", t: `Público · paga ${eur(tarifa(min))}`, d: `${fmtMin(min)} × ${eur(REGLAS.TARIFA_HORA)}/h${tarifa(min) === REGLAS.TOPE_DIARIO ? " (tope diario)" : ""}.` +
+          (perfil === "cliente" ? " Si compró y no le validaron, puede reclamar al personal." : "") };
+      }
+    }
+    $("#simTrace").innerHTML = steps.map(([i, t], k) => `<li style="--i:${k}"><span>${i}</span><p>${t}</p></li>`).join("");
+    $("#simVerdict").className = "verdict verdict--" + verdict.cls;
+    $("#simVerdict").innerHTML = `<span class="verdict__icon">${verdict.icon}</span><div><b>${verdict.t}</b><p>${verdict.d}</p></div>`;
+  }
+
+  $$("#simPerfil button").forEach((b) => b.addEventListener("click", () => {
+    perfil = b.dataset.p;
+    $$("#simPerfil button").forEach((x) => x.classList.toggle("is-active", x === b));
+    simular();
+  }));
+  [tiempo, conf, caja].forEach((el) => el.addEventListener("input", simular));
+  simular();
 })();
 
 /* ---------- 4. Paso 2 ---------- */

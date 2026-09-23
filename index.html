@@ -97,39 +97,117 @@
 
       <div class="problem reveal">
         <h3>🎯 El problema</h3>
-        <p>Una empresa de aparcamientos quiere <strong>evaluar</strong> si una aplicación de visión por computador podría leer matrículas en imágenes de su banco de pruebas para agilizar el registro de entradas y salidas. <span class="todo">✏️ Completad con vuestras palabras: para quién es, qué necesidad resuelve y qué NO pretende hacer.</span></p>
+        <p>Una empresa con <strong>muchos empleados</strong> tiene un parking que comparte con <strong>clientes de un supermercado</strong> y con <strong>público general</strong> que paga por tiempo. Hoy el control se hace con tarjetas y tiques de papel que se pierden, generan colas en la barrera y obligan a tener personal en la salida.</p>
+        <p>Matriculator propone que una cámara en la <strong>entrada</strong> y otra en la <strong>salida</strong> lean la matrícula y que el sistema sepa <strong>quién es cada coche</strong>:</p>
+        <ul class="check">
+          <li><b>Empleado:</b> su matrícula está dada de alta en el registro de la empresa y entra y sale sin pagar.</li>
+          <li><b>Cliente del supermercado:</b> el cajero apunta la matrícula al cobrar la compra, y a la salida el sistema aplica el tiempo gratuito.</li>
+          <li><b>Público:</b> cualquier otra matrícula paga según el tiempo de estancia.</li>
+        </ul>
+        <p><b>Qué NO pretende:</b> identificar personas, vigilar a los empleados (horarios, fichajes) ni sancionar automáticamente. Es un estudio con <b>imágenes de prueba y datos ficticios</b>.</p>
       </div>
 
+      <!-- Tres perfiles -->
+      <h3 class="sub reveal">1.1 · Un parking, tres perfiles</h3>
+      <div class="zones reveal">
+        <div class="zone" style="--c: var(--py)">
+          <span class="zone__icon">👔</span>
+          <h4>Empleados</h4>
+          <p>Zona reservada. La matrícula se compara con el <b>registro de empleados</b> (máx. 2 vehículos por persona).</p>
+          <div class="zone__rule"><span>Salida</span><b>Gratis · barrera abierta</b></div>
+        </div>
+        <div class="zone" style="--c: var(--ok)">
+          <span class="zone__icon">🛒</span>
+          <h4>Clientes del supermercado</h4>
+          <p>Al pagar, el <b>cajero apunta la matrícula</b> en el TPV. Esa validación dura solo ese día.</p>
+          <div class="zone__rule"><span>Salida</span><b>Gratis los primeros <span class="js-free">90</span> min · después, tarifa</b></div>
+        </div>
+        <div class="zone" style="--c: var(--java)">
+          <span class="zone__icon">🅿️</span>
+          <h4>Público</h4>
+          <p>Cualquier matrícula que no es de un empleado ni se ha validado en caja.</p>
+          <div class="zone__rule"><span>Salida</span><b>Paga por tiempo · <span class="js-rate">2,40</span> €/h</b></div>
+        </div>
+      </div>
+      <p class="meta reveal"><span class="todo-inline">✏️ Borrador:</span> los minutos gratuitos, la tarifa y el tope diario son valores de ejemplo (en <code>script.js</code> → <code>REGLAS</code>). Decidid los vuestros.</p>
+
+      <!-- Simulador -->
+      <h3 class="sub reveal">1.2 · Simula un coche</h3>
+      <div class="card sim reveal">
+        <div class="sim__controls">
+          <div class="sim__field">
+            <label>¿Quién entra?</label>
+            <div class="seg" id="simPerfil">
+              <button class="is-active" data-p="empleado">👔 Empleado</button>
+              <button data-p="cliente">🛒 Cliente</button>
+              <button data-p="publico">🅿️ Público</button>
+            </div>
+          </div>
+          <div class="sim__field">
+            <label for="simTiempo">Tiempo en el parking: <b id="simTiempoOut">60 min</b></label>
+            <input type="range" id="simTiempo" min="5" max="600" step="5" value="60">
+          </div>
+          <div class="sim__field" id="simCajaField">
+            <label>¿El cajero apuntó la matrícula?</label>
+            <label class="switch"><input type="checkbox" id="simCaja" checked><span></span> <em id="simCajaTxt">Sí, validada en caja</em></label>
+          </div>
+          <div class="sim__field">
+            <label for="simConf">Confianza de la lectura en la salida: <b id="simConfOut">0.93</b></label>
+            <input type="range" id="simConf" min="0.40" max="0.99" step="0.01" value="0.93">
+          </div>
+        </div>
+        <div class="sim__result">
+          <ol class="sim__trace" id="simTrace"></ol>
+          <div class="verdict" id="simVerdict"></div>
+        </div>
+      </div>
+
+      <!-- Entradas → salida -->
+      <h3 class="sub reveal">1.3 · Entradas, datos, procesamiento y salida</h3>
       <p class="hint reveal">👆 Pulsa cada bloque del flujo para ver el detalle.</p>
       <div class="ipo reveal" id="ipo">
-        <button class="ipo__card is-active" data-ipo="entrada"><span class="ipo__icon">📷</span><b>Entradas</b><small>Imagen + config. cámara</small></button>
+        <button class="ipo__card is-active" data-ipo="entrada"><span class="ipo__icon">📷</span><b>Entradas</b><small>Imágenes + validación en caja</small></button>
         <span class="ipo__arrow">➜</span>
-        <button class="ipo__card" data-ipo="datos"><span class="ipo__icon">🗂️</span><b>Datos</b><small>Imágenes anotadas</small></button>
+        <button class="ipo__card" data-ipo="datos"><span class="ipo__icon">🗂️</span><b>Datos</b><small>Imágenes anotadas + registros</small></button>
         <span class="ipo__arrow">➜</span>
-        <button class="ipo__card" data-ipo="proceso"><span class="ipo__icon">⚙️</span><b>Procesamiento</b><small>Validar · preparar · modelo</small></button>
+        <button class="ipo__card" data-ipo="proceso"><span class="ipo__icon">⚙️</span><b>Procesamiento</b><small>Leer · clasificar · calcular</small></button>
         <span class="ipo__arrow">➜</span>
-        <button class="ipo__card" data-ipo="salida"><span class="ipo__icon">🧾</span><b>Salida</b><small>Registro o aviso</small></button>
+        <button class="ipo__card" data-ipo="salida"><span class="ipo__icon">🧾</span><b>Salida</b><small>Barrera, importe o aviso</small></button>
         <span class="ipo__arrow">➜</span>
         <button class="ipo__card ipo__card--human" data-ipo="humano"><span class="ipo__icon">🧑‍⚖️</span><b>Decisión humana</b><small>Lo que no se automatiza</small></button>
       </div>
       <div class="ipo__detail reveal" id="ipoDetail"></div>
 
+      <!-- Viabilidad -->
+      <div class="card feas reveal">
+        <h3>✅ ¿Es viable?</h3>
+        <p>Sí. Los parkings con <b>lectura automática de matrículas</b> (ANPR/LPR) ya se usan en centros comerciales, aeropuertos y empresas. Lo importante de nuestro diseño es separar dos cosas:</p>
+        <div class="feas__split">
+          <div><span class="feas__tag feas__tag--ia">🤖 Parte de IA</span><p>Solo <b>detectar y leer la matrícula</b> en la imagen (visión por computador + OCR). Es la única parte que necesita un modelo.</p></div>
+          <div><span class="feas__tag feas__tag--app">🖥️ Parte de aplicación</span><p><b>Clasificar</b> (empleado / cliente / público) y <b>calcular el importe</b> son reglas y consultas a una base de datos. No hace falta IA.</p></div>
+        </div>
+        <p class="meta">Esta separación justifica en el Paso 2 que el lenguaje de la aplicación y el de la IA puedan ser distintos.</p>
+      </div>
+
       <div class="grid-2 reveal">
         <div class="card card--warn">
           <h3>⚠️ Riesgos y límites</h3>
           <ul class="check">
-            <li><b>Privacidad:</b> una matrícula es un dato personal indirecto. Solo imágenes ficticias o de banco de pruebas, sin personas identificables.</li>
-            <li><b>Retención mínima:</b> se guarda el resultado, no la imagen; borrado tras un plazo corto.</li>
-            <li><b>Errores de lectura:</b> confusiones 0/O, 8/B, suciedad, noche, ángulo… → umbral de confianza + revisión.</li>
-            <li><span class="todo">✏️ Añadid algún límite más (p. ej. matrículas extranjeras, sesgo del dataset).</span></li>
+            <li><b>Privacidad (RGPD):</b> la matrícula es un dato personal. El registro de empleados solo guarda matrícula + id interno; se informa a la plantilla y no se usa para controlar horarios.</li>
+            <li><b>Mínimos datos del cliente:</b> el TPV solo marca «validada sí/no» con fecha; nunca se vincula a qué ha comprado.</li>
+            <li><b>Retención mínima:</b> se guarda el resultado, no la imagen; los registros de público y clientes se borran tras un plazo corto.</li>
+            <li><b>Errores de lectura:</b> 0/O, 8/B, suciedad, noche, ángulo → umbral de confianza y revisión.</li>
+            <li><b>Errores humanos:</b> el cajero puede teclear mal la matrícula → el TPV sugiere las matrículas que han entrado hoy para elegirla.</li>
+            <li><b>Casos especiales:</b> coches de empresa compartidos, empleados que cambian de coche, matrículas extranjeras o remolques.</li>
           </ul>
         </div>
         <div class="card card--ok">
           <h3>🧑‍⚖️ Qué sigue siendo humano</h3>
           <ul class="check">
-            <li>Cualquier <b>cobro, sanción o denegación de acceso</b> basada en la lectura.</li>
-            <li>Validar lecturas con <b>confianza baja</b> o imágenes no válidas.</li>
-            <li>Decidir qué datos se guardan y durante cuánto tiempo.</li>
+            <li>La <b>validación en caja</b> la hace una persona (el cajero), no la IA.</li>
+            <li>Lecturas con <b>confianza baja</b> o que no coinciden con ninguna entrada → aviso al personal por el interfono.</li>
+            <li><b>Reclamaciones</b> (p. ej. «compré pero no me validaron») y cualquier <b>cobro o sanción</b> dudosa.</li>
+            <li>El <b>alta y baja</b> de matrículas de empleados la gestiona Recursos Humanos.</li>
           </ul>
         </div>
       </div>

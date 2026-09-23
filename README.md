@@ -8,7 +8,7 @@
 | | |
 |---|---|
 | **Integrantes** | Julen Altuna · Ander Ameztoy |
-| **Aplicación elegida** | Opción B — **Matriculator** (detección de matrículas en imágenes de prueba) |
+| **Aplicación elegida** | Opción B — **Matriculator**: lectura de matrículas en un parking de empresa con zona pública y zona de supermercado |
 | **Web publicada (Netlify)** | 🔗 _https://TU-SITIO.netlify.app_ |
 | **Repositorio** | 🔗 https://github.com/altu44/proyecto-ra1 |
 | **Fecha de entrega** | _dd/mm/aaaa_ |
@@ -114,17 +114,32 @@ _Texto de la reflexión…_
 
 ### Paso 1 · Define una aplicación hipotética
 
-**Opción elegida: B — Matriculator.** Una empresa de aparcamientos quiere estudiar una aplicación que detecte matrículas en imágenes de prueba.
+**Opción elegida: B — Matriculator**, adaptada a nuestro caso: el parking de una **empresa con muchos empleados** que también tiene una **zona pública de pago por tiempo** y una **zona para clientes de un supermercado**.
 
 | Elemento | Descripción |
 |---|---|
-| **Problema** | _¿Qué necesidad resuelve? ¿Para quién?_ |
-| **Entradas** | Imagen ficticia o de banco de pruebas + configuración de cámara (_resolución, ángulo, iluminación…_) |
-| **Datos** | Imágenes de prueba con anotaciones (cajas de la matrícula + texto), sin personas identificables |
-| **Procesamiento** | Validación del fichero → preparación de la imagen → modelo ya entrenado (detección + lectura OCR) |
-| **Salida** | Registro de prueba (matrícula, confianza, hora) o **aviso de validación humana** |
-| **Riesgos / límites** | Privacidad, retención mínima de datos, errores de lectura |
-| **Decisión que sigue siendo humana** | _p. ej. cualquier sanción/cobro o lecturas con baja confianza_ |
+| **Problema** | Un único parking con tres tipos de usuario. Hoy se controla con tarjetas y tiques de papel que se pierden, generan colas y necesitan personal en la salida. Queremos que el sistema reconozca la matrícula y sepa si el coche es de un **empleado**, de un **cliente del supermercado** o de **público**. |
+| **Entradas** | Imágenes de las cámaras de entrada y salida (en el estudio: ficticias o de banco de pruebas) + configuración de cámara · matrícula tecleada por el **cajero** en el TPV · alta de matrículas de empleados (Recursos Humanos) |
+| **Datos** | Para la IA: imágenes anotadas (caja de la matrícula + texto), sin personas identificables. Para la app: registro de empleados (matrícula + id interno), validaciones del día del supermercado, registro de entradas/salidas y tarifas. Todo ficticio. |
+| **Procesamiento** | Validar imagen → preparar → **detectar y leer la matrícula (IA)** → comprobar formato y confianza → **clasificar** (¿empleado? ¿validada hoy en caja? si no, público) → calcular tiempo e importe en la salida |
+| **Salida** | Empleado: barrera abierta · Cliente validado: gratis hasta el tiempo gratuito, después paga el exceso · Público: importe según tiempo · Confianza baja o sin entrada registrada: **aviso al personal** · Registro mínimo de cada movimiento |
+| **Riesgos / límites** | Privacidad (RGPD): la matrícula es un dato personal; el registro de empleados no se usa para controlar horarios; el TPV solo marca «validada sí/no», sin vincular la compra. Retención mínima. Errores de lectura (0/O, 8/B, noche, suciedad). Errores del cajero al teclear. Coches compartidos, cambios de coche, matrículas extranjeras. |
+| **Decisión que sigue siendo humana** | La validación en caja (cajero) · lecturas dudosas y reclamaciones (personal del parking) · alta y baja de empleados (RR. HH.) · cualquier cobro o sanción dudosa |
+
+#### Reglas del sistema (valores de ejemplo)
+
+| Perfil | Cómo se reconoce | Qué pasa en la salida |
+|---|---|---|
+| 👔 Empleado | La matrícula está en el registro de empleados | Gratis, barrera abierta |
+| 🛒 Cliente del supermercado | El cajero apuntó la matrícula hoy en el TPV | Gratis los primeros **90 min**; después paga el exceso |
+| 🅿️ Público | Ninguna de las anteriores | Paga **2,40 €/h** (por minuto), tope **18 €/día** |
+| ⚠️ Lectura dudosa | Confianza < **0,80** | Revisión humana por interfono |
+
+> ✏️ Los minutos gratuitos, la tarifa y el tope son valores de ejemplo: están en `script.js` → `REGLAS` y en la web hay un **simulador** para probarlos.
+
+#### ¿Es viable?
+
+Sí. Los parkings con lectura automática de matrículas (ANPR/LPR) ya existen en centros comerciales, aeropuertos y empresas. La clave del diseño es que **la IA solo detecta y lee la matrícula**; saber si es empleado, cliente o público y calcular el importe son **reglas y consultas a una base de datos**, sin IA. Esta separación la aprovechamos en el Paso 2 para justificar un lenguaje para la aplicación y otro para la IA.
 
 ### Paso 2 · Compara lenguajes y toma una decisión
 
