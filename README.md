@@ -43,8 +43,7 @@ proyecto-ra1/
 ├── README.md                # Organización, temporalización, fuentes, IA y preguntas
 ├── data/
 │   ├── trends_web.csv       # Exportación Google Trends — Búsqueda web
-│   ├── trends_youtube.csv   # Exportación Google Trends — Búsqueda en YouTube
-│   └── ejemplo/             # CSV de EJEMPLO (solo para probar la web, borrar al final)
+│   └── trends_youtube.csv   # Exportación Google Trends — Búsqueda en YouTube
 ├── assets/                  # Imágenes, diagramas y capturas propias
 │   └── ia/                  # Capturas de las conversaciones con IA (evidencias)
 ├── pseudocodigo.ipynb       # Paso 3 · Pseudocódigo comentado (20–50 líneas)
@@ -192,8 +191,16 @@ Lenguajes comparados: **Python, JavaScript/Node.js, R, C++, PHP y Java**.
 
 #### 2.1 Google Trends
 
-- Ámbito: **todo el mundo**, **desde 2004** (inicio de datos), búsqueda **web** y búsqueda en **YouTube**.
-- CSV exportados en [`data/`](data/). El gráfico de la web se genera leyendo esos CSV (no es una captura).
+| Dato | Valor |
+|---|---|
+| Lenguajes | Python, JavaScript, Java, PHP, C++ y R (como tema «Lenguaje de programación») |
+| Ámbito | Todo el mundo |
+| Periodo | Búsqueda web: 2004 – sep. 2026 · YouTube: 2008 – sep. 2026 (primer año con datos) |
+| Fecha de descarga | 23/09/2026 |
+| Archivos | [`data/trends_web.csv`](data/trends_web.csv) · [`data/trends_youtube.csv`](data/trends_youtube.csv) |
+
+- El gráfico de la web se genera **leyendo esos CSV** (no es una captura). Se puede ver por meses o por media anual.
+- **Avisos sobre los datos:** en YouTube faltan los meses de enero a julio de 2017 (vienen a 0 en la exportación de Google Trends; la web los trata como hueco). Septiembre de 2026 es un mes incompleto.
 - **Interpretación y conclusiones:** _…_
 
 #### 2.2 Características y comparativa

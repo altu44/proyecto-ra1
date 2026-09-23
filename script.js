@@ -370,8 +370,10 @@ function splitCSV(line) {
 }
 
 function parseTrends(text) {
-  const lines = text.replace(/\r/g, "").split("\n").filter((l) => l.trim() !== "");
-  const hIdx = lines.findIndex((l, k) => l.includes(",") && /^\d{4}-\d{2}/.test(lines[k + 1] || ""));
+  // Admite el formato clásico (Mes,Python: (Todo el mundo),...) y el nuevo con comillas ("Time","Python",...)
+  const lines = text.replace(/\r/g, "").replace(/^\uFEFF/, "").split("\n").filter((l) => l.trim() !== "");
+  const isDate = (l) => /^\d{4}-\d{2}/.test(splitCSV(l || "")[0] || "");
+  const hIdx = lines.findIndex((l, k) => l.includes(",") && !isDate(l) && isDate(lines[k + 1]));
   if (hIdx === -1) throw new Error("Formato CSV no reconocido");
   const headers = splitCSV(lines[hIdx]);
   const series = headers.slice(1).map((h) => ({ label: h.replace(/:\s*\(.*\)$/, "").trim(), lang: detectLang(h), data: [] }));
@@ -379,11 +381,11 @@ function parseTrends(text) {
   for (const l of lines.slice(hIdx + 1)) {
     const cells = splitCSV(l);
     if (!/^\d{4}-\d{2}/.test(cells[0])) continue;
-    dates.push(cells[0]);
-    series.forEach((s, k) => {
-      const v = cells[k + 1];
-      s.data.push(v === "<1" ? 0.5 : Number(v) || 0);
-    });
+    dates.push(cells[0].slice(0, 7)); // 2008-01-01 → 2008-01
+    const vals = cells.slice(1).map((v) => (v === "<1" ? 0.5 : Number(v) || 0));
+    // Mes con todo a 0 = hueco de datos de Google (p. ej. YouTube ene-jul 2017) → sin dato
+    const gap = vals.every((v) => v === 0);
+    series.forEach((s, k) => s.data.push(gap ? null : vals[k]));
   }
   return { dates, series };
 }
@@ -402,8 +404,8 @@ function yearly({ dates, series }) {
     series: series.map((s) => ({
       ...s,
       data: years.map((y) => {
-        const vals = s.data.filter((_, k) => dates[k].startsWith(y));
-        return +(vals.reduce((a, b) => a + b, 0) / vals.length).toFixed(1);
+        const vals = s.data.filter((v, k) => dates[k].startsWith(y) && v !== null);
+        return vals.length ? +(vals.reduce((a, b) => a + b, 0) / vals.length).toFixed(1) : null;
       }),
     })),
   };
@@ -457,7 +459,7 @@ function yearly({ dates, series }) {
     const grid = css("--grid");
     const datasets = view.series.map((s, k) => ({
       label: s.label, data: s.data, borderColor: colorFor(s, k), backgroundColor: colorFor(s, k) + "22",
-      borderWidth: 2.5, pointRadius: 0, pointHoverRadius: 5, tension: 0.35, hidden: hidden.has(s.label),
+      borderWidth: 2.5, pointRadius: 0, pointHoverRadius: 5, tension: 0.35, spanGaps: false, hidden: hidden.has(s.label),
     }));
     if (chart) chart.destroy();
     chart = new Chart(canvas, {
