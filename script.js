@@ -154,18 +154,48 @@ const REGLAS = {
   $$(".js-free").forEach((e) => (e.textContent = REGLAS.MIN_GRATIS_CLIENTE));
   $$(".js-rate").forEach((e) => (e.textContent = REGLAS.TARIFA_HORA.toFixed(2).replace(".", ",")));
 
-  // ✏️ Borrador: ampliad o corregid cada bloque
+  // ✏️ Borrador: ampliad o corregid cada bloque.
+  // Cada bloque se divide en filas: [título de la fila, [líneas]]
   const info = {
-    entrada: { t: "📷 Entradas", d: "Imágenes de las cámaras de entrada y de salida (en el estudio, imágenes ficticias o de un banco de pruebas) con la configuración de cada cámara. Además, dos entradas que no son imágenes: la matrícula que el cajero teclea en el TPV del supermercado y el alta de matrículas de empleados que hace Recursos Humanos.", tags: ["imagen .jpg/.png", "config. cámara (JSON)", "validación TPV", "registro de empleados"] },
-    datos: { t: "🗂️ Datos necesarios", d: "Para la IA: imágenes de prueba anotadas (caja de la matrícula + texto correcto), sin personas identificables. Para la aplicación: registro de empleados (matrícula + id interno), validaciones del día del supermercado, registro de entradas/salidas y tabla de tarifas. Todo ficticio en este trabajo.", tags: ["anotaciones (XML/JSON)", "BBDD empleados", "validaciones del día", "tarifas"] },
-    proceso: { t: "⚙️ Procesamiento", d: "1) Validar la imagen. 2) Preparar la imagen. 3) El modelo detecta la matrícula y el OCR la lee (parte de IA). 4) Se comprueba formato y confianza. 5) Se busca la matrícula: ¿está en empleados? ¿se validó hoy en caja? si no, es público (reglas). 6) En la salida se calcula el tiempo de estancia y el importe.", tags: ["OpenCV", "detector (YOLO)", "OCR", "reglas de negocio", "cálculo de tarifa"] },
-    salida: { t: "🧾 Salida", d: "Empleado → barrera abierta. Cliente validado → gratis si no supera el tiempo gratuito; si lo supera, paga el exceso. Público → importe a pagar en el cajero automático o en la barrera. Confianza baja o matrícula sin entrada registrada → aviso al personal. Siempre se guarda un registro mínimo (matrícula, perfil, horas, importe).", tags: ["barrera", "importe", "aviso al personal", "registro JSON/CSV"] },
-    humano: { t: "🧑‍⚖️ Decisión que sigue siendo humana", d: "El cajero decide validar la matrícula; el personal del parking resuelve lecturas dudosas y reclamaciones; Recursos Humanos da de alta y de baja a los empleados. La IA solo lee la matrícula: no decide cobros ni sanciones.", tags: ["human-in-the-loop", "RGPD", "AI Act"] },
+    entrada: { t: "📷 Entradas", rows: [
+      ["Cámara de entrada", ["Imagen del coche al entrar (en el estudio: imágenes ficticias o de un banco de pruebas).", "Configuración de la cámara: id, resolución, ángulo e iluminación."]],
+      ["Cámara de salida", ["Imagen del coche al salir, con la misma configuración."]],
+      ["TPV del supermercado", ["Matrícula que teclea el cajero al cobrar.", "Id del ticket de esa compra, que el TPV añade automáticamente."]],
+      ["Recursos Humanos", ["Alta y baja de las matrículas de los empleados."]],
+    ], tags: ["imagen .jpg/.png", "config. cámara (JSON)", "matrícula + id ticket", "registro de empleados"] },
+    datos: { t: "🗂️ Datos necesarios", rows: [
+      ["Para la IA", ["Imágenes de prueba anotadas: caja de la matrícula + texto correcto.", "Sin personas identificables; datos abiertos o sintéticos."]],
+      ["Empleados", ["Matrícula + id interno del empleado (máx. 2 vehículos por persona)."]],
+      ["Validaciones de clientes", ["Matrícula + id del ticket + fecha y hora + caja.", "El detalle de la compra se queda en el sistema del supermercado y se consulta con el id del ticket."]],
+      ["Movimientos", ["Registro de entradas y salidas: matrícula, hora, cámara y confianza de la lectura."]],
+      ["Tarifas", ["Minutos gratuitos para clientes, precio por hora y tope diario."]],
+    ], tags: ["anotaciones (XML/JSON)", "BBDD empleados", "validaciones + tickets", "tarifas"] },
+    proceso: { t: "⚙️ Procesamiento", rows: [
+      ["1 · Imagen", ["Validar el fichero (tipo, tamaño, que no esté dañado).", "Preparar la imagen: redimensionar, normalizar y mejorar el contraste."]],
+      ["2 · Lectura (IA)", ["El modelo detecta dónde está la matrícula.", "El OCR lee los caracteres.", "Se comprueba el formato y la confianza de la lectura."]],
+      ["3 · Clasificación", ["¿Está en el registro de empleados? → empleado.", "Si no, ¿tiene hoy un ticket asociado? → cliente.", "Si no → público."]],
+      ["4 · Cálculo", ["En la salida se calcula el tiempo de estancia y el importe según el perfil."]],
+    ], tags: ["OpenCV", "detector (YOLO)", "OCR", "reglas de negocio", "cálculo de tarifa"] },
+    salida: { t: "🧾 Salida", rows: [
+      ["👔 Empleado", ["Barrera abierta, sin pagar."]],
+      ["🛒 Cliente validado", ["Gratis si no supera el tiempo gratuito.", "Si lo supera, paga solo el exceso.", "Se guarda el id del ticket junto al movimiento."]],
+      ["🅿️ Público", ["Paga según el tiempo, en el cajero automático o en la barrera, con tope diario."]],
+      ["⚠️ Lectura dudosa", ["Confianza baja o matrícula sin entrada registrada → aviso al personal por el interfono."]],
+      ["📝 Registro", ["De cada movimiento se guarda: matrícula, perfil, horas, importe e id del ticket (si lo hay)."]],
+    ], tags: ["barrera", "importe", "aviso al personal", "registro JSON/CSV"] },
+    humano: { t: "🧑‍⚖️ Decisión que sigue siendo humana", rows: [
+      ["Cajero", ["Decide validar al cliente y apunta la matrícula con su ticket."]],
+      ["Personal del parking", ["Resuelve lecturas dudosas y reclamaciones (busca el ticket y corrige la validación)."]],
+      ["Recursos Humanos", ["Da de alta y de baja las matrículas de los empleados."]],
+      ["La IA", ["Solo lee la matrícula: no decide cobros ni sanciones."]],
+    ], tags: ["human-in-the-loop", "RGPD", "AI Act"] },
   };
   const detail = $("#ipoDetail");
   const show = (k) => {
     const x = info[k];
-    detail.innerHTML = `<h4>${x.t}</h4><p>${x.d}</p><div class="chips">${x.tags.map((t) => `<span class="chip">${t}</span>`).join("")}</div>`;
+    detail.innerHTML = `<h4>${x.t}</h4><dl class="ipo__rows">${x.rows.map(([h, items]) =>
+      `<div class="ipo__row"><dt>${h}</dt><dd><ul>${items.map((i) => `<li>${i}</li>`).join("")}</ul></dd></div>`).join("")}</dl>
+      <div class="chips">${x.tags.map((t) => `<span class="chip">${t}</span>`).join("")}</div>`;
     detail.style.animation = "none"; void detail.offsetWidth; detail.style.animation = "";
     $$(".ipo__card").forEach((c) => c.classList.toggle("is-active", c.dataset.ipo === k));
   };
@@ -174,6 +204,7 @@ const REGLAS = {
 
   // ---- Simulador ----
   const PLACAS = { empleado: "1234 BCD", cliente: "5678 FGH", publico: "9012 JKL" }; // ficticias
+  const TICKET = "T-2026-004817"; // id de ticket ficticio
   let perfil = "empleado";
   const tiempo = $("#simTiempo"), conf = $("#simConf"), caja = $("#simCaja");
 
@@ -192,7 +223,7 @@ const REGLAS = {
     let verdict;
     steps.push(["📷", `Entrada: la cámara lee <code>${placa}</code> y se guarda la hora de entrada.`]);
     if (perfil === "cliente") {
-      steps.push(["🛒", validada ? `El cajero apunta <code>${placa}</code> en el TPV al cobrar.` : "El cajero <b>no</b> apunta la matrícula."]);
+      steps.push(["🛒", validada ? `El cajero apunta <code>${placa}</code> en el TPV y se asocia al ticket <code>${TICKET}</code>.` : "El cajero <b>no</b> apunta la matrícula: no hay ticket asociado."]);
     }
     steps.push(["📷", `Salida tras ${fmtMin(min)}: lectura con confianza <b>${c.toFixed(2)}</b>.`]);
 
@@ -205,15 +236,15 @@ const REGLAS = {
     } else {
       steps.push(["🔎", "Consulta: la matrícula <b>no</b> está en el registro de empleados."]);
       if (perfil === "cliente" && validada) {
-        steps.push(["🛒", "Consulta: la matrícula <b>se validó hoy</b> en el supermercado."]);
+        steps.push(["🛒", `Consulta: la matrícula tiene hoy el ticket <code>${TICKET}</code> asociado.`]);
         const exceso = Math.max(0, min - REGLAS.MIN_GRATIS_CLIENTE);
         verdict = exceso === 0
-          ? { cls: "ok", icon: "🛒", t: "Cliente · gratis", d: `Ha estado ${fmtMin(min)}, dentro de los ${REGLAS.MIN_GRATIS_CLIENTE} min gratuitos.` }
-          : { cls: "pay", icon: "🛒", t: `Cliente · paga ${eur(tarifa(exceso))}`, d: `Supera el tiempo gratuito en ${fmtMin(exceso)}; se cobra solo el exceso.` };
+          ? { cls: "ok", icon: "🛒", t: "Cliente · gratis", d: `Ha estado ${fmtMin(min)}, dentro de los ${REGLAS.MIN_GRATIS_CLIENTE} min gratuitos. Se registra la salida con el ticket ${TICKET}.` }
+          : { cls: "pay", icon: "🛒", t: `Cliente · paga ${eur(tarifa(exceso))}`, d: `Supera el tiempo gratuito en ${fmtMin(exceso)}; se cobra solo el exceso. Se registra con el ticket ${TICKET}.` };
       } else {
-        if (perfil === "cliente") steps.push(["🛒", "Consulta: la matrícula <b>no</b> se validó en caja → se trata como público."]);
+        if (perfil === "cliente") steps.push(["🛒", "Consulta: la matrícula <b>no</b> tiene ningún ticket hoy → se trata como público."]);
         verdict = { cls: "pay", icon: "🅿️", t: `Público · paga ${eur(tarifa(min))}`, d: `${fmtMin(min)} × ${eur(REGLAS.TARIFA_HORA)}/h${tarifa(min) === REGLAS.TOPE_DIARIO ? " (tope diario)" : ""}.` +
-          (perfil === "cliente" ? " Si compró y no le validaron, puede reclamar al personal." : "") };
+          (perfil === "cliente" ? " Si compró y no le validaron, puede reclamar al personal enseñando el ticket." : "") };
       }
     }
     $("#simTrace").innerHTML = steps.map(([i, t], k) => `<li style="--i:${k}"><span>${i}</span><p>${t}</p></li>`).join("");

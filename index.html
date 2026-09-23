@@ -119,7 +119,7 @@
         <div class="zone" style="--c: var(--ok)">
           <span class="zone__icon">🛒</span>
           <h4>Clientes del supermercado</h4>
-          <p>Al pagar, el <b>cajero apunta la matrícula</b> en el TPV. Esa validación dura solo ese día.</p>
+          <p>Al pagar, el <b>cajero apunta la matrícula</b> en el TPV y el sistema la <b>asocia al id del ticket</b> de compra. La validación dura solo ese día.</p>
           <div class="zone__rule"><span>Salida</span><b>Gratis los primeros <span class="js-free">90</span> min · después, tarifa</b></div>
         </div>
         <div class="zone" style="--c: var(--java)">
@@ -166,9 +166,9 @@
       <h3 class="sub reveal">1.3 · Entradas, datos, procesamiento y salida</h3>
       <p class="hint reveal">👆 Pulsa cada bloque del flujo para ver el detalle.</p>
       <div class="ipo reveal" id="ipo">
-        <button class="ipo__card is-active" data-ipo="entrada"><span class="ipo__icon">📷</span><b>Entradas</b><small>Imágenes + validación en caja</small></button>
+        <button class="ipo__card is-active" data-ipo="entrada"><span class="ipo__icon">📷</span><b>Entradas</b><small>Imágenes + matrícula y ticket en caja</small></button>
         <span class="ipo__arrow">➜</span>
-        <button class="ipo__card" data-ipo="datos"><span class="ipo__icon">🗂️</span><b>Datos</b><small>Imágenes anotadas + registros</small></button>
+        <button class="ipo__card" data-ipo="datos"><span class="ipo__icon">🗂️</span><b>Datos</b><small>Imágenes anotadas + bases de datos</small></button>
         <span class="ipo__arrow">➜</span>
         <button class="ipo__card" data-ipo="proceso"><span class="ipo__icon">⚙️</span><b>Procesamiento</b><small>Leer · clasificar · calcular</small></button>
         <span class="ipo__arrow">➜</span>
@@ -180,13 +180,10 @@
 
       <!-- Viabilidad -->
       <div class="card feas reveal">
-        <h3>✅ ¿Es viable?</h3>
-        <p>Sí. Los parkings con <b>lectura automática de matrículas</b> (ANPR/LPR) ya se usan en centros comerciales, aeropuertos y empresas. Lo importante de nuestro diseño es separar dos cosas:</p>
         <div class="feas__split">
           <div><span class="feas__tag feas__tag--ia">🤖 Parte de IA</span><p>Solo <b>detectar y leer la matrícula</b> en la imagen (visión por computador + OCR). Es la única parte que necesita un modelo.</p></div>
-          <div><span class="feas__tag feas__tag--app">🖥️ Parte de aplicación</span><p><b>Clasificar</b> (empleado / cliente / público) y <b>calcular el importe</b> son reglas y consultas a una base de datos. No hace falta IA.</p></div>
+          <div><span class="feas__tag feas__tag--app">🖥️ Parte de aplicación</span><p><b>Clasificar</b> (empleado / cliente / público), <b>asociar el ticket</b> y <b>calcular el importe</b> son reglas y consultas a una base de datos. No hace falta IA.</p></div>
         </div>
-        <p class="meta">Esta separación justifica en el Paso 2 que el lenguaje de la aplicación y el de la IA puedan ser distintos.</p>
       </div>
 
       <div class="grid-2 reveal">
@@ -194,7 +191,7 @@
           <h3>⚠️ Riesgos y límites</h3>
           <ul class="check">
             <li><b>Privacidad (RGPD):</b> la matrícula es un dato personal. El registro de empleados solo guarda matrícula + id interno; se informa a la plantilla y no se usa para controlar horarios.</li>
-            <li><b>Mínimos datos del cliente:</b> el TPV solo marca «validada sí/no» con fecha; nunca se vincula a qué ha comprado.</li>
+            <li><b>Vínculo matrícula ↔ ticket:</b> al asociar la matrícula al id del ticket se puede saber qué ha comprado el cliente. Es un dato personal más sensible: hay que avisar al cliente (cartel y ticket), guardar solo el id del ticket (el detalle de la compra sigue en el sistema del supermercado), limitar quién puede consultarlo y borrarlo pasado un plazo.</li>
             <li><b>Retención mínima:</b> se guarda el resultado, no la imagen; los registros de público y clientes se borran tras un plazo corto.</li>
             <li><b>Errores de lectura:</b> 0/O, 8/B, suciedad, noche, ángulo → umbral de confianza y revisión.</li>
             <li><b>Errores humanos:</b> el cajero puede teclear mal la matrícula → el TPV sugiere las matrículas que han entrado hoy para elegirla.</li>
@@ -204,9 +201,9 @@
         <div class="card card--ok">
           <h3>🧑‍⚖️ Qué sigue siendo humano</h3>
           <ul class="check">
-            <li>La <b>validación en caja</b> la hace una persona (el cajero), no la IA.</li>
+            <li>La <b>validación en caja</b> (matrícula + ticket) la hace una persona, el cajero, no la IA.</li>
             <li>Lecturas con <b>confianza baja</b> o que no coinciden con ninguna entrada → aviso al personal por el interfono.</li>
-            <li><b>Reclamaciones</b> (p. ej. «compré pero no me validaron») y cualquier <b>cobro o sanción</b> dudosa.</li>
+            <li><b>Reclamaciones</b> (p. ej. «compré pero no me validaron»): el personal busca el ticket y corrige la validación. También cualquier <b>cobro o sanción</b> dudosa.</li>
             <li>El <b>alta y baja</b> de matrículas de empleados la gestiona Recursos Humanos.</li>
           </ul>
         </div>

@@ -116,30 +116,75 @@ _Texto de la reflexión…_
 
 **Opción elegida: B — Matriculator**, adaptada a nuestro caso: el parking de una **empresa con muchos empleados** que también tiene una **zona pública de pago por tiempo** y una **zona para clientes de un supermercado**.
 
-| Elemento | Descripción |
-|---|---|
-| **Problema** | Un único parking con tres tipos de usuario. Hoy se controla con tarjetas y tiques de papel que se pierden, generan colas y necesitan personal en la salida. Queremos que el sistema reconozca la matrícula y sepa si el coche es de un **empleado**, de un **cliente del supermercado** o de **público**. |
-| **Entradas** | Imágenes de las cámaras de entrada y salida (en el estudio: ficticias o de banco de pruebas) + configuración de cámara · matrícula tecleada por el **cajero** en el TPV · alta de matrículas de empleados (Recursos Humanos) |
-| **Datos** | Para la IA: imágenes anotadas (caja de la matrícula + texto), sin personas identificables. Para la app: registro de empleados (matrícula + id interno), validaciones del día del supermercado, registro de entradas/salidas y tarifas. Todo ficticio. |
-| **Procesamiento** | Validar imagen → preparar → **detectar y leer la matrícula (IA)** → comprobar formato y confianza → **clasificar** (¿empleado? ¿validada hoy en caja? si no, público) → calcular tiempo e importe en la salida |
-| **Salida** | Empleado: barrera abierta · Cliente validado: gratis hasta el tiempo gratuito, después paga el exceso · Público: importe según tiempo · Confianza baja o sin entrada registrada: **aviso al personal** · Registro mínimo de cada movimiento |
-| **Riesgos / límites** | Privacidad (RGPD): la matrícula es un dato personal; el registro de empleados no se usa para controlar horarios; el TPV solo marca «validada sí/no», sin vincular la compra. Retención mínima. Errores de lectura (0/O, 8/B, noche, suciedad). Errores del cajero al teclear. Coches compartidos, cambios de coche, matrículas extranjeras. |
-| **Decisión que sigue siendo humana** | La validación en caja (cajero) · lecturas dudosas y reclamaciones (personal del parking) · alta y baja de empleados (RR. HH.) · cualquier cobro o sanción dudosa |
+#### El problema
+
+Un único parking con tres tipos de usuario. Hoy se controla con tarjetas y tiques de papel que se pierden, generan colas en la barrera y obligan a tener personal en la salida. Queremos que una cámara en la entrada y otra en la salida lean la matrícula y que el sistema sepa si el coche es de un **empleado**, de un **cliente del supermercado** o de **público**.
+
+**Qué NO pretende:** identificar personas, vigilar a los empleados (horarios, fichajes) ni sancionar automáticamente. Es un estudio con imágenes de prueba y datos ficticios.
+
+#### Entradas
+
+- **Cámara de entrada:** imagen del coche al entrar (en el estudio: ficticia o de banco de pruebas) + configuración de la cámara (id, resolución, ángulo, iluminación).
+- **Cámara de salida:** imagen del coche al salir.
+- **TPV del supermercado:** matrícula que teclea el cajero al cobrar + **id del ticket** de esa compra (lo añade el TPV automáticamente).
+- **Recursos Humanos:** alta y baja de matrículas de empleados.
+
+#### Datos
+
+- **Para la IA:** imágenes de prueba anotadas (caja de la matrícula + texto correcto), sin personas identificables.
+- **Empleados:** matrícula + id interno del empleado (máx. 2 vehículos por persona).
+- **Validaciones de clientes:** matrícula + **id del ticket** + fecha y hora + caja. El detalle de la compra se queda en el sistema del supermercado y se consulta con el id del ticket.
+- **Movimientos:** entradas y salidas (matrícula, hora, cámara, confianza de la lectura).
+- **Tarifas:** minutos gratuitos, precio por hora y tope diario.
+
+Todos los datos del trabajo son ficticios.
+
+#### Procesamiento
+
+1. **Imagen:** validar el fichero y prepararlo (redimensionar, normalizar, contraste).
+2. **Lectura (IA):** el modelo detecta la matrícula, el OCR la lee y se comprueban formato y confianza.
+3. **Clasificación:** ¿está en el registro de empleados? → empleado · si no, ¿tiene hoy un ticket asociado? → cliente · si no → público.
+4. **Cálculo:** en la salida, tiempo de estancia e importe según el perfil.
+
+#### Salida
+
+- 👔 **Empleado:** barrera abierta, sin pagar.
+- 🛒 **Cliente validado:** gratis si no supera el tiempo gratuito; si lo supera, paga solo el exceso. Se guarda el id del ticket junto al movimiento.
+- 🅿️ **Público:** paga según el tiempo, con tope diario.
+- ⚠️ **Lectura dudosa:** confianza baja o matrícula sin entrada registrada → aviso al personal por el interfono.
+- 📝 **Registro:** de cada movimiento se guarda matrícula, perfil, horas, importe e id del ticket (si lo hay).
 
 #### Reglas del sistema (valores de ejemplo)
 
 | Perfil | Cómo se reconoce | Qué pasa en la salida |
 |---|---|---|
 | 👔 Empleado | La matrícula está en el registro de empleados | Gratis, barrera abierta |
-| 🛒 Cliente del supermercado | El cajero apuntó la matrícula hoy en el TPV | Gratis los primeros **90 min**; después paga el exceso |
+| 🛒 Cliente del supermercado | El cajero apuntó la matrícula hoy y quedó asociada a un **id de ticket** | Gratis los primeros **90 min**; después paga el exceso |
 | 🅿️ Público | Ninguna de las anteriores | Paga **2,40 €/h** (por minuto), tope **18 €/día** |
 | ⚠️ Lectura dudosa | Confianza < **0,80** | Revisión humana por interfono |
 
 > ✏️ Los minutos gratuitos, la tarifa y el tope son valores de ejemplo: están en `script.js` → `REGLAS` y en la web hay un **simulador** para probarlos.
 
-#### ¿Es viable?
+#### Parte de IA y parte de aplicación
 
-Sí. Los parkings con lectura automática de matrículas (ANPR/LPR) ya existen en centros comerciales, aeropuertos y empresas. La clave del diseño es que **la IA solo detecta y lee la matrícula**; saber si es empleado, cliente o público y calcular el importe son **reglas y consultas a una base de datos**, sin IA. Esta separación la aprovechamos en el Paso 2 para justificar un lenguaje para la aplicación y otro para la IA.
+- 🤖 **Parte de IA:** solo **detectar y leer la matrícula** en la imagen (visión por computador + OCR). Es la única parte que necesita un modelo.
+- 🖥️ **Parte de aplicación:** **clasificar** (empleado / cliente / público), **asociar el ticket** y **calcular el importe** son reglas y consultas a una base de datos. No hace falta IA.
+
+#### Riesgos y límites
+
+- **Privacidad (RGPD):** la matrícula es un dato personal. El registro de empleados solo guarda matrícula + id interno; se informa a la plantilla y no se usa para controlar horarios.
+- **Vínculo matrícula ↔ ticket:** al asociar la matrícula al id del ticket se puede saber qué ha comprado el cliente. Es un dato más sensible: hay que avisar al cliente (cartel y ticket), guardar solo el id del ticket (el detalle sigue en el sistema del supermercado), limitar quién puede consultarlo y borrarlo pasado un plazo.
+- **Retención mínima:** se guarda el resultado, no la imagen.
+- **Errores de lectura:** 0/O, 8/B, suciedad, noche, ángulo → umbral de confianza y revisión.
+- **Errores humanos:** el cajero puede teclear mal la matrícula → el TPV sugiere las matrículas que han entrado hoy.
+- **Casos especiales:** coches de empresa compartidos, cambios de coche, matrículas extranjeras, remolques.
+
+#### Decisiones que siguen siendo humanas
+
+- **Cajero:** decide validar al cliente y apunta la matrícula con su ticket.
+- **Personal del parking:** lecturas dudosas y reclamaciones (busca el ticket y corrige la validación).
+- **Recursos Humanos:** alta y baja de matrículas de empleados.
+- **La IA** solo lee la matrícula: no decide cobros ni sanciones.
 
 ### Paso 2 · Compara lenguajes y toma una decisión
 
@@ -260,7 +305,8 @@ _Respuesta…_
 | Paso | Miembro | Prompt (literal) | Qué aportó | Evidencia |
 |---|---|---|---|---|
 | Organización | Julen | _«En el curso de IA y Big Data… queremos que hagas el README.md con la estructura de pasos…»_ | Estructura del repo, README y web base | `assets/ia/…png` |
-| Paso 1 | | | | |
+| Paso 1 | Julen | _«Nosotros habíamos pensado en un parking de una empresa con muchos empleados… que tenga una parte que sea pública (pago por tiempo) y también una zona para un supermercado… que el cajero tenga un apartado de apuntar la matrícula del cliente… ¿Esto sería posible?»_ | Confirmó la viabilidad, separó parte de IA / parte de aplicación, propuso reglas y un simulador | `assets/ia/…png` |
+| Paso 1 | Julen | _«…quiero también que el sistema guarde el id del ticket y lo asocie a la matrícula del coche del cliente, para que se vincule con lo que ha comprado el cliente.»_ | Añadió el id del ticket a entradas, datos, salida y simulador, y los riesgos de privacidad asociados | `assets/ia/…png` |
 | Paso 2 | | | | |
 | Paso 3 | Julen | | | |
 | Paso 4 | Ander | | | |
@@ -270,8 +316,8 @@ _Respuesta…_
 
 | # | Respuesta inicial de la IA | Qué detectamos | Repregunta / corrección | Resultado final |
 |---|---|---|---|---|
-| 1 | | _p. ej. dato sin fuente / puntuación que no nos convence_ | | |
-| 2 | | | | |
+| 1 | La IA propuso guardar solo «validada sí/no» y no vincular la matrícula con la compra (mínimos datos) | Queríamos poder saber qué ha comprado cada cliente | Pedimos guardar el **id del ticket** asociado a la matrícula | **Decisión humana contra la propuesta de la IA:** se guarda el id del ticket; a cambio se añaden medidas de privacidad (aviso al cliente, acceso limitado, borrado) |
+| 2 | Información de «Entradas / Datos / Salida» en párrafos largos | Difícil de leer | Pedimos separar por líneas cada perfil (empleado, cliente, público…) | Cada bloque dividido en filas con listas |
 
 ### 4.4 Reflexión conjunta sobre el uso de la IA
 
