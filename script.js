@@ -815,19 +815,24 @@ const JUSTIF_SRC = {
 
 /* ---------- 5. Paso 3 ---------- */
 (function flow() {
-  // ✏️ Paso 3 (Julen): flujo de 8 etapas, desde que la persona llega hasta el resultado
+  // ✏️ Paso 3 (Julen): flujo de 10 etapas, desde que el coche llega a la barrera hasta que sale.
+  // kind: "ia" = parte de IA · "app" = reglas y base de datos · "humano" = decide una persona
+  const KIND = { ia: ["🤖 IA", "--py"], app: ["🖥️ Aplicación", "--js"], humano: ["🧑‍⚖️ Humano", "--warn"] };
   const stages = [
-    { ico: "🧑‍💻", t: "Acceso", d: "El operador del parking abre la aplicación web por primera vez y ve el panel para subir una imagen de prueba.", tags: ["HTML/CSS/JS"] },
-    { ico: "📤", t: "Subida", d: "Selecciona una imagen ficticia y la cámara/configuración. El navegador la envía al servidor.", tags: ["formulario", "JSON"] },
-    { ico: "🛡️", t: "Validación", d: "Se comprueba tipo de fichero, tamaño y que la imagen no esté dañada. Si falla → mensaje de error y fin.", tags: ["control de errores"] },
-    { ico: "🖼️", t: "Preparación", d: "Redimensionar, normalizar y mejorar contraste para que el modelo reciba lo que espera.", tags: ["OpenCV"] },
-    { ico: "🎯", t: "Detección", d: "El modelo ya entrenado localiza la matrícula en la imagen (bounding box + confianza).", tags: ["YOLO", "modelo preentrenado"] },
-    { ico: "🔤", t: "Lectura OCR", d: "Se recorta la región y un OCR lee los caracteres; se comprueba que siga el formato de matrícula.", tags: ["OCR", "regex"] },
-    { ico: "🧑‍⚖️", t: "Revisión humana", d: "Si la confianza está por debajo del umbral o el formato no encaja, una persona valida o corrige la lectura.", tags: ["human-in-the-loop"], human: true },
-    { ico: "🧾", t: "Resultado", d: "Se muestra la matrícula, la confianza y se guarda un registro de prueba (sin la imagen original).", tags: ["JSON/CSV", "retención mínima"] },
+    { ico: "🚗", t: "Llegada a la entrada", kind: "app", d: "Un coche se detiene ante la barrera de entrada. Un sensor detecta el vehículo y la cámara de entrada toma una imagen (en el estudio: imágenes de prueba).", tags: ["sensor", "cámara de entrada"] },
+    { ico: "🖼️", t: "Validar y preparar", kind: "app", d: "Se comprueba que la imagen es válida (formato, tamaño, no dañada) y se prepara: redimensionar, normalizar y mejorar el contraste para que el modelo reciba lo que espera.", tags: ["OpenCV", "control de errores"] },
+    { ico: "🎯", t: "Leer la matrícula", kind: "ia", d: "El detector localiza la matrícula en la imagen y el OCR lee los caracteres. Se comprueba el formato (4 números + 3 letras) y la confianza de la lectura.", tags: ["YOLO", "OCR", "modelo preentrenado"] },
+    { ico: "⚠️", t: "¿Lectura fiable?", kind: "humano", human: true, d: "Si la confianza es menor que 0,80 o el formato no encaja, la barrera no decide sola: el personal del parking comprueba la matrícula por interfono o cámara y la corrige.", tags: ["umbral 0,80", "interfono"] },
+    { ico: "📝", t: "Registrar la entrada", kind: "app", d: "Se guarda la matrícula y la hora de entrada (no la imagen) y se abre la barrera. Todos los coches entran igual; el perfil se decide al salir.", tags: ["BBDD movimientos", "retención mínima"] },
+    { ico: "🛒", t: "Validación en caja", kind: "humano", human: true, optional: true, d: "Solo si el conductor compra en el supermercado: al cobrar, el cajero apunta la matrícula en el TPV y el sistema la asocia al id del ticket de esa compra.", tags: ["TPV", "matrícula + id ticket", "opcional"] },
+    { ico: "🚙", t: "Llegada a la salida", kind: "ia", d: "La cámara de salida toma una imagen y se repite la lectura (etapas 2–4): detección, OCR y comprobación de confianza, con revisión humana si hace falta.", tags: ["cámara de salida", "mismo modelo"] },
+    { ico: "🔎", t: "Clasificar el coche", kind: "app", d: "Se consulta la base de datos: ¿la matrícula está en el registro de empleados? → empleado. Si no, ¿tiene hoy un ticket asociado? → cliente. Si no → público.", tags: ["BBDD empleados", "BBDD tickets"] },
+    { ico: "💶", t: "Calcular el importe", kind: "app", d: "Con la hora de entrada y la de salida se calcula la estancia. Empleado: 0 €. Cliente: gratis los primeros 90 min y después solo el exceso. Público: 2,40 €/h con tope de 18 €/día.", tags: ["reglas de tarifa"] },
+    { ico: "🧾", t: "Resultado y salida", kind: "app", d: "Si hay importe, el conductor paga en la barrera o en el cajero; después se abre la barrera. Se guarda un registro mínimo: matrícula, perfil, horas, importe e id del ticket. Las reclamaciones las resuelve el personal.", tags: ["barrera", "pago", "registro JSON/CSV"] },
   ];
   const ol = $("#flow");
-  ol.innerHTML = stages.map((s, k) => `<li data-k="${k}" class="${s.human ? "is-human" : ""}"><span class="f-ico">${s.ico}</span>${s.t}</li>`).join("");
+  ol.innerHTML = stages.map((s, k) => `<li data-k="${k}" class="${s.human ? "is-human" : ""}${s.optional ? " is-optional" : ""}" style="--kc: var(${KIND[s.kind][1]})">
+    <span class="f-ico">${s.ico}</span>${s.t}<span class="f-kind">${KIND[s.kind][0]}</span></li>`).join("");
   let cur = 0; let timer = null;
 
   function go(k) {
@@ -837,8 +842,8 @@ const JUSTIF_SRC = {
       li.classList.toggle("is-current", j === cur);
     });
     const s = stages[cur];
-    $("#flowDetail").innerHTML = `<div class="big">${s.ico}</div><div><h4>${cur + 1}. ${s.t}</h4><p>${s.d}</p>
-      ${s.human ? '<p class="human-note">⚠️ Aquí interviene la revisión humana.</p>' : ""}
+    $("#flowDetail").innerHTML = `<div class="big">${s.ico}</div><div><h4>${cur + 1}. ${s.t} <span class="f-kind f-kind--big" style="--kc: var(${KIND[s.kind][1]})">${KIND[s.kind][0]}</span></h4><p>${s.d}</p>
+      ${s.human ? '<p class="human-note">⚠️ Aquí interviene una persona.</p>' : ""}
       <div class="tagline">${s.tags.map((t) => `<span>${t}</span>`).join("")}</div></div>`;
     $("#flowCounter").textContent = `Etapa ${cur + 1} / ${stages.length}`;
   }
@@ -847,7 +852,7 @@ const JUSTIF_SRC = {
     if (timer) return stop();
     $("#flowPlay").textContent = "⏸ Pausar";
     if (cur === stages.length - 1) go(0);
-    timer = setInterval(() => { if (cur === stages.length - 1) return stop(); go(cur + 1); }, 1800);
+    timer = setInterval(() => { if (cur === stages.length - 1) return stop(); go(cur + 1); }, 2200);
   });
   $("#flowPrev").addEventListener("click", () => { stop(); go(cur - 1); });
   $("#flowNext").addEventListener("click", () => { stop(); go(cur + 1); });
@@ -859,20 +864,20 @@ const JUSTIF_SRC = {
   // ✏️ Paso 3 (Julen): componentes antes / después de integrar el modelo
   const data = {
     antes: [
-      ["Recogida de datos", "Buscar un dataset abierto de matrículas o generar imágenes sintéticas. Sin personas identificables.", "datasets abiertos"],
-      ["Anotación", "Marcar la caja de cada matrícula y su texto correcto.", "XML (Pascal VOC) / JSON"],
-      ["Preparación", "Limpiar, redimensionar y dividir en entrenamiento / validación / test.", "pandas · OpenCV"],
-      ["Elegir modelo", "Seleccionar un detector y un OCR preentrenados en lugar de crear uno desde cero.", "YOLO · EasyOCR"],
-      ["Ajuste y evaluación", "Ajuste fino con nuestras imágenes y medir precisión, errores y confianza.", "PyTorch · métricas"],
-      ["Exportar", "Guardar el modelo en un formato que la aplicación pueda cargar.", ".pt · ONNX"],
+      ["Recoger imágenes de prueba", "Dataset abierto de matrículas o imágenes sintéticas de entrada y salida: de día, de noche, con lluvia y en ángulo. Sin personas identificables.", "datasets abiertos"],
+      ["Anotar", "Marcar la caja de cada matrícula y su texto correcto para poder medir si el modelo acierta.", "XML (Pascal VOC) / JSON"],
+      ["Preparar los datos", "Limpiar, redimensionar y dividir en entrenamiento / validación / test.", "pandas · OpenCV"],
+      ["Elegir modelos preentrenados", "Un detector de objetos y un OCR ya entrenados, en lugar de crearlos desde cero.", "YOLO · EasyOCR"],
+      ["Ajustar y evaluar", "Ajuste fino con matrículas españolas; medir el % de matrículas bien leídas y elegir el umbral de confianza (0,80).", "PyTorch · métricas"],
+      ["Preparar la aplicación", "Exportar el modelo y crear las bases de datos de prueba: empleados, tickets, movimientos y tarifas.", ".pt / ONNX · BBDD"],
     ],
     despues: [
-      ["Cargar modelo", "El servicio de IA carga el modelo una vez al arrancar.", "Python · FastAPI"],
-      ["Recibir petición", "La app (Node.js) envía la imagen y la configuración al servicio de IA.", "HTTP · JSON"],
-      ["Inferencia", "Preprocesado → detección → OCR → comprobación de formato.", "OpenCV · YOLO · OCR"],
-      ["Decidir según umbral", "Confianza alta → registro. Baja → aviso de revisión humana.", "if / else"],
-      ["Responder y registrar", "Devolver JSON con el resultado y guardar un registro mínimo.", "JSON · CSV"],
-      ["Monitorizar", "Revisar errores y correcciones humanas para mejorar el modelo en el futuro.", "logs"],
+      ["Cargar el modelo", "El servicio de IA carga el detector y el OCR una sola vez al arrancar.", "Python · FastAPI"],
+      ["Recibir la imagen", "Cuando una cámara detecta un coche, la aplicación envía la imagen al servicio de IA.", "HTTP · JSON"],
+      ["Leer la matrícula", "Preparar → detectar → OCR → comprobar formato y confianza. Devuelve matrícula + confianza.", "OpenCV · YOLO · OCR"],
+      ["Decidir según el umbral", "Confianza ≥ 0,80 → sigue sola. Menor → aviso al personal para revisión humana.", "if / else"],
+      ["Aplicar las reglas", "Entrada: registrar. Salida: clasificar (empleado / cliente / público) y calcular el importe.", "Node.js · BBDD"],
+      ["Registrar y mejorar", "Guardar un registro mínimo y revisar las correcciones humanas para mejorar el modelo más adelante.", "JSON · CSV · logs"],
     ],
   };
   const render = (k) => {
@@ -889,48 +894,54 @@ const JUSTIF_SRC = {
 /* Pseudocódigo: cada línea con su tipo (in/fn/if/out) para colorear la leyenda.
    ✏️ Julen: debe coincidir con pseudocodigo.ipynb */
 const PSEUDO = [
-  ["", "# Matriculator · pseudocódigo (NO es código ejecutable)"],
+  ["", "# Matriculator · pseudocódigo de la SALIDA del parking (NO es código ejecutable)"],
   ["", "UMBRAL_CONFIANZA = 0.80"],
-  ["", "FORMATOS = ['.jpg', '.png']"],
+  ["", "MIN_GRATIS_CLIENTE = 90      # minutos"],
+  ["", "TARIFA_HORA = 2.40           # €/hora"],
+  ["", "TOPE_DIARIO = 18.00          # €"],
   ["", ""],
-  ["fn", "función validar_imagen(ruta):"],
-  ["if", "    si extensión(ruta) no está en FORMATOS: lanzar Error('Formato no válido')"],
-  ["if", "    si tamaño(ruta) > 5 MB: lanzar Error('Imagen demasiado grande')"],
-  ["fn", "    devolver leer_imagen(ruta)"],
-  ["", ""],
-  ["fn", "función preparar(imagen):"],
-  ["fn", "    imagen = redimensionar(imagen, 640, 640)"],
-  ["fn", "    devolver normalizar(imagen)"],
-  ["", ""],
-  ["fn", "función leer_matricula(imagen, detector, ocr):"],
-  ["fn", "    cajas = detector.detectar(imagen)"],
+  ["fn", "función leer_matricula(imagen, detector, ocr):          # parte de IA"],
+  ["if", "    si no es_imagen_valida(imagen): lanzar Error('Imagen no válida')"],
+  ["fn", "    cajas = detector.detectar(preparar(imagen))"],
   ["if", "    si cajas está vacío: devolver None, 0.0"],
   ["fn", "    mejor = caja con mayor confianza de cajas"],
-  ["fn", "    texto = ocr.leer(recortar(imagen, mejor))"],
-  ["fn", "    devolver limpiar(texto), mejor.confianza"],
+  ["fn", "    texto = limpiar(ocr.leer(recortar(imagen, mejor)))"],
+  ["fn", "    devolver texto, mejor.confianza"],
   ["", ""],
-  ["", "# ---- Programa principal ----"],
-  ["fn", "detector = cargar_modelo('modelos/detector.pt')"],
-  ["fn", "ocr = cargar_ocr(idioma='es')"],
-  ["in", "entrada = leer_json('data/entrada_prueba.json')   # ruta imagen + cámara"],
+  ["fn", "función clasificar(matricula, dia):                      # reglas"],
+  ["if", "    si matricula en bd.empleados: devolver 'EMPLEADO', None"],
+  ["fn", "    ticket = bd.tickets.buscar(matricula, dia)"],
+  ["if", "    si ticket: devolver 'CLIENTE', ticket.id"],
+  ["fn", "    devolver 'PUBLICO', None"],
   ["", ""],
+  ["fn", "función calcular_importe(perfil, minutos):"],
+  ["if", "    si perfil == 'EMPLEADO': devolver 0"],
+  ["if", "    si perfil == 'CLIENTE': minutos = max(0, minutos - MIN_GRATIS_CLIENTE)"],
+  ["fn", "    devolver min(TOPE_DIARIO, minutos / 60 * TARIFA_HORA)"],
+  ["", ""],
+  ["", "# ---- Programa principal: un coche llega a la salida ----"],
+  ["in", "evento = recibir_evento('camara_salida')      # imagen + cámara + hora"],
   ["if", "intentar:"],
-  ["fn", "    imagen = preparar(validar_imagen(entrada.ruta_imagen))"],
-  ["fn", "    matricula, conf = leer_matricula(imagen, detector, ocr)"],
-  ["if", "    si matricula es None o conf < UMBRAL_CONFIANZA o no cumple formato:"],
-  ["out", "        resultado = {estado: 'REVISION_HUMANA', confianza: conf}"],
-  ["if", "    si no:"],
-  ["out", "        resultado = {estado: 'OK', matricula: matricula, confianza: conf}"],
+  ["fn", "    matricula, conf = leer_matricula(evento.imagen, detector, ocr)"],
+  ["if", "    si matricula es None o conf < UMBRAL_CONFIANZA:"],
+  ["out", "        avisar_personal(evento)                 # revisión humana"],
+  ["in", "        matricula = esperar_confirmacion_humana()"],
+  ["fn", "    entrada = bd.movimientos.ultima_entrada(matricula)"],
+  ["if", "    si entrada es None: lanzar Error('Sin entrada registrada')"],
+  ["fn", "    perfil, id_ticket = clasificar(matricula, hoy())"],
+  ["fn", "    minutos = minutos_entre(entrada.hora, evento.hora)"],
+  ["fn", "    importe = calcular_importe(perfil, minutos)"],
+  ["if", "    si importe > 0: esperar_pago(importe)"],
+  ["out", "    abrir_barrera()"],
+  ["out", "    resultado = {matricula, perfil, id_ticket, minutos, importe, estado: 'OK'}"],
   ["if", "capturar Error como e:"],
+  ["out", "    avisar_personal(evento, e.mensaje)"],
   ["out", "    resultado = {estado: 'ERROR', mensaje: e.mensaje}"],
-  ["", ""],
-  ["out", "resultado.fecha = ahora(); resultado.camara = entrada.camara_id"],
-  ["out", "guardar_registro('registros.csv', resultado)   # sin guardar la imagen"],
-  ["out", "mostrar(resultado)"],
+  ["out", "guardar_registro('movimientos.csv', resultado)   # sin guardar la imagen"],
 ];
 
 (function pseudo() {
-  const KW = /\b(función|devolver|si no|si|intentar|capturar|lanzar|como|no está en|está vacío|o|es|None|en)\b/g;
+  const KW = /\b(función|devolver|si no|si|intentar|capturar|lanzar|como|no|está vacío|o|es|None|en)\b/g;
   const hl = (line) => {
     let h = escapeHTML(line);
     const ci = h.indexOf("#");

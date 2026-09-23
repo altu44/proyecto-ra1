@@ -344,7 +344,7 @@
         <span class="section__num">03</span>
         <div>
           <h2>Explica las partes del programa</h2>
-          <p class="section__sub">Flujo general, etapas antes y después de integrar el modelo, y pseudocódigo comentado. <span class="ce">CE e</span> <span class="owner">👤 Julen</span></p>
+          <p class="section__sub">Recorrido de un coche por el parking, diagrama de decisión en la salida, etapas antes y después de integrar el modelo y pseudocódigo comentado. <span class="ce">CE e</span> <span class="owner">👤 Julen</span></p>
         </div>
       </div>
 
@@ -353,22 +353,39 @@
         <button class="btn btn--primary btn--small" id="flowPlay">▶ Reproducir flujo</button>
         <button class="btn btn--ghost btn--small" id="flowPrev">←</button>
         <button class="btn btn--ghost btn--small" id="flowNext">→</button>
-        <span class="flow-counter" id="flowCounter">Etapa 1 / 8</span>
+        <span class="flow-counter" id="flowCounter">Etapa 1 / 10</span>
+      </div>
+      <div class="flow-legend reveal">
+        <span style="--kc: var(--py)">🤖 IA</span><span style="--kc: var(--js)">🖥️ Aplicación (reglas y BBDD)</span><span style="--kc: var(--warn)">🧑‍⚖️ Interviene una persona</span><span class="is-opt">Borde discontinuo gris = etapa opcional</span>
       </div>
       <ol class="flow reveal" id="flow"></ol>
       <div class="flow-detail reveal" id="flowDetail"></div>
 
-      <h3 class="sub reveal">3.2 · Etapas y componentes del programa</h3>
+      <h3 class="sub reveal">3.2 · Diagrama de decisión en la salida</h3>
+      <div class="card fc-card reveal">
+        <div class="fc-legend">
+          <span><i class="lg-ia"></i>Parte de IA</span><span><i class="lg-dec"></i>Decisión (reglas)</span><span><i class="lg-human"></i>Revisión humana</span><span><i class="lg-ok"></i>Sale gratis</span><span><i class="lg-pay"></i>Paga</span>
+        </div>
+        <p class="fc-hint">👉 Desliza el diagrama hacia los lados para verlo entero.</p>
+        <div class="fc-scroll"><svg class="fc" viewBox="0 0 960 630" role="img" aria-labelledby="fcTitle fcDesc"><title id="fcTitle">Diagrama de decisión en la salida del parking</title><desc id="fcDesc">Se lee la matrícula; si la confianza es baja revisa una persona; después se comprueba si es empleado, si tiene ticket del supermercado y el tiempo de estancia para decidir el importe.</desc><defs><marker id="fcArrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" class="fc-arrowhead"/></marker></defs><g class="fc-start"><rect x="340.0" y="16.0" width="280" height="48" rx="24"/><text x="480" y="40">🚙 Coche en la salida</text></g><g class="fc-ia"><rect x="320.0" y="97.0" width="320" height="56" rx="12"/><text x="480" y="117">🤖 Leer la matrícula</text><text class="fc-sub" x="480" y="136">detector + OCR · devuelve texto y confianza</text></g><g class="fc-dec"><polygon points="480,183 630,225 480,267 330,225"/><text x="480" y="225">¿Confianza ≥ 0,80?</text></g><g class="fc-human"><rect x="695.0" y="193.0" width="240" height="64" rx="12"/><text x="815" y="217">🧑‍⚖️ Revisión humana</text><text class="fc-sub" x="815" y="236">el personal comprueba y corrige</text></g><g class="fc-dec"><polygon points="480,303 630,345 480,387 330,345"/><text x="480" y="345">¿Está en empleados?</text></g><g class="fc-end fc-ok"><rect x="30.0" y="315.0" width="230" height="60" rx="12"/><text x="145" y="337">👔 Empleado</text><text class="fc-sub" x="145" y="356">0 € · barrera abierta</text></g><g class="fc-dec"><polygon points="480,423 630,465 480,507 330,465"/><text x="480" y="465">¿Tiene ticket hoy?</text></g><g class="fc-end fc-pay"><rect x="30.0" y="435.0" width="230" height="60" rx="12"/><text x="145" y="457">🅿️ Público</text><text class="fc-sub" x="145" y="476">2,40 €/h · tope 18 €/día</text></g><g class="fc-dec"><polygon points="480,543 630,585 480,627 330,585"/><text x="480" y="585">¿Estancia ≤ 90 min?</text></g><g class="fc-end fc-ok"><rect x="695.0" y="555.0" width="240" height="60" rx="12"/><text x="815" y="577">🛒 Cliente · gratis</text><text class="fc-sub" x="815" y="596">se guarda el id del ticket</text></g><g class="fc-end fc-pay"><rect x="30.0" y="555.0" width="230" height="60" rx="12"/><text x="145" y="577">🛒 Cliente · paga</text><text class="fc-sub" x="145" y="596">solo el tiempo que excede</text></g><path class="fc-arrow " d="M480 64 V95" marker-end="url(#fcArrow)"/><path class="fc-arrow " d="M480 153 V181" marker-end="url(#fcArrow)"/><path class="fc-arrow " d="M630 225 H693" marker-end="url(#fcArrow)"/><text class="fc-label" x="660" y="215">No</text><path class="fc-arrow fc-arrow--human" d="M815 257 V345 H632" marker-end="url(#fcArrow)"/><text class="fc-label" x="860" y="300">confirmada</text><path class="fc-arrow " d="M480 267 V301" marker-end="url(#fcArrow)"/><text class="fc-label" x="495" y="285.0">Sí</text><path class="fc-arrow " d="M330 345 H262" marker-end="url(#fcArrow)"/><text class="fc-label" x="298" y="335">Sí</text><path class="fc-arrow " d="M480 387 V421" marker-end="url(#fcArrow)"/><text class="fc-label" x="497" y="405.0">No</text><path class="fc-arrow " d="M330 465 H262" marker-end="url(#fcArrow)"/><text class="fc-label" x="298" y="455">No</text><path class="fc-arrow " d="M480 507 V541" marker-end="url(#fcArrow)"/><text class="fc-label" x="495" y="525.0">Sí</text><path class="fc-arrow " d="M630 585 H693" marker-end="url(#fcArrow)"/><text class="fc-label" x="660" y="575">Sí</text><path class="fc-arrow " d="M330 585 H262" marker-end="url(#fcArrow)"/><text class="fc-label" x="298" y="575">No</text></svg></div>
+        <div class="fc-notes">
+          <p><b>Cómo se lee:</b> la IA solo interviene en el primer bloque (leer la matrícula). Todo lo demás son <b>reglas</b> que consultan la base de datos: primero se descarta que sea un empleado, después se busca si el cajero asoció un ticket ese día y, por último, se mira cuánto tiempo ha estado.</p>
+          <p><b>Revisión humana:</b> si la lectura no es fiable, una persona confirma la matrícula y el coche continúa por el mismo camino. También resuelve las reclamaciones (por ejemplo, un cliente que compró pero no le validaron).</p>
+          <p><b>En todos los casos</b> se guarda un registro mínimo (matrícula, perfil, horas, importe e id del ticket si lo hay), nunca la imagen.</p>
+        </div>
+      </div>
+
+      <h3 class="sub reveal">3.3 · Etapas y componentes del programa</h3>
       <div class="tabs tabs--big reveal" id="phaseTabs">
         <button class="tab is-active" data-phase="antes">🛠️ Antes de integrar el modelo</button>
         <button class="tab" data-phase="despues">🚀 Después de integrar el modelo</button>
       </div>
       <div class="phase reveal" id="phase"></div>
 
-      <h3 class="sub reveal">3.3 · Pseudocódigo <small>(Python · completo en <a href="pseudocodigo.ipynb">pseudocodigo.ipynb</a>)</small></h3>
+      <h3 class="sub reveal">3.4 · Pseudocódigo <small>(Python · completo en <a href="pseudocodigo.ipynb">pseudocodigo.ipynb</a>)</small></h3>
       <div class="code reveal">
         <div class="code__bar">
-          <span>matriculator.py · pseudocódigo</span>
+          <span>salida_parking.py · pseudocódigo</span>
           <div class="code__legend">
             <span class="lg lg--in">entrada</span><span class="lg lg--fn">función</span><span class="lg lg--if">condición/error</span><span class="lg lg--out">salida</span>
           </div>

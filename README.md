@@ -256,10 +256,47 @@ Pesos (suman 100 %) × puntuación (1–5). Ver la matriz interactiva en la web.
 
 > Responsable: **Julen**
 
-- **Flujo general (6–10 etapas)**, desde que la persona se pone delante de la aplicación hasta el resultado, indicando dónde interviene la **revisión humana**. → ver diagrama en la web.
-- **Antes de integrar el modelo:** recogida y anotación de datos, preparación, elección de modelo preentrenado, ajuste/validación, exportación.
-- **Después de integrar el modelo:** carga del modelo, inferencia, umbral de confianza, registro, revisión humana, monitorización.
-- **Pseudocódigo** (20–50 líneas, en Python): [`pseudocodigo.ipynb`](pseudocodigo.ipynb) — con entrada, funciones principales, condición/control de errores y salida.
+#### 3.1 Flujo general (10 etapas)
+
+Recorrido de un coche desde que llega a la barrera de entrada hasta que sale. 🤖 = parte de IA · 🖥️ = aplicación (reglas y BBDD) · 🧑‍⚖️ = interviene una persona.
+
+| # | Etapa | Tipo | Qué ocurre |
+|---|---|---|---|
+| 1 | Llegada a la entrada | 🖥️ | Un sensor detecta el coche y la cámara de entrada toma una imagen |
+| 2 | Validar y preparar | 🖥️ | Se comprueba la imagen (formato, tamaño) y se redimensiona / normaliza |
+| 3 | Leer la matrícula | 🤖 | El detector localiza la matrícula y el OCR la lee; se comprueban formato y confianza |
+| 4 | ¿Lectura fiable? | 🧑‍⚖️ | Si la confianza es < 0,80, el personal la comprueba por interfono y la corrige |
+| 5 | Registrar la entrada | 🖥️ | Se guarda matrícula + hora (no la imagen) y se abre la barrera |
+| 6 | Validación en caja *(opcional)* | 🧑‍⚖️ | Si compra en el supermercado, el cajero apunta la matrícula y se asocia al **id del ticket** |
+| 7 | Llegada a la salida | 🤖 | La cámara de salida repite la lectura (etapas 2–4) |
+| 8 | Clasificar el coche | 🖥️ | ¿Empleado? → ¿ticket hoy? → si no, público |
+| 9 | Calcular el importe | 🖥️ | Empleado 0 € · cliente gratis 90 min y después el exceso · público 2,40 €/h (tope 18 €) |
+| 10 | Resultado y salida | 🖥️ | Pago si corresponde, barrera y registro mínimo; reclamaciones al personal |
+
+#### 3.2 Diagrama de decisión en la salida
+
+```
+Coche en la salida → 🤖 Leer matrícula → ¿Confianza ≥ 0,80?
+    ├─ No → 🧑‍⚖️ Revisión humana → (matrícula confirmada) ─┐
+    └─ Sí ──────────────────────────────────────────────┴→ ¿Está en empleados?
+                                                              ├─ Sí → 👔 Empleado · 0 €
+                                                              └─ No → ¿Tiene ticket hoy?
+                                                                        ├─ No → 🅿️ Público · 2,40 €/h (tope 18 €)
+                                                                        └─ Sí → ¿Estancia ≤ 90 min?
+                                                                                  ├─ Sí → 🛒 Cliente · gratis
+                                                                                  └─ No → 🛒 Cliente · paga el exceso
+```
+
+La IA solo interviene al leer la matrícula; el resto son **reglas** que consultan la base de datos. En todos los casos se guarda un registro mínimo, nunca la imagen.
+
+#### 3.3 Etapas y componentes del programa
+
+- **Antes de integrar el modelo:** recoger imágenes de prueba (día, noche, lluvia, ángulo) → anotar (caja + texto) → preparar y dividir los datos → elegir detector y OCR preentrenados → ajustar con matrículas españolas y elegir el umbral (0,80) → exportar el modelo y crear las BBDD de prueba (empleados, tickets, movimientos, tarifas).
+- **Después de integrar el modelo:** cargar el modelo → recibir la imagen de la cámara → leer la matrícula → decidir según el umbral → aplicar las reglas (registrar / clasificar / calcular) → registrar y revisar las correcciones humanas para mejorar el modelo.
+
+#### 3.4 Pseudocódigo
+
+[`pseudocodigo.ipynb`](pseudocodigo.ipynb) — 49 líneas en Python que describen **la salida del parking**: `leer_matricula()` (IA), `clasificar()` y `calcular_importe()` (reglas), umbral de confianza con revisión humana, `try/except` y registro en CSV sin la imagen. Se puede ejecutar gracias a un detector, un OCR y unas BBDD **simulados** con cuatro coches ficticios (empleado, cliente con ticket, lectura dudosa corregida por una persona e imagen no válida).
 
 ### Paso 4 · Selecciona marcado y formatos de datos
 

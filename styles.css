@@ -382,7 +382,7 @@ input[type="range"]::-moz-range-thumb { width: 18px; height: 18px; border-radius
 /* ---------- Paso 3 ---------- */
 .flow-controls { display: flex; gap: .5rem; align-items: center; margin-bottom: 1rem; }
 .flow-counter { margin-left: auto; font: 600 .85rem var(--mono); color: var(--muted); }
-.flow { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(8, 1fr); gap: .5rem; counter-reset: s; }
+.flow { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(5, 1fr); gap: 1.1rem .6rem; counter-reset: s; }
 .flow li {
   position: relative; padding: 1rem .6rem .8rem; border-radius: var(--radius-sm); text-align: center; cursor: pointer;
   background: var(--surface); border: 1px solid var(--border); font-size: .8rem; font-weight: 600; transition: all .3s;
@@ -715,3 +715,49 @@ body.no-scroll { overflow: hidden; }
 .interp__conc ol { margin: 0; padding-left: 1.2rem; }
 .interp__conc li { margin: .35rem 0; font-size: .92rem; }
 @media (max-width: 760px) { .interp { grid-template-columns: 1fr; } }
+
+/* ---------- Paso 3: flujo del parking ---------- */
+.flow li { border-top: 4px solid var(--kc, var(--border)); padding-top: 1.1rem; }
+.flow li .f-kind { display: block; margin-top: .35rem; font-size: .66rem; font-weight: 700; color: var(--muted); }
+.flow li.is-optional { border-style: dashed; border-top-style: solid; }
+@media (min-width: 1001px) { .flow li:nth-child(5n)::after { display: none; } }
+.f-kind--big { display: inline-block; margin-left: .4rem; font-size: .72rem; padding: .1rem .55rem; border-radius: 999px; vertical-align: middle;
+  background: color-mix(in srgb, var(--kc) 18%, transparent); color: var(--text); font-weight: 700; }
+.flow-legend { display: flex; flex-wrap: wrap; gap: .4rem .9rem; margin: 0 0 1.2rem; font-size: .8rem; color: var(--muted); }
+.flow-legend span { display: inline-flex; align-items: center; gap: .35rem; }
+.flow-legend span:not(.is-opt)::before { content: ""; width: 18px; height: 4px; border-radius: 2px; background: var(--kc); }
+.flow-legend .is-opt::before { content: ""; width: 16px; height: 12px; border: 1px dashed var(--muted); border-radius: 3px; }
+
+/* Diagrama de decisión (SVG) */
+.fc-card { padding: 1.2rem 1.4rem; }
+.fc-legend { display: flex; flex-wrap: wrap; gap: .4rem 1rem; font-size: .8rem; color: var(--muted); margin-bottom: .6rem; }
+.fc-legend span { display: inline-flex; align-items: center; gap: .35rem; }
+.fc-legend i { width: 14px; height: 14px; border-radius: 4px; border: 2px solid; }
+.lg-ia { border-color: var(--py) !important; } .lg-dec { border-color: var(--accent) !important; transform: rotate(45deg) scale(.8); }
+.lg-human { border-color: var(--warn) !important; border-style: dashed !important; }
+.lg-ok { border-color: var(--ok) !important; background: color-mix(in srgb, var(--ok) 25%, transparent); }
+.lg-pay { border-color: var(--java) !important; background: color-mix(in srgb, var(--java) 25%, transparent); }
+.fc-scroll { overflow-x: auto; }
+.fc { display: block; width: 100%; min-width: 620px; height: auto; max-height: 720px; }
+.fc text { fill: var(--text); font: 600 15px var(--font); text-anchor: middle; dominant-baseline: middle; }
+.fc .fc-sub { font-size: 12px; font-weight: 500; fill: var(--muted); }
+.fc rect, .fc polygon { stroke-width: 2; }
+.fc-start rect { fill: var(--surface-2); stroke: var(--muted); }
+.fc-ia rect { fill: color-mix(in srgb, var(--py) 16%, var(--surface)); stroke: var(--py); }
+.fc-dec polygon { fill: color-mix(in srgb, var(--accent) 12%, var(--surface)); stroke: var(--accent); }
+.fc-human rect { fill: color-mix(in srgb, var(--warn) 14%, var(--surface)); stroke: var(--warn); stroke-dasharray: 6 4; }
+.fc-ok rect { fill: color-mix(in srgb, var(--ok) 18%, var(--surface)); stroke: var(--ok); }
+.fc-pay rect { fill: color-mix(in srgb, var(--java) 16%, var(--surface)); stroke: var(--java); }
+.fc-arrow { fill: none; stroke: var(--muted); stroke-width: 2; }
+.fc-arrow--human { stroke: var(--warn); stroke-dasharray: 6 4; }
+.fc-arrowhead { fill: var(--muted); }
+.fc .fc-label { font-size: 13px; font-weight: 700; fill: var(--accent); }
+.fc-notes { display: grid; grid-template-columns: repeat(3, 1fr); gap: .8rem; margin-top: 1rem; }
+.fc-notes p { margin: 0; padding: .8rem 1rem; border-radius: var(--radius-sm); background: var(--surface-2); border: 1px solid var(--border); font-size: .88rem; }
+@media (max-width: 1000px) { .fc-notes { grid-template-columns: 1fr; } .flow { grid-template-columns: repeat(4, 1fr); } }
+@media (max-width: 760px) { .flow { grid-template-columns: repeat(2, 1fr); } }
+.flow li.is-done, .flow li.is-current { border-top-color: var(--kc, var(--accent)); }
+.flow-controls { flex-wrap: wrap; }
+.flow-counter { white-space: nowrap; }
+.fc-hint { display: none; font-size: .78rem; color: var(--muted); margin: 0 0 .4rem; }
+@media (max-width: 760px) { .fc-hint { display: block; } .flow-controls .btn { white-space: nowrap; } }
