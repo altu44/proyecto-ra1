@@ -24,6 +24,7 @@
       <a href="#paso3">3 · Programa</a>
       <a href="#paso4">4 · Formatos</a>
       <a href="#paso5">5 · Preguntas</a>
+      <a href="#fuentes">Fuentes</a>
       <a href="#equipo">Equipo</a>
     </nav>
     <div class="nav__actions">
@@ -238,11 +239,19 @@
         <div class="banner" id="trendsBanner" hidden></div>
         <div class="chart-wrap"><canvas id="trendsChart" aria-label="Gráfico de Google Trends"></canvas></div>
         <div class="legend-toggles" id="trendsLegend"></div>
-        <p class="meta">Fuente: Google Trends · Todo el mundo · 2004–presente · Datos leídos de <code id="trendsFile">data/trends_web.csv</code> (no es una captura).</p>
+        <p class="meta">Fuente: Google Trends <sup class="cite" data-src="trends"></sup> · Todo el mundo · 2004–presente · Datos leídos de <code id="trendsFile">data/trends_web.csv</code> (no es una captura). Los valores van de 0 a 100: 100 es el momento de máximo interés relativo y cada dato se divide entre el total de búsquedas de esa zona y periodo <sup class="cite" data-src="trends-faq"></sup>.</p>
       </div>
       <div class="card reveal">
         <h3>📈 Interpretación y conclusiones</h3>
-        <p class="todo">✏️ Escribid aquí qué muestra el gráfico: tendencia de cada lenguaje, cruces, diferencias entre búsqueda web y YouTube, y qué os sugiere para Matriculator. Recordad que Trends mide <em>interés relativo de búsqueda</em>, no uso real.</p>
+        <p class="todo">✏️ Escribid aquí qué muestra el gráfico: tendencia de cada lenguaje, cruces, diferencias entre búsqueda web y YouTube, y qué os sugiere para Matriculator. Recordad que Trends mide <em>interés relativo de búsqueda</em>, no uso real <sup class="cite" data-src="trends-faq"></sup>.</p>
+        <div class="evidence">
+          <p class="evidence__title">📊 Para contrastar con otros indicadores de uso</p>
+          <ul class="check">
+            <li><b>GitHub Octoverse 2024:</b> Python pasa a ser el lenguaje más usado en GitHub y supera a JavaScript tras 10 años en cabeza; lo relaciona con el auge de la IA <sup class="cite" data-src="octoverse"></sup>.</li>
+            <li><b>Stack Overflow Developer Survey 2025:</b> JavaScript (66 %) y Python (57,9 %) son los lenguajes más usados; Python crece 7 puntos respecto a 2024 por la IA y la ciencia de datos <sup class="cite" data-src="so2025"></sup>.</li>
+            <li><b>Índice TIOBE:</b> ranking mensual de popularidad según buscadores <sup class="cite" data-src="tiobe"></sup>.</li>
+          </ul>
+        </div>
       </div>
 
       <!-- 2.2 Características -->
@@ -282,17 +291,17 @@
         <div class="decision">
           <span class="decision__tag">🖥️ Lenguaje principal · Aplicación</span>
           <div class="decision__lang" style="--c: var(--js)">JavaScript <small>(Node.js + HTML/CSS)</small></div>
-          <p><span class="todo-inline">✏️ Borrador —</span> Mismo lenguaje en navegador y servidor, gran ecosistema web (Express, APIs REST), fácil integración con bases de datos y despliegue sencillo.</p>
+          <p><span class="todo-inline">✏️ Borrador —</span> Mismo lenguaje en navegador y servidor <sup class="cite" data-src="mdn-js,node"></sup>, gran ecosistema web (Express, APIs REST) <sup class="cite" data-src="express"></sup>, fácil integración con bases de datos y despliegue sencillo.</p>
         </div>
         <div class="decision">
           <span class="decision__tag">🤖 Lenguaje principal · IA</span>
           <div class="decision__lang" style="--c: var(--py)">Python</div>
-          <p><span class="todo-inline">✏️ Borrador —</span> Ecosistema de visión y deep learning (OpenCV, PyTorch, YOLO, OCR), modelos preentrenados reutilizables y notebooks para documentar.</p>
+          <p><span class="todo-inline">✏️ Borrador —</span> Ecosistema de visión y deep learning: OpenCV <sup class="cite" data-src="opencv"></sup>, PyTorch <sup class="cite" data-src="torchvision"></sup>, YOLO <sup class="cite" data-src="ultralytics"></sup> y OCR <sup class="cite" data-src="easyocr"></sup>; modelos preentrenados reutilizables <sup class="cite" data-src="hf-hub"></sup> y notebooks para documentar.</p>
         </div>
       </div>
       <div class="card reveal">
         <h3>🔀 ¿Por qué dos lenguajes distintos?</h3>
-        <p><span class="todo-inline">✏️</span> La interfaz y la lógica web se benefician de JavaScript, mientras que la IA depende de librerías que están en Python. Se conectan mediante una <b>API</b> (el servicio de IA en Python recibe la imagen y devuelve un <b>JSON</b>). Alternativa válida: toda la app en Python (FastAPI/Flask) con un front mínimo en HTML/JS — <span class="todo-inline">decidid y justificad.</span></p>
+        <p><span class="todo-inline">✏️</span> La interfaz y la lógica web se benefician de JavaScript, mientras que la IA depende de librerías que están en Python. Se conectan mediante una <b>API</b> (el servicio de IA en Python recibe la imagen y devuelve un <b>JSON</b>). Alternativa válida: toda la app en Python (FastAPI <sup class="cite" data-src="fastapi"></sup>) con un front mínimo en HTML/JS — <span class="todo-inline">decidid y justificad.</span></p>
       </div>
       <div class="discard reveal" id="discard"></div>
     </section>
@@ -421,11 +430,26 @@
     </section>
 
     <!-- ================================================= -->
+    <!-- FUENTES                                           -->
+    <!-- ================================================= -->
+    <section class="section" id="fuentes">
+      <div class="section__head reveal">
+        <span class="section__num section__num--emoji">📚</span>
+        <div>
+          <h2>Fuentes</h2>
+          <p class="section__sub">Documentación oficial, fundaciones y organismos responsables de cada tecnología, e informes con autoría y fecha. Los números <b>[n]</b> del Paso 2 enlazan a esta lista. <span class="ce">Criterio 3</span></p>
+        </div>
+      </div>
+      <div class="src-filter reveal" id="srcFilter"></div>
+      <div class="src-grid" id="srcGrid"></div>
+    </section>
+
+    <!-- ================================================= -->
     <!-- EQUIPO                                            -->
     <!-- ================================================= -->
     <section class="section" id="equipo">
       <div class="section__head reveal">
-        <span class="section__num">👥</span>
+        <span class="section__num section__num--emoji">👥</span>
         <div>
           <h2>Organización del equipo</h2>
           <p class="section__sub">Detalle completo, tiempos reales, fuentes y evidencias de IA en el <a href="https://github.com/altu44/proyecto-ra1#readme" target="_blank" rel="noopener">README</a>.</p>

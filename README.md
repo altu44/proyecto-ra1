@@ -272,20 +272,42 @@ _Respuesta…_
 
 | # | Título | Entidad / autor | URL | Fecha de consulta | Usada en |
 |---|---|---|---|---|---|
-| 1 | Google Trends | Google | https://trends.google.com | _dd/mm/aaaa_ | Paso 2 |
-| 2 | Python documentation | Python Software Foundation | https://docs.python.org/3/ | | Paso 2, 4 |
-| 3 | OpenCV documentation | OpenCV.org | https://docs.opencv.org/ | | Paso 2, 3 |
-| 4 | PyTorch documentation | PyTorch Foundation | https://pytorch.org/docs/ | | Paso 2, 5 |
-| 5 | Ultralytics YOLO Docs | Ultralytics | https://docs.ultralytics.com/ | | Paso 3, 5 |
-| 6 | MDN Web Docs — HTML / JSON | Mozilla | https://developer.mozilla.org/ | | Paso 4 |
-| 7 | Extensible Markup Language (XML) 1.0 | W3C | https://www.w3.org/TR/xml/ | | Paso 4 |
-| 8 | RFC 4180 — Common Format for CSV Files | IETF | https://www.rfc-editor.org/rfc/rfc4180 | | Paso 4 |
-| 9 | RFC 8259 — The JSON Data Interchange Format | IETF | https://www.rfc-editor.org/rfc/rfc8259 | | Paso 4 |
-| 10 | CommonMark Spec | CommonMark | https://spec.commonmark.org/ | | Paso 4 |
-| 11 | pandas documentation | pandas | https://pandas.pydata.org/docs/ | | Paso 4 |
-| 12 | Agencia Española de Protección de Datos | AEPD | https://www.aepd.es/ | | Paso 1, 5 |
-| 13 | Reglamento (UE) 2024/1689 de Inteligencia Artificial | EUR-Lex | https://eur-lex.europa.eu/eli/reg/2024/1689/oj | | Paso 1, 5 |
-| … | | | | | |
+| 1 | Google Trends | Google | https://trends.google.es/trends/ | 23/09/2026 | Paso 2.1 |
+| 2 | Preguntas frecuentes sobre los datos de Google Trends | Google · Ayuda de Tendencias de búsqueda | https://support.google.com/trends/answer/4365533?hl=es | 23/09/2026 | Paso 2.1 |
+| 3 | Octoverse: AI leads Python to top language as the number of global developers surges | GitHub Staff · GitHub Blog, 29/10/2024 | https://github.blog/news-insights/octoverse/octoverse-2024/ | 23/09/2026 | Paso 2.1 · 2.3 |
+| 4 | 2025 Stack Overflow Developer Survey — Technology | Stack Overflow | https://survey.stackoverflow.co/2025/technology | 23/09/2026 | Paso 2.1 · 2.3 |
+| 5 | TIOBE Programming Community Index | TIOBE Software | https://www.tiobe.com/tiobe-index/ | 23/09/2026 | Paso 2.1 · 2.3 |
+| 6 | El tutorial de Python | Python Software Foundation | https://docs.python.org/es/3/tutorial/index.html | 23/09/2026 | Paso 2.2 · 2.3 |
+| 7 | PEP 8 – Style Guide for Python Code | G. van Rossum, B. Warsaw, A. Coghlan · python.org | https://peps.python.org/pep-0008/ | 23/09/2026 | Paso 2.3 |
+| 8 | PEP 20 – The Zen of Python | Tim Peters · python.org | https://peps.python.org/pep-0020/ | 23/09/2026 | Paso 2.2 · 2.3 |
+| 9 | FastAPI | Sebastián Ramírez (tiangolo) | https://fastapi.tiangolo.com/ | 23/09/2026 | Paso 2.3 · 2.5 |
+| 10 | statsmodels documentation | statsmodels (S. Seabold, J. Perktold) | https://www.statsmodels.org/stable/index.html | 23/09/2026 | Paso 2.3 |
+| 11 | OpenCV modules — documentación 4.x | OpenCV | https://docs.opencv.org/4.x/ | 23/09/2026 | Paso 2.2 · 2.3 · 2.5 |
+| 12 | Models and pre-trained weights — TorchVision | PyTorch Foundation | https://docs.pytorch.org/vision/stable/models.html | 23/09/2026 | Paso 2.2 · 2.3 · 2.5 |
+| 13 | Ultralytics YOLO Docs | Ultralytics | https://docs.ultralytics.com/ | 23/09/2026 | Paso 2.2 · 2.3 · 2.5 |
+| 14 | EasyOCR (repositorio oficial) | Jaided AI · GitHub | https://github.com/JaidedAI/EasyOCR | 23/09/2026 | Paso 2.2 · 2.3 · 2.5 |
+| 15 | The Model Hub | Hugging Face | https://huggingface.co/docs/hub/models-the-hub | 23/09/2026 | Paso 2.2 · 2.3 |
+| 16 | JavaScript \| MDN | Mozilla | https://developer.mozilla.org/es/docs/Web/JavaScript | 23/09/2026 | Paso 2.2 · 2.3 · 2.5 |
+| 17 | About Node.js | OpenJS Foundation | https://nodejs.org/en/about | 23/09/2026 | Paso 2.2 · 2.3 · 2.5 |
+| 18 | Express — framework web para Node.js | OpenJS Foundation | https://expressjs.com/ | 23/09/2026 | Paso 2.2 · 2.3 · 2.5 |
+| 19 | TypeScript: JavaScript With Syntax For Types | Microsoft | https://www.typescriptlang.org/ | 23/09/2026 | Paso 2.3 |
+| 20 | TensorFlow.js | Google | https://www.tensorflow.org/js | 23/09/2026 | Paso 2.2 · 2.3 · 2.5 |
+| 21 | ONNX Runtime Web | Microsoft · ONNX Runtime | https://onnxruntime.ai/docs/tutorials/web/ | 23/09/2026 | Paso 2.2 · 2.3 · 2.5 |
+| 22 | Tesseract.js (repositorio oficial) | naptha · GitHub | https://github.com/naptha/tesseract.js | 23/09/2026 | Paso 2.3 |
+| 23 | What is R? | The R Foundation | https://www.r-project.org/about.html | 23/09/2026 | Paso 2.2 · 2.3 · 2.5 |
+| 24 | Shiny | Posit | https://shiny.posit.co/ | 23/09/2026 | Paso 2.2 · 2.3 |
+| 25 | Plumber: an API generator for R | Posit · B. Schloerke | https://www.rplumber.io/ | 23/09/2026 | Paso 2.3 · 2.5 |
+| 26 | torch for R | mlverse · Posit | https://torch.mlverse.org/ | 23/09/2026 | Paso 2.2 · 2.3 |
+| 27 | Getting Started with C++ | Standard C++ Foundation (isocpp.org) | https://isocpp.org/get-started | 23/09/2026 | Paso 2.2 · 2.3 |
+| 28 | PyTorch C++ API | PyTorch Foundation | https://docs.pytorch.org/cppdocs/ | 23/09/2026 | Paso 2.2 · 2.3 · 2.5 |
+| 29 | What is PHP? | The PHP Group · php.net | https://www.php.net/manual/en/intro-whatis.php | 23/09/2026 | Paso 2.2 · 2.3 |
+| 30 | GD — Image Processing and Generation | The PHP Group · php.net | https://www.php.net/manual/en/book.image.php | 23/09/2026 | Paso 2.3 |
+| 31 | Rubix ML (repositorio oficial) | Rubix ML · GitHub | https://github.com/RubixML/ML | 23/09/2026 | Paso 2.2 · 2.3 · 2.5 |
+| 32 | Learn Java — Dev.java | Oracle | https://dev.java/learn/ | 23/09/2026 | Paso 2.2 · 2.3 |
+| 33 | Spring Boot | Spring (Broadcom) | https://spring.io/projects/spring-boot | 23/09/2026 | Paso 2.2 · 2.3 |
+| 34 | Deep Java Library (DJL) | DJL · Amazon Web Services | https://docs.djl.ai/master/index.html | 23/09/2026 | Paso 2.2 · 2.3 · 2.5 |
+
+> En la web, cada dato del Paso 2 lleva un número **[n]** que enlaza a su fuente en la sección **📚 Fuentes**. Las fuentes de los Pasos 1, 3, 4 y 5 (AEPD, Reglamento europeo de IA, W3C, IETF…) se añadirán al trabajarlos.
 
 ---
 

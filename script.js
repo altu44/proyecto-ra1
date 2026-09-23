@@ -33,6 +33,73 @@ const LANGS = [
 ];
 const langById = Object.fromEntries(LANGS.map((l) => [l.id, l]));
 
+/* ---------- Fuentes (Paso 2) ----------
+   Cada fuente tiene un id que se usa para citarla con cite(["id"]).
+   El número [n] es su posición en esta lista. Fecha de consulta común. */
+const FECHA_CONSULTA = "23/09/2026";
+const SRC_CATS = {
+  tend: ["📈 Tendencias y uso", "--accent-2"], py: ["Python", "--py"], js: ["JavaScript / Node.js", "--js"],
+  r: ["R", "--r"], cpp: ["C++", "--cpp"], php: ["PHP", "--php"], java: ["Java", "--java"],
+};
+const SOURCES = [
+  // Tendencias y uso
+  { id: "trends", cat: "tend", title: "Google Trends", org: "Google", url: "https://trends.google.es/trends/", used: "2.1" },
+  { id: "trends-faq", cat: "tend", title: "Preguntas frecuentes sobre los datos de Google Trends", org: "Google · Ayuda de Tendencias de búsqueda", url: "https://support.google.com/trends/answer/4365533?hl=es", used: "2.1" },
+  { id: "octoverse", cat: "tend", title: "Octoverse: AI leads Python to top language as the number of global developers surges", org: "GitHub Staff · GitHub Blog, 29/10/2024", url: "https://github.blog/news-insights/octoverse/octoverse-2024/", used: "2.1 · 2.3" },
+  { id: "so2025", cat: "tend", title: "2025 Stack Overflow Developer Survey — Technology", org: "Stack Overflow", url: "https://survey.stackoverflow.co/2025/technology", used: "2.1 · 2.3" },
+  { id: "tiobe", cat: "tend", title: "TIOBE Programming Community Index", org: "TIOBE Software", url: "https://www.tiobe.com/tiobe-index/", used: "2.1 · 2.3" },
+  // Python
+  { id: "py-tut", cat: "py", title: "El tutorial de Python", org: "Python Software Foundation", url: "https://docs.python.org/es/3/tutorial/index.html", used: "2.2 · 2.3" },
+  { id: "pep8", cat: "py", title: "PEP 8 – Style Guide for Python Code", org: "G. van Rossum, B. Warsaw, A. Coghlan · python.org", url: "https://peps.python.org/pep-0008/", used: "2.3" },
+  { id: "pep20", cat: "py", title: "PEP 20 – The Zen of Python", org: "Tim Peters · python.org", url: "https://peps.python.org/pep-0020/", used: "2.2 · 2.3" },
+  { id: "fastapi", cat: "py", title: "FastAPI", org: "Sebastián Ramírez (tiangolo)", url: "https://fastapi.tiangolo.com/", used: "2.3 · 2.5" },
+  { id: "statsmodels", cat: "py", title: "statsmodels documentation", org: "statsmodels (S. Seabold, J. Perktold)", url: "https://www.statsmodels.org/stable/index.html", used: "2.3" },
+  { id: "opencv", cat: "py", title: "OpenCV modules — documentación 4.x", org: "OpenCV", url: "https://docs.opencv.org/4.x/", used: "2.2 · 2.3 · 2.5" },
+  { id: "torchvision", cat: "py", title: "Models and pre-trained weights — TorchVision", org: "PyTorch Foundation", url: "https://docs.pytorch.org/vision/stable/models.html", used: "2.2 · 2.3 · 2.5" },
+  { id: "ultralytics", cat: "py", title: "Ultralytics YOLO Docs", org: "Ultralytics", url: "https://docs.ultralytics.com/", used: "2.2 · 2.3 · 2.5" },
+  { id: "easyocr", cat: "py", title: "EasyOCR (repositorio oficial)", org: "Jaided AI · GitHub", url: "https://github.com/JaidedAI/EasyOCR", used: "2.2 · 2.3 · 2.5" },
+  { id: "hf-hub", cat: "py", title: "The Model Hub", org: "Hugging Face", url: "https://huggingface.co/docs/hub/models-the-hub", used: "2.2 · 2.3" },
+  // JavaScript
+  { id: "mdn-js", cat: "js", title: "JavaScript | MDN", org: "Mozilla", url: "https://developer.mozilla.org/es/docs/Web/JavaScript", used: "2.2 · 2.3 · 2.5" },
+  { id: "node", cat: "js", title: "About Node.js", org: "OpenJS Foundation", url: "https://nodejs.org/en/about", used: "2.2 · 2.3 · 2.5" },
+  { id: "express", cat: "js", title: "Express — framework web para Node.js", org: "OpenJS Foundation", url: "https://expressjs.com/", used: "2.2 · 2.3 · 2.5" },
+  { id: "ts", cat: "js", title: "TypeScript: JavaScript With Syntax For Types", org: "Microsoft", url: "https://www.typescriptlang.org/", used: "2.3" },
+  { id: "tfjs", cat: "js", title: "TensorFlow.js", org: "Google", url: "https://www.tensorflow.org/js", used: "2.2 · 2.3 · 2.5" },
+  { id: "ort-web", cat: "js", title: "ONNX Runtime Web", org: "Microsoft · ONNX Runtime", url: "https://onnxruntime.ai/docs/tutorials/web/", used: "2.2 · 2.3 · 2.5" },
+  { id: "tesseractjs", cat: "js", title: "Tesseract.js (repositorio oficial)", org: "naptha · GitHub", url: "https://github.com/naptha/tesseract.js", used: "2.3" },
+  // R
+  { id: "r-about", cat: "r", title: "What is R?", org: "The R Foundation", url: "https://www.r-project.org/about.html", used: "2.2 · 2.3 · 2.5" },
+  { id: "shiny", cat: "r", title: "Shiny", org: "Posit", url: "https://shiny.posit.co/", used: "2.2 · 2.3" },
+  { id: "plumber", cat: "r", title: "Plumber: an API generator for R", org: "Posit · B. Schloerke", url: "https://www.rplumber.io/", used: "2.3 · 2.5" },
+  { id: "torch-r", cat: "r", title: "torch for R", org: "mlverse · Posit", url: "https://torch.mlverse.org/", used: "2.2 · 2.3" },
+  // C++
+  { id: "isocpp", cat: "cpp", title: "Getting Started with C++", org: "Standard C++ Foundation (isocpp.org)", url: "https://isocpp.org/get-started", used: "2.2 · 2.3" },
+  { id: "libtorch", cat: "cpp", title: "PyTorch C++ API", org: "PyTorch Foundation", url: "https://docs.pytorch.org/cppdocs/", used: "2.2 · 2.3 · 2.5" },
+  // PHP
+  { id: "php-what", cat: "php", title: "What is PHP?", org: "The PHP Group · php.net", url: "https://www.php.net/manual/en/intro-whatis.php", used: "2.2 · 2.3" },
+  { id: "php-gd", cat: "php", title: "GD — Image Processing and Generation", org: "The PHP Group · php.net", url: "https://www.php.net/manual/en/book.image.php", used: "2.3" },
+  { id: "rubix", cat: "php", title: "Rubix ML (repositorio oficial)", org: "Rubix ML · GitHub", url: "https://github.com/RubixML/ML", used: "2.2 · 2.3 · 2.5" },
+  // Java
+  { id: "devjava", cat: "java", title: "Learn Java — Dev.java", org: "Oracle", url: "https://dev.java/learn/", used: "2.2 · 2.3" },
+  { id: "spring", cat: "java", title: "Spring Boot", org: "Spring (Broadcom)", url: "https://spring.io/projects/spring-boot", used: "2.2 · 2.3" },
+  { id: "djl", cat: "java", title: "Deep Java Library (DJL)", org: "DJL · Amazon Web Services", url: "https://docs.djl.ai/master/index.html", used: "2.2 · 2.3 · 2.5" },
+];
+const srcIndex = Object.fromEntries(SOURCES.map((s, i) => [s.id, i + 1]));
+const srcById = Object.fromEntries(SOURCES.map((s) => [s.id, s]));
+
+/* Devuelve el HTML de una cita: [1, 4] con enlaces a la sección de fuentes */
+function cite(ids) {
+  const list = (Array.isArray(ids) ? ids : String(ids).split(",")).map((x) => x.trim()).filter((x) => srcById[x]);
+  if (!list.length) return "";
+  return `<sup class="cite">[${list.map((id) =>
+    `<a href="#src-${id}" data-src="${id}" title="${escapeHTML(srcById[id].title)} — ${escapeHTML(srcById[id].org)}">${srcIndex[id]}</a>`).join(", ")}]</sup>`;
+}
+/* Lista de enlaces externos (para la ventana del heatmap) */
+function srcLinks(ids) {
+  return ids.filter((id) => srcById[id]).map((id) =>
+    `<a href="${srcById[id].url}" target="_blank" rel="noopener">[${srcIndex[id]}] ${escapeHTML(srcById[id].title)} ↗</a>`).join("");
+}
+
 /* ---------- 1. Tema, navegación, progreso, reveal ---------- */
 (function ui() {
   const root = document.documentElement;
@@ -461,6 +528,15 @@ const LANG_INFO = {
 };
 
 (function langCards() {
+  // Fuentes de cada tarjeta
+  const SRC = {
+    python: ["py-tut", "pep20", "opencv", "torchvision", "ultralytics", "easyocr", "hf-hub"],
+    js: ["mdn-js", "node", "express", "tfjs", "ort-web"],
+    r: ["r-about", "shiny", "torch-r"],
+    cpp: ["isocpp", "libtorch", "opencv"],
+    php: ["php-what", "rubix"],
+    java: ["devjava", "spring", "djl"],
+  };
   const roleLabel = { app: ["role--app", "App"], ia: ["role--ia", "IA"], no: ["role--no", "Descartado"] };
   $("#langGrid").innerHTML = LANGS.map((l) => {
     const i = LANG_INFO[l.id];
@@ -474,6 +550,7 @@ const LANG_INFO = {
         <div class="lang__face lang__back">
           <h4>✅ A favor</h4><ul>${i.pros.map((p) => `<li>${p}</li>`).join("")}</ul>
           <h4>❌ En contra</h4><ul>${i.cons.map((p) => `<li>${p}</li>`).join("")}</ul>
+          <p class="lang__src">📚 Fuentes ${cite(SRC[l.id])}</p>
         </div>
       </div></div>`;
   }).join("");
@@ -590,6 +667,17 @@ const JUSTIF = {
   ],
 };
 
+/* Fuentes de cada casilla (mismo orden que CRITERIA). [] = valoración del equipo sin fuente directa */
+const JUSTIF_SRC = {
+  //       aprender     legible            manten    integ                 datos       estad            libs                                     pre                                  rend                      ui
+  python: [["py-tut"], ["pep8", "pep20"], ["pep8"], ["fastapi"],           ["opencv"], ["statsmodels"], ["torchvision", "ultralytics", "easyocr"], ["hf-hub", "torchvision", "ultralytics"], ["octoverse", "so2025"], []],
+  js:     [["mdn-js"], ["mdn-js"],        ["ts"],   ["node", "express"],   [],         [],              ["tfjs", "ort-web", "tesseractjs"],        ["tfjs", "ort-web"],                  ["node", "so2025"],       ["mdn-js"]],
+  r:      [["r-about"], [],               [],       ["plumber", "shiny"],  ["r-about"], ["r-about"],    ["torch-r"],                               ["torch-r"],                          [],                       ["shiny"]],
+  cpp:    [["isocpp"], ["isocpp"],        [],       [],                    ["opencv"], [],              ["libtorch", "opencv"],                    ["libtorch"],                         ["isocpp", "tiobe"],      []],
+  php:    [["php-what"], [],              [],       ["php-what"],          ["php-gd"], [],              ["rubix"],                                 ["rubix"],                            [],                       ["php-what"]],
+  java:   [["devjava"], ["devjava"],      ["devjava"], ["spring"],         [],         [],              ["djl"],                                   ["djl"],                              ["tiobe"],                []],
+};
+
 (function heatmap() {
   const head = `<thead><tr><th>Criterio</th>${LANGS.map((l) => `<th style="color:var(${l.color})">${l.short || l.name}</th>`).join("")}</tr></thead>`;
   const body = CRITERIA.map((c, k) => `<tr><th>${c.name}</th>${LANGS.map((l) => {
@@ -612,7 +700,7 @@ const JUSTIF = {
       </div>
       <div class="modal__score"><b id="modalScore"></b><span>/ 5</span><div class="modal__dots" id="modalDots"></div></div>
       <p class="modal__text" id="modalText"></p>
-      <p class="modal__note">✏️ Borrador: revisad la justificación y apoyadla en una fuente.</p>
+      <div class="modal__src" id="modalSrc"></div>
       <div class="modal__nav">
         <button class="btn btn--small btn--ghost" data-move="-1,0">↑ Criterio anterior</button>
         <button class="btn btn--small btn--ghost" data-move="1,0">↓ Criterio siguiente</button>
@@ -637,6 +725,10 @@ const JUSTIF = {
     $("#modalScore").textContent = v;
     $("#modalDots").innerHTML = [1, 2, 3, 4, 5].map((i) => `<i class="${i <= v ? "on" : ""}"></i>`).join("");
     $("#modalText").textContent = (JUSTIF[l.id] || [])[cur.k] || "✏️ Pendiente de justificar.";
+    const ids = (JUSTIF_SRC[l.id] || [])[cur.k] || [];
+    $("#modalSrc").innerHTML = ids.length
+      ? `<span>📚 Fuentes</span>${srcLinks(ids)}`
+      : `<span>📚 Fuentes</span><em>Valoración del equipo, sin fuente directa. ✏️ Añadid una si la encontráis.</em>`;
     $$("#heatTable td").forEach((td) => td.classList.toggle("is-selected", td.dataset.l === l.id && +td.dataset.k === cur.k));
     card.style.animation = "none"; void card.offsetWidth; card.style.animation = "";
   }
@@ -709,14 +801,14 @@ const JUSTIF = {
 (function discard() {
   // ✏️ Borrador: motivos de descarte para la PARTE DE IA
   const items = [
-    ["js", "Hay IA en el navegador (TensorFlow.js, ONNX), pero con muchos menos modelos de visión y OCR listos. Se queda para la app."],
-    ["r", "Muy bueno en estadística, pero pobre en visión por computador y en servir modelos por API."],
-    ["cpp", "Rendimiento máximo, pero desarrollar y mantener es mucho más costoso. Útil solo si se llevara a hardware embebido."],
-    ["php", "Prácticamente sin ecosistema de IA ni de visión."],
-    ["java", "Viable (DJL), pero con menos modelos, tutoriales y comunidad de IA que Python."],
+    ["js", "Hay IA en el navegador (TensorFlow.js, ONNX), pero con muchos menos modelos de visión y OCR listos. Se queda para la app.", ["tfjs", "ort-web"]],
+    ["r", "Muy bueno en estadística, pero pobre en visión por computador y en servir modelos por API.", ["r-about", "torch-r", "plumber"]],
+    ["cpp", "Rendimiento máximo, pero desarrollar y mantener es mucho más costoso. Útil solo si se llevara a hardware embebido.", ["libtorch"]],
+    ["php", "Prácticamente sin ecosistema de IA ni de visión.", ["rubix"]],
+    ["java", "Viable (DJL), pero con menos modelos, tutoriales y comunidad de IA que Python.", ["djl"]],
   ];
-  $("#discard").innerHTML = items.map(([id, t]) =>
-    `<div class="discard__item" style="--c: var(${langById[id].color})"><b>❌ ${langById[id].name}</b>${t}</div>`).join("");
+  $("#discard").innerHTML = items.map(([id, t, src]) =>
+    `<div class="discard__item" style="--c: var(${langById[id].color})"><b>❌ ${langById[id].name}</b>${t} ${cite(src)}</div>`).join("");
 })();
 
 /* ---------- 5. Paso 3 ---------- */
@@ -971,4 +1063,51 @@ const PSEUDO = [
       <div class="tl-seg" style="left:${(s / max) * 100}%; width:${(d / max) * 100}%; --c: var(${who[w][1]})">${d}h</div>
     </div></div>`).join("") +
     `<div class="tl-legend">${Object.values(who).map(([n, c]) => `<span><i style="--c: var(${c})"></i>${n}</span>`).join("")}<span>· eje en horas acumuladas (≈ 9 h por persona)</span></div>`;
+})();
+
+/* ---------- Fuentes: citas estáticas, sección y navegación ---------- */
+(function fuentes() {
+  // Citas escritas en el HTML: <sup class="cite" data-src="id1,id2"></sup>
+  $$("sup.cite[data-src]").forEach((s) => { s.outerHTML = cite(s.dataset.src); });
+
+  // Tarjetas de la sección de fuentes
+  const grid = $("#srcGrid");
+  if (!grid) return;
+  grid.innerHTML = SOURCES.map((s, i) => {
+    const [cat, color] = SRC_CATS[s.cat];
+    let domain = "";
+    try { domain = new URL(s.url).hostname.replace(/^www\./, ""); } catch { /* url no válida */ }
+    return `<article class="src reveal is-visible" id="src-${s.id}" data-cat="${s.cat}" style="--c: var(${color})">
+      <span class="src__n">${i + 1}</span>
+      <div class="src__body">
+        <span class="src__cat">${cat}</span>
+        <h4><a href="${s.url}" target="_blank" rel="noopener">${escapeHTML(s.title)} <span aria-hidden="true">↗</span></a></h4>
+        <p class="src__org">${escapeHTML(s.org)}</p>
+        <div class="src__meta"><span>🔗 ${domain}</span><span>📅 Consultado el ${FECHA_CONSULTA}</span><span>📍 Citada en ${s.used}</span></div>
+      </div>
+    </article>`;
+  }).join("");
+
+  // Filtros por categoría
+  const counts = SOURCES.reduce((a, s) => ((a[s.cat] = (a[s.cat] || 0) + 1), a), {});
+  $("#srcFilter").innerHTML = `<button class="is-active" data-cat="all">Todas <b>${SOURCES.length}</b></button>` +
+    Object.entries(SRC_CATS).map(([k, [n, c]]) => `<button data-cat="${k}" style="--c: var(${c})"><i></i>${n} <b>${counts[k] || 0}</b></button>`).join("");
+  const filter = (cat) => {
+    $$("#srcFilter button").forEach((b) => b.classList.toggle("is-active", b.dataset.cat === cat));
+    $$("#srcGrid .src").forEach((c) => (c.hidden = cat !== "all" && c.dataset.cat !== cat));
+  };
+  $$("#srcFilter button").forEach((b) => b.addEventListener("click", () => filter(b.dataset.cat)));
+
+  // Clic en una cita [n] → baja a la fuente y la resalta
+  document.addEventListener("click", (e) => {
+    const a = e.target.closest(".cite a[data-src]");
+    if (!a) return;
+    e.preventDefault();
+    e.stopPropagation();
+    const card = document.getElementById("src-" + a.dataset.src);
+    if (!card) return;
+    if (card.hidden) filter("all");
+    card.scrollIntoView({ behavior: "smooth", block: "center" });
+    card.classList.remove("is-flash"); void card.offsetWidth; card.classList.add("is-flash");
+  }, true);
 })();

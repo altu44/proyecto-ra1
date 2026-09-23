@@ -311,7 +311,7 @@ main { max-width: var(--maxw); margin: 0 auto; padding: 0 clamp(1rem, 4vw, 2.5re
 
 /* Tarjetas de lenguajes (flip) */
 .lang-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
-.lang { perspective: 1000px; height: 250px; cursor: pointer; }
+.lang { perspective: 1000px; height: 290px; cursor: pointer; }
 .lang__inner { position: relative; width: 100%; height: 100%; transition: transform .7s cubic-bezier(.2, .8, .2, 1); transform-style: preserve-3d; }
 .lang.is-flipped .lang__inner { transform: rotateY(180deg); }
 .lang__face {
@@ -649,3 +649,44 @@ body.no-scroll { overflow: hidden; }
 .ipo__row li { margin: .15rem 0; font-size: .92rem; color: var(--muted); }
 .ipo__row li::marker { color: var(--accent); }
 @media (max-width: 760px) { .ipo__row { grid-template-columns: 1fr; gap: .3rem; } }
+
+/* ---------- Citas y fuentes ---------- */
+.cite { font-size: .68em; font-weight: 700; margin-left: .1em; white-space: nowrap; line-height: 0; }
+.cite a { color: var(--accent); padding: 0 .1em; border-radius: 4px; }
+.cite a:hover { background: color-mix(in srgb, var(--accent) 18%, transparent); text-decoration: none; }
+.evidence { margin-top: 1rem; padding: 1rem 1.2rem; border-radius: var(--radius-sm); background: var(--surface-2); border: 1px solid var(--border); }
+.evidence__title { margin: 0 0 .4rem; font-weight: 700; font-size: .92rem; }
+.evidence .check li { font-size: .9rem; }
+.lang__src { margin: .4rem 0 0; font-size: .78rem; color: var(--muted); }
+.modal__src { display: grid; gap: .3rem; margin: 0 0 1rem; padding: .7rem .9rem; border-radius: 10px; background: var(--surface-2); border: 1px solid var(--border); font-size: .84rem; }
+.modal__src > span { font-size: .72rem; text-transform: uppercase; letter-spacing: .08em; font-weight: 700; color: var(--muted); }
+.modal__src em { color: var(--warn); font-style: normal; }
+
+.src-filter { display: flex; flex-wrap: wrap; gap: .4rem; margin-bottom: 1.2rem; }
+.src-filter button {
+  display: inline-flex; align-items: center; gap: .4rem; padding: .4rem .85rem; border-radius: 999px; cursor: pointer;
+  border: 1px solid var(--border); background: var(--surface); color: var(--muted); font: 600 .82rem var(--font); transition: all .2s;
+}
+.src-filter button i { width: 9px; height: 9px; border-radius: 50%; background: var(--c); }
+.src-filter button b { font-family: var(--mono); font-size: .75rem; opacity: .7; }
+.src-filter button:hover { color: var(--text); border-color: var(--accent); }
+.src-filter button.is-active { background: var(--accent); border-color: var(--accent); color: #06231b; }
+.src-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: .9rem; }
+.src {
+  display: grid; grid-template-columns: 38px 1fr; gap: .9rem; align-items: start; padding: 1rem 1.1rem;
+  border-radius: var(--radius-sm); background: var(--surface); border: 1px solid var(--border); border-left: 4px solid var(--c);
+  transition: transform .2s, box-shadow .2s; scroll-margin-top: 100px;
+}
+.src[hidden] { display: none; }
+.src:hover { transform: translateY(-3px); box-shadow: var(--shadow); }
+.src__n { width: 38px; height: 38px; border-radius: 10px; display: grid; place-items: center; font: 700 .9rem var(--mono); color: var(--c); background: color-mix(in srgb, var(--c) 15%, var(--surface-2)); }
+.src__cat { font-size: .68rem; text-transform: uppercase; letter-spacing: .08em; font-weight: 700; color: var(--muted); }
+.src h4 { margin: .2rem 0 .15rem; font-size: .98rem; line-height: 1.35; }
+.src h4 a { color: var(--text); }
+.src h4 a:hover { color: var(--accent); }
+.src__org { margin: 0 0 .5rem; font-size: .84rem; color: var(--muted); }
+.src__meta { display: flex; flex-wrap: wrap; gap: .3rem .8rem; font-size: .74rem; color: var(--muted); }
+.src.is-flash { animation: flash 1.6s ease; }
+@keyframes flash { 0%, 40% { box-shadow: 0 0 0 4px var(--accent); } 100% { box-shadow: none; } }
+@media (max-width: 760px) { .src-grid { grid-template-columns: 1fr; } }
+.section__num--emoji { background: none; -webkit-background-clip: border-box; background-clip: border-box; color: inherit; -webkit-text-fill-color: initial; }
