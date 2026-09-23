@@ -201,7 +201,25 @@ Lenguajes comparados: **Python, JavaScript/Node.js, R, C++, PHP y Java**.
 
 - El gráfico de la web se genera **leyendo esos CSV** (no es una captura). Se puede ver por meses o por media anual.
 - **Avisos sobre los datos:** en YouTube faltan los meses de enero a julio de 2017 (vienen a 0 en la exportación de Google Trends; la web los trata como hueco). Septiembre de 2026 es un mes incompleto.
-- **Interpretación y conclusiones:** _…_
+
+**Interpretación** (medias anuales calculadas con los CSV):
+
+| | Búsqueda web | YouTube |
+|---|---|---|
+| **Python** | Plano (~5–6) hasta 2013; sube desde 2014 y es el **primero desde 2019**. Máximo en 2022 (26,5) y 2026 (25) | Crece desde 2018, lidera de 2020 a 2023 (máximo 70 en 2023) |
+| **Java** | Dominaba en 2004 (93) y cae hasta ~12 | Pico en 2016 (90); vuelve a ser el primero en 2024–2026 (~70–75) |
+| **JavaScript** | Muy estable: 10–17 desde 2010 | Sube hasta 2023 (48) y baja a 24 en 2026 |
+| **PHP / C++** | Caída sostenida (PHP 38 → 5; C++ 27 → 5) | Bajos; PHP cae a 5 |
+| **R** | Siempre por debajo de 6 | Algo más de peso (15–22 desde 2016) |
+
+**Conclusiones para Matriculator:**
+
+1. **Python** es el lenguaje con más impulso en las dos fuentes y su subida coincide con el auge de la IA y la ciencia de datos (coherente con GitHub Octoverse 2024 y Stack Overflow 2025) → refuerza elegirlo para la parte de IA.
+2. **JavaScript** mantiene un interés estable: tecnología madura y con mucho material → adecuada para la parte web.
+3. **Java** conserva mucho interés, sobre todo en vídeos de aprendizaje, pero no ligado a la IA → alternativa para backend, no para el modelo.
+4. **PHP, C++ y R** tienen poco interés relativo o en descenso → apoya descartarlos para la IA.
+
+> ⚠️ Límites: Trends mide interés de búsqueda relativo, no uso real. En YouTube faltan enero–julio de 2017 y tras el hueco los valores bajan de golpe (posible cambio de escala), así que se comparan tendencias, no cifras exactas.
 
 #### 2.2 Características y comparativa
 

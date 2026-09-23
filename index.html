@@ -243,7 +243,37 @@
       </div>
       <div class="card reveal">
         <h3>📈 Interpretación y conclusiones</h3>
-        <p class="todo">✏️ Escribid aquí qué muestra el gráfico: tendencia de cada lenguaje, cruces, diferencias entre búsqueda web y YouTube, y qué os sugiere para Matriculator. Recordad que Trends mide <em>interés relativo de búsqueda</em>, no uso real <sup class="cite" data-src="trends-faq"></sup>.</p>
+        <p class="interp__lead">Medias anuales calculadas con los CSV de <code>data/</code>. Recordad que Trends mide <em>interés de búsqueda relativo</em> (0–100), no cuánta gente usa cada lenguaje <sup class="cite" data-src="trends-faq"></sup>.</p>
+        <div class="interp">
+          <div class="interp__col">
+            <h4>🔎 Búsqueda web <small>(2004 – 2026)</small></h4>
+            <ul class="check">
+              <li><b>Java</b> dominaba en 2004 (media 93) y cae de forma continua hasta ~12 en 2026.</li>
+              <li><b>Python</b> estuvo plano en torno a 5–6 hasta 2013; desde 2014 sube sin parar y es el <b>primero desde 2019</b> (18 frente a 17 de Java). Alcanza su máximo en 2022 (26,5) y vuelve a subir en 2026 (25; récord mensual de 33 en junio).</li>
+              <li><b>JavaScript</b> es el más estable: entre 10 y 17 desde 2010.</li>
+              <li><b>PHP y C++</b> caen de forma sostenida (PHP de 38 a 5; C++ de 27 a 5) y <b>R</b> siempre está por debajo de 6.</li>
+            </ul>
+          </div>
+          <div class="interp__col">
+            <h4>▶️ YouTube <small>(2008 – 2026)</small></h4>
+            <ul class="check">
+              <li><b>Java</b> tuvo su pico en 2016 (media 90) y sigue muy alto: vuelve a ser el primero en 2024–2026 (~70–75).</li>
+              <li><b>Python</b> crece desde 2018 y lidera de 2020 a 2023, con máximo en 2023 (70).</li>
+              <li><b>JavaScript</b> sube hasta 2023 (48) y después baja a la mitad (24 en 2026).</li>
+              <li><b>R</b> tiene más peso que en la web (15–22 desde 2016), probablemente por los tutoriales de estadística; <b>PHP</b> cae a 5.</li>
+            </ul>
+          </div>
+        </div>
+        <div class="interp__conc">
+          <h4>🎯 ¿Qué nos dice para Matriculator?</h4>
+          <ol>
+            <li><b>Python es la opción con más impulso</b> en las dos fuentes, y su subida coincide con el auge de la IA y la ciencia de datos, como también señalan GitHub y Stack Overflow <sup class="cite" data-src="octoverse,so2025"></sup>. Refuerza elegirlo para la parte de IA.</li>
+            <li><b>JavaScript mantiene un interés estable</b>: es una tecnología madura y con mucho material, adecuada para la parte web de la aplicación.</li>
+            <li><b>Java</b> sigue teniendo mucho interés, sobre todo en vídeos de aprendizaje, pero ese interés no está ligado a la IA; es una alternativa para el backend, no para el modelo.</li>
+            <li><b>PHP, C++ y R</b> tienen poco interés relativo o en descenso, lo que apoya descartarlos para la parte de IA (ver 2.5).</li>
+          </ol>
+          <p class="meta">⚠️ Límites: en YouTube faltan enero–julio de 2017 y después del hueco los valores bajan de golpe (posible cambio de escala de Google), así que conviene comparar tendencias, no cifras exactas. 2026 solo llega a septiembre.</p>
+        </div>
         <div class="evidence">
           <p class="evidence__title">📊 Para contrastar con otros indicadores de uso</p>
           <ul class="check">
@@ -263,7 +293,7 @@
       <h3 class="sub reveal">2.3 · Comparativa por criterios</h3>
       <div class="card reveal table-card">
         <div class="table-scroll"><table class="heat" id="heatTable"></table></div>
-        <p class="meta">Escala 1 (poco adecuado) – 5 (muy adecuado) para <b>este caso</b>. 👆 <b>Pulsa una casilla</b> para ver por qué tiene esa nota. <span class="todo-inline">✏️ Borrador: revisad y justificad cada puntuación.</span></p>
+        <p class="meta">Escala <span class="heat-legend"><i style="--v:1">1</i><i style="--v:2">2</i><i style="--v:3">3</i><i style="--v:4">4</i><i style="--v:5">5</i></span> de poco adecuado (rojo) a muy adecuado (verde) para <b>este caso</b>. 👆 <b>Pulsa una casilla</b> para ver por qué tiene esa nota. <span class="todo-inline">✏️ Borrador: revisad y justificad cada puntuación.</span></p>
       </div>
 
       <!-- 2.4 Matriz de decisión -->
