@@ -7,7 +7,7 @@
 
 | | |
 |---|---|
-| **Integrantes** | Julen Altuna · _Nombre del compañero/a_ |
+| **Integrantes** | Julen Altuna · Ander Ameztoy |
 | **Aplicación elegida** | Opción B — **Matriculator** (detección de matrículas en imágenes de prueba) |
 | **Web publicada (Netlify)** | 🔗 _https://TU-SITIO.netlify.app_ |
 | **Repositorio** | 🔗 https://github.com/altu44/proyecto-ra1 |
@@ -57,7 +57,7 @@ proyecto-ra1/
 |---|---|---|
 | `main` | Ambos (solo merges revisados) | Versión estable que se despliega en Netlify |
 | `julen` | Julen | Paso 2 (Trends + gráfico), Paso 3, partes compartidas asignadas |
-| `companero` | _Compañero/a_ | Paso 2 (características + comparativa), Paso 4, partes compartidas asignadas |
+| `ander` | Ander | Paso 2 (características + comparativa), Paso 4, partes compartidas asignadas |
 
 Cada integrante trabaja en su rama y abre un **Pull Request** hacia `main`; el otro lo revisa antes de hacer merge. Así queda evidencia de quién ha hecho qué (commits) y de la revisión cruzada.
 
@@ -67,24 +67,24 @@ Cada integrante trabaja en su rama y abre un **Pull Request** hacia `main`; el o
 
 > Rúbrica · Criterio 1 (1,5 pt): tareas vinculadas a entregables, responsables, distribución equilibrada, tiempo previsto/real/revisado y **reflexión**.
 
-**Reparto general:** los Pasos 1, 2 y 5 se hacen entre los dos (dividiendo subtareas para que sea equilibrado); el **Paso 3** lo hace **Julen** y el **Paso 4** lo hace **_compañero/a_**. Disponemos de **5 h de clase**; el resto se completa en casa.
+**Reparto general:** los Pasos 1, 2 y 5 se hacen entre los dos (dividiendo subtareas para que sea equilibrado); el **Paso 3** lo hace **Julen** y el **Paso 4** lo hace **Ander**. Disponemos de **5 h de clase**; el resto se completa en casa.
 
 | # | Tarea | Entregable vinculado | Responsable | Rama | Tiempo previsto | Tiempo invertido | Desviación | Dónde (clase/casa) | Estado |
 |---|---|---|---|---|---|---|---|---|---|
 | T1 | Crear repo, ramas, estructura y Netlify | Repo + URL Netlify | Julen | `main` | 0,5 h | | | Clase | ⬜ |
 | T2 | Definir la aplicación (problema, entradas, datos, proceso, salida, riesgos, decisión humana) | Paso 1 (web) | Ambos | ambas | 0,5 h c/u | | | Clase | ⬜ |
 | T3 | Google Trends (web + YouTube), exportar CSV e interpretar | `data/*.csv` + gráfico web | Julen | `julen` | 1 h | | | Clase | ⬜ |
-| T4 | Características de los 6 lenguajes y comparativa por criterios | Paso 2 (tabla comparativa) | _Compañero/a_ | `companero` | 1,5 h | | | Clase + casa | ⬜ |
+| T4 | Características de los 6 lenguajes y comparativa por criterios | Paso 2 (tabla comparativa) | Ander | `ander` | 1,5 h | | | Clase + casa | ⬜ |
 | T5 | Matriz de decisión, decisiones finales y descarte razonado | Paso 2 (matriz) | Ambos | ambas | 1 h c/u | | | Clase | ⬜ |
 | T6 | Flujo general (6–10 etapas) y diagramas antes/después del modelo | Paso 3 (diagramas) | Julen | `julen` | 1,5 h | | | Casa | ⬜ |
 | T7 | Pseudocódigo comentado (20–50 líneas) | `pseudocodigo.ipynb` | Julen | `julen` | 1,5 h | | | Casa | ⬜ |
-| T8 | HTML, XML, JSON, Markdown y CSV: qué son y dónde intervienen | Paso 4 (web) | _Compañero/a_ | `companero` | 1,5 h | | | Casa | ⬜ |
-| T9 | Notebook de demo (librerías Python/R, HTML y JSON inventados) | `demo_lenguajes.ipynb` | _Compañero/a_ | `companero` | 1,5 h | | | Casa | ⬜ |
+| T8 | HTML, XML, JSON, Markdown y CSV: qué son y dónde intervienen | Paso 4 (web) | Ander | `ander` | 1,5 h | | | Casa | ⬜ |
+| T9 | Notebook de demo (librerías Python/R, HTML y JSON inventados) | `demo_lenguajes.ipynb` | Ander | `ander` | 1,5 h | | | Casa | ⬜ |
 | T10 | Preguntas adicionales (IA débil/fuerte · preentrenado/desde cero) | Paso 5 (README + web) | Ambos (una pregunta cada uno + revisión cruzada) | ambas | 0,5 h c/u | | | Clase | ⬜ |
 | T11 | Fuentes, evidencias de IA y reflexiones | README | Ambos | ambas | 1 h c/u | | | Casa | ⬜ |
 | T12 | Integrar en `index.html`, merge a `main` y despliegue | Web Netlify | Ambos | `main` | 1 h c/u | | | Clase | ⬜ |
 | T13 | Revisión final con la rúbrica | Todo | Ambos | `main` | 0,5 h c/u | | | Clase | ⬜ |
-| | **TOTAL** | | | | **Julen ≈ 9 h · _Compa_ ≈ 9 h** | | | | |
+| | **TOTAL** | | | | **Julen ≈ 9 h · Ander ≈ 9 h** | | | | |
 
 > 💡 **Cómo rellenar:** apuntad las horas reales al terminar cada sesión. *Desviación* = invertido − previsto. Estado: ⬜ pendiente · 🟨 en curso · ✅ hecho.
 
@@ -178,7 +178,7 @@ Pesos (suman 100 %) × puntuación (1–5). Ver la matriz interactiva en la web.
 
 ### Paso 4 · Selecciona marcado y formatos de datos
 
-> Responsable: **_Compañero/a_**
+> Responsable: **Ander**
 
 | Formato | Tipo | Qué es / para qué sirve | Dónde interviene en Matriculator |
 |---|---|---|---|
@@ -238,7 +238,7 @@ _Respuesta…_
 | Herramienta | Quién la usó | Para qué | Por qué esta herramienta |
 |---|---|---|---|
 | Claude (Anthropic) | Julen | Estructura del repo, README, plantilla web | _…_ |
-| _ChatGPT / Copilot / Gemini…_ | _Compa_ | _…_ | _…_ |
+| _ChatGPT / Copilot / Gemini…_ | Ander | _…_ | _…_ |
 
 ### 4.2 Prompts por etapa
 
@@ -248,7 +248,7 @@ _Respuesta…_
 | Paso 1 | | | | |
 | Paso 2 | | | | |
 | Paso 3 | Julen | | | |
-| Paso 4 | _Compa_ | | | |
+| Paso 4 | Ander | | | |
 | Paso 5 | | | | |
 
 ### 4.3 Repreguntas, cambios y correcciones

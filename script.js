@@ -607,7 +607,7 @@ const PSEUDO = [
 
 /* ---------- 6. Paso 4: formatos ---------- */
 (function formats() {
-  // ✏️ Paso 4 (compañero/a): revisad y ampliad con fuentes (W3C, IETF, MDN, CommonMark)
+  // ✏️ Paso 4 (Ander): revisad y ampliad con fuentes (W3C, IETF, MDN, CommonMark)
   const F = {
     html: { name: "HTML", type: "Lenguaje de marcado",
       what: "HyperText Markup Language. Estructura el contenido de una página web mediante etiquetas.",
@@ -701,7 +701,7 @@ const PSEUDO = [
 
 (function timeline() {
   // Horas previstas por tarea (coherente con la tabla del README)
-  const who = { J: ["Julen", "--py"], C: ["Compañero/a", "--java"], A: ["Ambos", "--accent"] };
+  const who = { J: ["Julen", "--py"], C: ["Ander", "--java"], A: ["Ambos", "--accent"] };
   const tasks = [
     ["T1 · Repo, ramas y Netlify", "J", 0, 0.5],
     ["T2 · Paso 1 · Definir app", "A", 0.5, 0.5],
