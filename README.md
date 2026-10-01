@@ -11,7 +11,7 @@
 | **Aplicación elegida** | Opción B — **Matriculator** (detección de matrículas en imágenes de prueba) |
 | **Web publicada (Netlify)** | 🔗 _https://TU-SITIO.netlify.app_ |
 | **Repositorio** | 🔗 https://github.com/altu44/proyecto-ra1 |
-| **Fecha de entrega** | _dd/mm/aaaa_ |
+| **Fecha de entrega** | _05/10/2026_ |
 
 > ⚠️ **No se implementa ni se entrena ningún modelo.** Es una propuesta técnica fundamentada. Todos los datos usados son ficticios, anónimos o abiertos. No se suben claves ni datos personales.
 
