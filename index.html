@@ -98,14 +98,13 @@
 
       <div class="problem reveal">
         <h3>🎯 El problema</h3>
-        <p>Una empresa con <strong>muchos empleados</strong> tiene un parking que comparte con <strong>clientes de un supermercado</strong> y con <strong>público general</strong> que paga por tiempo. Hoy el control se hace con tarjetas y tiques de papel que se pierden, generan colas en la barrera y obligan a tener personal en la salida.</p>
-        <p>Matriculator propone que una cámara en la <strong>entrada</strong> y otra en la <strong>salida</strong> lean la matrícula y que el sistema sepa <strong>quién es cada coche</strong>:</p>
+        <p>Una empresa con <strong>muchos empleados</strong> tiene un parking, y lo comparte con <strong>clientes de un supermercado</strong> y con <strong>público general</strong>(de la calle) que paga por tiempo. Hoy el control se hace con tarjetas y tiques de papel que se pierden, generan colas en la barrera y obligan a tener personal en la salida.</p>
+        <p>Con matriculator, ponemos una cámara en la entrada y otra en la salida, leen la matrícula y saben <strong>quién es cada coche</strong>:</p>
         <ul class="check">
           <li><b>Empleado:</b> su matrícula está dada de alta en el registro de la empresa y entra y sale sin pagar.</li>
           <li><b>Cliente del supermercado:</b> el cajero apunta la matrícula al cobrar la compra, y a la salida el sistema aplica el tiempo gratuito.</li>
           <li><b>Público:</b> cualquier otra matrícula paga según el tiempo de estancia.</li>
         </ul>
-        <p><b>Qué NO pretende:</b> identificar personas, vigilar a los empleados (horarios, fichajes) ni sancionar automáticamente. Es un estudio con <b>imágenes de prueba y datos ficticios</b>.</p>
       </div>
 
       <!-- Tres perfiles -->
@@ -120,8 +119,8 @@
         <div class="zone" style="--c: var(--ok)">
           <span class="zone__icon">🛒</span>
           <h4>Clientes del supermercado</h4>
-          <p>Al pagar, el <b>cajero apunta la matrícula</b> en el TPV y el sistema la <b>asocia al id del ticket</b> de compra. La validación dura solo ese día.</p>
-          <div class="zone__rule"><span>Salida</span><b>Gratis los primeros <span class="js-free">90</span> min · después, tarifa</b></div>
+          <p>Cuando el cliente paga, el <b>cajero apunta la matrícula</b> en el TPV y el sistema la <b>asocia al id del ticket</b> de compra. La validación dura solo ese día.</p>
+          <div class="zone__rule"><span>Salida</span><b>Gratis los primeros <span class="js-free">90</span> min</b></div>
         </div>
         <div class="zone" style="--c: var(--java)">
           <span class="zone__icon">🅿️</span>
@@ -130,7 +129,6 @@
           <div class="zone__rule"><span>Salida</span><b>Paga por tiempo · <span class="js-rate">2,40</span> €/h</b></div>
         </div>
       </div>
-      <p class="meta reveal"><span class="todo-inline">✏️ Borrador:</span> los minutos gratuitos, la tarifa y el tope diario son valores de ejemplo (en <code>script.js</code> → <code>REGLAS</code>). Decidid los vuestros.</p>
 
       <!-- Simulador -->
       <h3 class="sub reveal">1.2 · Simula un coche</h3>
