@@ -110,7 +110,7 @@ _Texto de la reflexión…_
 
 ## 🧠 2. Desarrollo del trabajo
 
-> El desarrollo técnico completo (con gráficos, diagramas y matriz interactiva) está en la **web**: 🔗 _https://TU-SITIO.netlify.app_. Aquí se resume cada paso.
+> El desarrollo técnico completo (con gráficos, diagramas y matriz interactiva) está en la **web**: 🔗 _https://matriculator.netlify.app_. Aquí se resume cada paso.
 
 ### Paso 1 · Define una aplicación hipotética
 
