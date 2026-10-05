@@ -11,7 +11,7 @@
 | **Aplicación elegida** | Opción B — **Matriculator**: lectura de matrículas en un parking de empresa con zona pública y zona de supermercado |
 | **Web publicada (Netlify)** | 🔗 _https://TU-SITIO.netlify.app_ |
 | **Repositorio** | 🔗 https://github.com/altu44/proyecto-ra1 |
-| **Fecha de entrega** | _dd/mm/aaaa_ |
+| **Fecha de entrega** | _05/10/2026_ |
 
 > ⚠️ **No se implementa ni se entrena ningún modelo.** Es una propuesta técnica fundamentada. Todos los datos usados son ficticios, anónimos o abiertos. No se suben claves ni datos personales.
 
@@ -109,7 +109,7 @@ _Texto de la reflexión…_
 
 ## 🧠 2. Desarrollo del trabajo
 
-> El desarrollo técnico completo (con gráficos, diagramas y matriz interactiva) está en la **web**: 🔗 _https://TU-SITIO.netlify.app_. Aquí se resume cada paso.
+> El desarrollo técnico completo (con gráficos, diagramas y matriz interactiva) está en la **web**: 🔗 _https://matriculator.netlify.app_. Aquí se resume cada paso.
 
 ### Paso 1 · Define una aplicación hipotética
 
