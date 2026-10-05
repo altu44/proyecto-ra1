@@ -40,6 +40,7 @@ const FECHA_CONSULTA = "23/09/2026";
 const SRC_CATS = {
   tend: ["📈 Tendencias y uso", "--accent-2"], py: ["Python", "--py"], js: ["JavaScript / Node.js", "--js"],
   r: ["R", "--r"], cpp: ["C++", "--cpp"], php: ["PHP", "--php"], java: ["Java", "--java"],
+  legal: ["⚖️ Privacidad y normativa", "--warn"], pseudo: ["📝 Pseudocódigo", "--ok"],
 };
 const SOURCES = [
   // Tendencias y uso
@@ -83,6 +84,11 @@ const SOURCES = [
   { id: "devjava", cat: "java", title: "Learn Java — Dev.java", org: "Oracle", url: "https://dev.java/learn/", used: "2.2 · 2.3" },
   { id: "spring", cat: "java", title: "Spring Boot", org: "Spring (Broadcom)", url: "https://spring.io/projects/spring-boot", used: "2.2 · 2.3" },
   { id: "djl", cat: "java", title: "Deep Java Library (DJL)", org: "DJL · Amazon Web Services", url: "https://docs.djl.ai/master/index.html", used: "2.2 · 2.3 · 2.5" },
+  // Privacidad y normativa (Paso 1)
+  { id: "aepd-video", cat: "legal", title: "Protección de datos: Guía sobre el uso de videocámaras para seguridad y otras finalidades", org: "Agencia Española de Protección de Datos (AEPD), 2025", url: "https://www.aepd.es/guias/guia-videovigilancia.pdf", used: "1" },
+  { id: "ai-act", cat: "legal", title: "Reglamento (UE) 2024/1689 de Inteligencia Artificial", org: "Parlamento Europeo y Consejo · EUR-Lex, 13/06/2024", url: "https://eur-lex.europa.eu/eli/reg/2024/1689/oj", used: "1" },
+  // Pseudocódigo (Paso 3)
+  { id: "pseint", cat: "pseudo", title: "PSeInt: herramienta para aprender a programar con pseudocódigo en español", org: "PSeInt · Pablo Novara (SourceForge)", url: "https://pseint.sourceforge.net/", used: "3.4" },
 ];
 const srcIndex = Object.fromEntries(SOURCES.map((s, i) => [s.id, i + 1]));
 const srcById = Object.fromEntries(SOURCES.map((s) => [s.id, s]));

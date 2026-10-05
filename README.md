@@ -1,424 +1,337 @@
-# 🚗 Matriculator — Propuesta técnica de una aplicación de IA
+# Matriculator
 
-> **Trabajo grupal RA1 · Programación de Inteligencia Artificial**
-> Curso de Especialización en Inteligencia Artificial y Big Data
->
-> *RA1. Caracteriza lenguajes de programación valorando su idoneidad en el desarrollo de Inteligencia Artificial.*
+Trabajo grupal del RA1 de Programación de Inteligencia Artificial (Curso de Especialización en IA y Big Data).
 
-| | |
-|---|---|
-| **Integrantes** | Julen Altuna · Ander Ameztoy |
-| **Aplicación elegida** | Opción B — **Matriculator**: lectura de matrículas en un parking de empresa con zona pública y zona de supermercado |
-| **Web publicada (Netlify)** | 🔗 _https://TU-SITIO.netlify.app_ |
-| **Repositorio** | 🔗 https://github.com/altu44/proyecto-ra1 |
-| **Fecha de entrega** | _05/10/2026_ |
+**Integrantes:** Julen Altuna y Ander Ameztoy
+**Web:** https://matriculator.netlify.app
+**Repositorio:** https://github.com/altu44/proyecto-ra1
+**Fecha de entrega:** 05/10/2026
 
-> ⚠️ **No se implementa ni se entrena ningún modelo.** Es una propuesta técnica fundamentada. Todos los datos usados son ficticios, anónimos o abiertos. No se suben claves ni datos personales.
+De las dos opciones del enunciado elegimos la B, Matriculator, pero la hemos llevado a un caso más concreto: el parking de una empresa con muchos empleados que también usan clientes de un supermercado y gente de fuera que paga por horas. No hemos programado ni entrenado ningún modelo; lo que hay aquí es la propuesta de cómo lo haríamos y por qué. Todos los datos que aparecen son inventados o abiertos.
 
----
+En este README contamos cómo nos hemos organizado, las fuentes que hemos usado, cómo hemos usado la IA y las respuestas a las preguntas del paso 5. El desarrollo completo, con los gráficos y las partes interactivas, está en la web.
 
-## 📑 Índice
+## Índice
 
-1. [Estructura del repositorio](#-estructura-del-repositorio)
-2. [Organización del grupo y temporalización](#-1-organización-del-grupo-y-temporalización)
-3. [Desarrollo del trabajo](#-2-desarrollo-del-trabajo)
-   - [Paso 1 · Aplicación hipotética](#paso-1--define-una-aplicación-hipotética)
-   - [Paso 2 · Comparativa de lenguajes y decisión](#paso-2--compara-lenguajes-y-toma-una-decisión)
-   - [Paso 3 · Partes del programa](#paso-3--explica-las-partes-del-programa)
-   - [Paso 4 · Marcado y formatos de datos](#paso-4--selecciona-marcado-y-formatos-de-datos)
-   - [Paso 5 · Preguntas adicionales](#paso-5--preguntas-adicionales)
-4. [Fuentes consultadas](#-3-fuentes-consultadas)
-5. [Evidencias del uso de IA generativa](#-4-evidencias-del-uso-de-ia-generativa)
-6. [Enlaces verificables](#-5-enlaces-verificables)
+1. [Qué hay en el repositorio](#qué-hay-en-el-repositorio)
+2. [Organización y tiempos](#organización-y-tiempos)
+3. [Resumen del trabajo](#resumen-del-trabajo)
+4. [Preguntas del paso 5](#preguntas-del-paso-5)
+5. [Fuentes](#fuentes)
+6. [Uso de la IA](#uso-de-la-ia)
+7. [Enlaces](#enlaces)
 
 ---
 
-## 📁 Estructura del repositorio
+## Qué hay en el repositorio
 
 ```
 proyecto-ra1/
-├── index.html               # Web: desarrollo técnico del trabajo (publicada en Netlify)
-├── styles.css               # Estilos de la web
-├── script.js                # Interactividad: gráfico de Trends, matriz, diagramas…
-├── README.md                # Organización, temporalización, fuentes, IA y preguntas
+├── index.html             la web con todo el desarrollo (está en Netlify)
+├── styles.css             estilos de la web
+├── script.js              gráfico de Trends, matriz, simulador, diagramas...
+├── README.md              este archivo
 ├── data/
-│   ├── trends_web.csv       # Exportación Google Trends — Búsqueda web
-│   └── trends_youtube.csv   # Exportación Google Trends — Búsqueda en YouTube
-├── assets/                  # Imágenes, diagramas y capturas propias
-│   └── ia/                  # Capturas de las conversaciones con IA (evidencias)
-├── pseudocodigo.ipynb       # Paso 3 · Pseudocódigo comentado (20–50 líneas)
-└── demo_lenguajes.ipynb     # Paso 4 · Demo de lectura de HTML, CSV y JSON
+│   ├── trends_web.csv     Google Trends, búsqueda web
+│   └── trends_youtube.csv Google Trends, búsqueda en YouTube
+├── assets/ia/             capturas de las conversaciones con IA
+├── pseudocodigo.ipynb     paso 3, componente de IA en Python
+└── demo_lenguajes.ipynb   paso 4, lectura de HTML, CSV, JSON y XML
 ```
 
-### 🌿 Flujo de trabajo con ramas (Git)
-
-| Rama | Responsable | Contenido |
-|---|---|---|
-| `main` | Ambos (solo merges revisados) | Versión estable que se despliega en Netlify |
-| `julen` | Julen | Paso 2 (Trends + gráfico), Paso 3, partes compartidas asignadas |
-| `ander` | Ander | Paso 2 (características + comparativa), Paso 4, partes compartidas asignadas |
-
-Cada integrante trabaja en su rama y abre un **Pull Request** hacia `main`; el otro lo revisa antes de hacer merge. Así queda evidencia de quién ha hecho qué (commits) y de la revisión cruzada.
+Cada uno ha trabajado en su rama (`julen` y `ander`) y luego lo hemos juntado en `main`, que es la rama que publica Netlify.
 
 ---
 
-## 👥 1. Organización del grupo y temporalización
+## Organización y tiempos
 
-> Rúbrica · Criterio 1 (1,5 pt): tareas vinculadas a entregables, responsables, distribución equilibrada, tiempo previsto/real/revisado y **reflexión**.
+Los pasos 1, 2 y 5 los hemos hecho entre los dos, repartiéndonos las partes. El paso 3 lo ha llevado Julen y el paso 4 Ander. Teníamos 5 horas de clase y el resto lo hemos hecho en casa.
 
-**Reparto general:** los Pasos 1, 2 y 5 se hacen entre los dos (dividiendo subtareas para que sea equilibrado); el **Paso 3** lo hace **Julen** y el **Paso 4** lo hace **Ander**. Disponemos de **5 h de clase**; el resto se completa en casa.
-
-| # | Tarea | Entregable vinculado | Responsable | Rama | Tiempo previsto | Tiempo invertido | Desviación | Dónde (clase/casa) | Estado |
-|---|---|---|---|---|---|---|---|---|---|
-| T1 | Crear repo, ramas, estructura y Netlify | Repo + URL Netlify | Julen | `main` | 0,5 h | | | Clase | ⬜ |
-| T2 | Definir la aplicación (problema, entradas, datos, proceso, salida, riesgos, decisión humana) | Paso 1 (web) | Ambos | ambas | 0,5 h c/u | | | Clase | ⬜ |
-| T3 | Google Trends (web + YouTube), exportar CSV e interpretar | `data/*.csv` + gráfico web | Julen | `julen` | 1 h | | | Clase | ⬜ |
-| T4 | Características de los 6 lenguajes y comparativa por criterios | Paso 2 (tabla comparativa) | Ander | `ander` | 1,5 h | | | Clase + casa | ⬜ |
-| T5 | Matriz de decisión, decisiones finales y descarte razonado | Paso 2 (matriz) | Ambos | ambas | 1 h c/u | | | Clase | ⬜ |
-| T6 | Flujo general (6–10 etapas) y diagramas antes/después del modelo | Paso 3 (diagramas) | Julen | `julen` | 1,5 h | | | Casa | ⬜ |
-| T7 | Pseudocódigo comentado (20–50 líneas) | `pseudocodigo.ipynb` | Julen | `julen` | 1,5 h | | | Casa | ⬜ |
-| T8 | HTML, XML, JSON, Markdown y CSV: qué son y dónde intervienen | Paso 4 (web) | Ander | `ander` | 1,5 h | | | Casa | ⬜ |
-| T9 | Notebook de demo (librerías Python/R, HTML y JSON inventados) | `demo_lenguajes.ipynb` | Ander | `ander` | 1,5 h | | | Casa | ⬜ |
-| T10 | Preguntas adicionales (IA débil/fuerte · preentrenado/desde cero) | Paso 5 (README + web) | Ambos (una pregunta cada uno + revisión cruzada) | ambas | 0,5 h c/u | | | Clase | ⬜ |
-| T11 | Fuentes, evidencias de IA y reflexiones | README | Ambos | ambas | 1 h c/u | | | Casa | ⬜ |
-| T12 | Integrar en `index.html`, merge a `main` y despliegue | Web Netlify | Ambos | `main` | 1 h c/u | | | Clase | ⬜ |
-| T13 | Revisión final con la rúbrica | Todo | Ambos | `main` | 0,5 h c/u | | | Clase | ⬜ |
-| | **TOTAL** | | | | **Julen ≈ 9 h · Ander ≈ 9 h** | | | | |
-
-> 💡 **Cómo rellenar:** apuntad las horas reales al terminar cada sesión. *Desviación* = invertido − previsto. Estado: ⬜ pendiente · 🟨 en curso · ✅ hecho.
-
-### 🔄 Revisión de la planificación
-
-| Fecha | Qué cambió respecto al plan | Motivo | Ajuste realizado |
-|---|---|---|---|
-| _dd/mm_ | _p. ej. Google Trends llevó más tiempo por la ambigüedad de «R» y «Java»_ | | _Se reasignó 0,5 h de T12_ |
-| | | | |
-
-### 💭 Reflexión del equipo sobre la organización y la temporalización
-
-> *(0,5 pt — la parte que más puntúa del criterio 1. Escribidla entre los dos al final.)*
-
-- ¿El reparto fue equilibrado? ¿Por qué sí/no?
-- ¿Qué tareas se desviaron más del tiempo previsto y por qué?
-- ¿Cómo funcionó el trabajo con ramas y Pull Requests? ¿Hubo conflictos de merge?
-- ¿Qué haríais diferente en el siguiente trabajo?
-
-_Texto de la reflexión…_
-
----
-
-## 🧠 2. Desarrollo del trabajo
-
-> El desarrollo técnico completo (con gráficos, diagramas y matriz interactiva) está en la **web**: 🔗 _https://matriculator.netlify.app_. Aquí se resume cada paso.
-
-### Paso 1 · Define una aplicación hipotética
-
-**Opción elegida: B — Matriculator**, adaptada a nuestro caso: el parking de una **empresa con muchos empleados** que también tiene una **zona pública de pago por tiempo** y una **zona para clientes de un supermercado**.
-
-#### El problema
-
-Un único parking con tres tipos de usuario. Hoy se controla con tarjetas y tiques de papel que se pierden, generan colas en la barrera y obligan a tener personal en la salida. Queremos que una cámara en la entrada y otra en la salida lean la matrícula y que el sistema sepa si el coche es de un **empleado**, de un **cliente del supermercado** o de **público**.
-
-**Qué NO pretende:** identificar personas, vigilar a los empleados (horarios, fichajes) ni sancionar automáticamente. Es un estudio con imágenes de prueba y datos ficticios.
-
-#### Entradas
-
-- **Cámara de entrada:** imagen del coche al entrar (en el estudio: ficticia o de banco de pruebas) + configuración de la cámara (id, resolución, ángulo, iluminación).
-- **Cámara de salida:** imagen del coche al salir.
-- **TPV del supermercado:** matrícula que teclea el cajero al cobrar + **id del ticket** de esa compra (lo añade el TPV automáticamente).
-- **Recursos Humanos:** alta y baja de matrículas de empleados.
-
-#### Datos
-
-- **Para la IA:** imágenes de prueba anotadas (caja de la matrícula + texto correcto), sin personas identificables.
-- **Empleados:** matrícula + id interno del empleado (máx. 2 vehículos por persona).
-- **Validaciones de clientes:** matrícula + **id del ticket** + fecha y hora + caja. El detalle de la compra se queda en el sistema del supermercado y se consulta con el id del ticket.
-- **Movimientos:** entradas y salidas (matrícula, hora, cámara, confianza de la lectura).
-- **Tarifas:** minutos gratuitos, precio por hora y tope diario.
-
-Todos los datos del trabajo son ficticios.
-
-#### Procesamiento
-
-1. **Imagen:** validar el fichero y prepararlo (redimensionar, normalizar, contraste).
-2. **Lectura (IA):** el modelo detecta la matrícula, el OCR la lee y se comprueban formato y confianza.
-3. **Clasificación:** ¿está en el registro de empleados? → empleado · si no, ¿tiene hoy un ticket asociado? → cliente · si no → público.
-4. **Cálculo:** en la salida, tiempo de estancia e importe según el perfil.
-
-#### Salida
-
-- 👔 **Empleado:** barrera abierta, sin pagar.
-- 🛒 **Cliente validado:** gratis si no supera el tiempo gratuito; si lo supera, paga solo el exceso. Se guarda el id del ticket junto al movimiento.
-- 🅿️ **Público:** paga según el tiempo, con tope diario.
-- ⚠️ **Lectura dudosa:** confianza baja o matrícula sin entrada registrada → aviso al personal por el interfono.
-- 📝 **Registro:** de cada movimiento se guarda matrícula, perfil, horas, importe e id del ticket (si lo hay).
-
-#### Reglas del sistema (valores de ejemplo)
-
-| Perfil | Cómo se reconoce | Qué pasa en la salida |
-|---|---|---|
-| 👔 Empleado | La matrícula está en el registro de empleados | Gratis, barrera abierta |
-| 🛒 Cliente del supermercado | El cajero apuntó la matrícula hoy y quedó asociada a un **id de ticket** | Gratis los primeros **90 min**; después paga el exceso |
-| 🅿️ Público | Ninguna de las anteriores | Paga **2,40 €/h** (por minuto), tope **18 €/día** |
-| ⚠️ Lectura dudosa | Confianza < **0,80** | Revisión humana por interfono |
-
-> ✏️ Los minutos gratuitos, la tarifa y el tope son valores de ejemplo: están en `script.js` → `REGLAS` y en la web hay un **simulador** para probarlos.
-
-#### Parte de IA y parte de aplicación
-
-- 🤖 **Parte de IA:** solo **detectar y leer la matrícula** en la imagen (visión por computador + OCR). Es la única parte que necesita un modelo.
-- 🖥️ **Parte de aplicación:** **clasificar** (empleado / cliente / público), **asociar el ticket** y **calcular el importe** son reglas y consultas a una base de datos. No hace falta IA.
-
-#### Riesgos y límites
-
-- **Privacidad (RGPD):** la matrícula es un dato personal. El registro de empleados solo guarda matrícula + id interno; se informa a la plantilla y no se usa para controlar horarios.
-- **Vínculo matrícula ↔ ticket:** al asociar la matrícula al id del ticket se puede saber qué ha comprado el cliente. Es un dato más sensible: hay que avisar al cliente (cartel y ticket), guardar solo el id del ticket (el detalle sigue en el sistema del supermercado), limitar quién puede consultarlo y borrarlo pasado un plazo.
-- **Retención mínima:** se guarda el resultado, no la imagen.
-- **Errores de lectura:** 0/O, 8/B, suciedad, noche, ángulo → umbral de confianza y revisión.
-- **Errores humanos:** el cajero puede teclear mal la matrícula → el TPV sugiere las matrículas que han entrado hoy.
-- **Casos especiales:** coches de empresa compartidos, cambios de coche, matrículas extranjeras, remolques.
-
-#### Decisiones que siguen siendo humanas
-
-- **Cajero:** decide validar al cliente y apunta la matrícula con su ticket.
-- **Personal del parking:** lecturas dudosas y reclamaciones (busca el ticket y corrige la validación).
-- **Recursos Humanos:** alta y baja de matrículas de empleados.
-- **La IA** solo lee la matrícula: no decide cobros ni sanciones.
-
-### Paso 2 · Compara lenguajes y toma una decisión
-
-Lenguajes comparados: **Python, JavaScript/Node.js, R, C++, PHP y Java**.
-
-#### 2.1 Google Trends
-
-| Dato | Valor |
-|---|---|
-| Lenguajes | Python, JavaScript, Java, PHP, C++ y R (como tema «Lenguaje de programación») |
-| Ámbito | Todo el mundo |
-| Periodo | Búsqueda web: 2004 – sep. 2026 · YouTube: 2008 – sep. 2026 (primer año con datos) |
-| Fecha de descarga | 23/09/2026 |
-| Archivos | [`data/trends_web.csv`](data/trends_web.csv) · [`data/trends_youtube.csv`](data/trends_youtube.csv) |
-
-- El gráfico de la web se genera **leyendo esos CSV** (no es una captura). Se puede ver por meses o por media anual.
-- **Avisos sobre los datos:** en YouTube faltan los meses de enero a julio de 2017 (vienen a 0 en la exportación de Google Trends; la web los trata como hueco). Septiembre de 2026 es un mes incompleto.
-
-**Interpretación** (medias anuales calculadas con los CSV):
-
-| | Búsqueda web | YouTube |
-|---|---|---|
-| **Python** | Plano (~5–6) hasta 2013; sube desde 2014 y es el **primero desde 2019**. Máximo en 2022 (26,5) y 2026 (25) | Crece desde 2018, lidera de 2020 a 2023 (máximo 70 en 2023) |
-| **Java** | Dominaba en 2004 (93) y cae hasta ~12 | Pico en 2016 (90); vuelve a ser el primero en 2024–2026 (~70–75) |
-| **JavaScript** | Muy estable: 10–17 desde 2010 | Sube hasta 2023 (48) y baja a 24 en 2026 |
-| **PHP / C++** | Caída sostenida (PHP 38 → 5; C++ 27 → 5) | Bajos; PHP cae a 5 |
-| **R** | Siempre por debajo de 6 | Algo más de peso (15–22 desde 2016) |
-
-**Conclusiones para Matriculator:**
-
-1. **Python** es el lenguaje con más impulso en las dos fuentes y su subida coincide con el auge de la IA y la ciencia de datos (coherente con GitHub Octoverse 2024 y Stack Overflow 2025) → refuerza elegirlo para la parte de IA.
-2. **JavaScript** mantiene un interés estable: tecnología madura y con mucho material → adecuada para la parte web.
-3. **Java** conserva mucho interés, sobre todo en vídeos de aprendizaje, pero no ligado a la IA → alternativa para backend, no para el modelo.
-4. **PHP, C++ y R** tienen poco interés relativo o en descenso → apoya descartarlos para la IA.
-
-> ⚠️ Límites: Trends mide interés de búsqueda relativo, no uso real. En YouTube faltan enero–julio de 2017 y tras el hueco los valores bajan de golpe (posible cambio de escala), así que se comparan tendencias, no cifras exactas.
-
-#### 2.2 Características y comparativa
-
-| Criterio | Python | JS / Node.js | R | C++ | PHP | Java |
-|---|---|---|---|---|---|---|
-| Facilidad de aprendizaje | | | | | | |
-| Legibilidad | | | | | | |
-| Mantenimiento | | | | | | |
-| Integración web, APIs, BBDD | | | | | | |
-| Trabajo con datos (imágenes) | | | | | | |
-| Análisis estadístico | | | | | | |
-| Bibliotecas y modelos de IA | | | | | | |
-| Reutilizar modelos preentrenados | | | | | | |
-| Rendimiento, despliegue, docs, comunidad | | | | | | |
-| Interfaz web | | | | | | |
-
-#### 2.3 Matriz de decisión
-
-Pesos (suman 100 %) × puntuación (1–5). Ver la matriz interactiva en la web.
-
-| Criterio | Peso | Python | JS/Node | R | C++ | PHP | Java |
+| # | Tarea | Qué se entrega | Quién | Previsto | Real | Diferencia | Estado |
 |---|---|---|---|---|---|---|---|
-| … | … | | | | | | |
-| **Total ponderado** | 100 % | | | | | | |
+| T1 | Crear el repo, las ramas y publicar en Netlify | Repo y web | Julen | 0,5 h | | | Hecho |
+| T2 | Definir la aplicación (problema, entradas, datos, salida, riesgos) | Paso 1 | Los dos | 0,5 h cada uno | | | Hecho |
+| T3 | Google Trends: descargar los CSV, gráfico e interpretación | Paso 2.1 | Julen | 1 h | | | Hecho |
+| T4 | Características de los lenguajes y comparativa | Paso 2.2 | Ander | 1,5 h | | | Hecho |
+| T5 | Matriz de decisión y decisiones finales | Paso 2.3 y 2.4 | Los dos | 1 h cada uno | | | Hecho |
+| T6 | Flujo general y diagramas | Paso 3 | Julen | 1,5 h | | | Hecho |
+| T7 | Pseudocódigo | Paso 3 y `pseudocodigo.ipynb` | Julen / Ander | 1,5 h | | | Hecho |
+| T8 | HTML, XML, JSON, Markdown y CSV | Paso 4 | Ander | 1,5 h | | | Hecho |
+| T9 | Notebook de formatos | `demo_lenguajes.ipynb` | Ander | 1,5 h | | | Hecho |
+| T10 | Preguntas del paso 5 | README y web | Los dos | 0,5 h cada uno | | | Falta pasarlo a la web |
+| T11 | Fuentes y uso de la IA | README | Los dos | 1 h cada uno | | | Hecho |
+| T12 | Juntar las ramas y publicar | `main` y Netlify | Los dos | 1 h cada uno | | | Hecho |
+| T13 | Repaso final con la rúbrica | Todo | Los dos | 0,5 h cada uno | | | En curso |
+| | **Total previsto** | | | **unas 9 h cada uno** | | | |
 
-#### 2.4 Decisiones
+### Cambios sobre lo que habíamos planeado
 
-- 🖥️ **Lenguaje principal para la aplicación:** _…_ — porque _…_
-- 🤖 **Lenguaje principal para la IA:** _…_ — porque _…_
-- ❓ **Si son distintos, ¿por qué?** _…_
-- ❌ **Descarte razonado para la parte de IA:** R (_…_), C++ (_…_), PHP (_…_), Java (_…_), JavaScript (_…_).
-
-### Paso 3 · Explica las partes del programa
-
-> Responsable: **Julen**
-
-#### 3.1 Flujo general (10 etapas)
-
-Recorrido de un coche desde que llega a la barrera de entrada hasta que sale. 🤖 = parte de IA · 🖥️ = aplicación (reglas y BBDD) · 🧑‍⚖️ = interviene una persona.
-
-| # | Etapa | Tipo | Qué ocurre |
+| Fecha | Qué pasó | Por qué | Qué hicimos |
 |---|---|---|---|
-| 1 | Llegada a la entrada | 🖥️ | Un sensor detecta el coche y la cámara de entrada toma una imagen |
-| 2 | Validar y preparar | 🖥️ | Se comprueba la imagen (formato, tamaño) y se redimensiona / normaliza |
-| 3 | Leer la matrícula | 🤖 | El detector localiza la matrícula y el OCR la lee; se comprueban formato y confianza |
-| 4 | ¿Lectura fiable? | 🧑‍⚖️ | Si la confianza es < 0,80, el personal la comprueba por interfono y la corrige |
-| 5 | Registrar la entrada | 🖥️ | Se guarda matrícula + hora (no la imagen) y se abre la barrera |
-| 6 | Validación en caja *(opcional)* | 🧑‍⚖️ | Si compra en el supermercado, el cajero apunta la matrícula y se asocia al **id del ticket** |
-| 7 | Llegada a la salida | 🤖 | La cámara de salida repite la lectura (etapas 2–4) |
-| 8 | Clasificar el coche | 🖥️ | ¿Empleado? → ¿ticket hoy? → si no, público |
-| 9 | Calcular el importe | 🖥️ | Empleado 0 € · cliente gratis 90 min y después el exceso · público 2,40 €/h (tope 18 €) |
-| 10 | Resultado y salida | 🖥️ | Pago si corresponde, barrera y registro mínimo; reclamaciones al personal |
+| 23/09 | Cambiamos el caso del paso 1 por uno propio (parking de empresa + supermercado + público) | El ejemplo del enunciado se nos quedaba corto | Rehicimos el paso 1 y después el 3 para que encajaran |
+| 23/09 | Decidimos guardar el id del ticket junto a la matrícula del cliente | Queríamos poder relacionar la estancia con la compra | Lo añadimos a los datos, al simulador y a los riesgos de privacidad |
+| 23/09 | Los primeros CSV de Trends eran de España y no del mundo | Se nos pasó cambiar el filtro de país | Los volvimos a descargar y rehicimos la interpretación |
+| 05/10 | Al juntar las ramas, los dos habíamos cambiado `pseudocodigo.ipynb` | Trabajamos el mismo archivo a la vez sin avisarnos | Nos quedamos con la versión de Ander y adaptamos el texto de la web |
 
-#### 3.2 Diagrama de decisión en la salida
+### Reflexión
 
-```
-Coche en la salida → 🤖 Leer matrícula → ¿Confianza ≥ 0,80?
-    ├─ No → 🧑‍⚖️ Revisión humana → (matrícula confirmada) ─┐
-    └─ Sí ──────────────────────────────────────────────┴→ ¿Está en empleados?
-                                                              ├─ Sí → 👔 Empleado · 0 €
-                                                              └─ No → ¿Tiene ticket hoy?
-                                                                        ├─ No → 🅿️ Público · 2,40 €/h (tope 18 €)
-                                                                        └─ Sí → ¿Estancia ≤ 90 min?
-                                                                                  ├─ Sí → 🛒 Cliente · gratis
-                                                                                  └─ No → 🛒 Cliente · paga el exceso
-```
+El reparto ha salido bastante equilibrado. Cada uno tenía su paso propio (el 3 y el 4) y los demás los hemos ido haciendo juntos, sobre todo en clase. Lo que más tiempo nos ha llevado no estaba en el plan: cambiar el caso del paso 1 a mitad de trabajo nos obligó a rehacer partes que ya estaban hechas, aunque creemos que mereció la pena porque ahora la aplicación tiene más sentido.
 
-La IA solo interviene al leer la matrícula; el resto son **reglas** que consultan la base de datos. En todos los casos se guarda un registro mínimo, nunca la imagen.
+Con Git hemos aprendido bastante. Trabajar en ramas separadas funcionó bien mientras cada uno tocaba sus archivos, pero el único conflicto que tuvimos fue justo en un archivo que habíamos tocado los dos sin decirnos nada. La próxima vez lo hablaríamos antes y haríamos merges más a menudo en vez de esperar al final.
 
-#### 3.3 Etapas y componentes del programa
-
-- **Antes de integrar el modelo:** recoger imágenes de prueba (día, noche, lluvia, ángulo) → anotar (caja + texto) → preparar y dividir los datos → elegir detector y OCR preentrenados → ajustar con matrículas españolas y elegir el umbral (0,80) → exportar el modelo y crear las BBDD de prueba (empleados, tickets, movimientos, tarifas).
-- **Después de integrar el modelo:** cargar el modelo → recibir la imagen de la cámara → leer la matrícula → decidir según el umbral → aplicar las reglas (registrar / clasificar / calcular) → registrar y revisar las correcciones humanas para mejorar el modelo.
-
-#### 3.4 Pseudocódigo
-
-[`pseudocodigo.ipynb`](pseudocodigo.ipynb) — 49 líneas en Python que describen **la salida del parking**: `leer_matricula()` (IA), `clasificar()` y `calcular_importe()` (reglas), umbral de confianza con revisión humana, `try/except` y registro en CSV sin la imagen. Se puede ejecutar gracias a un detector, un OCR y unas BBDD **simulados** con cuatro coches ficticios (empleado, cliente con ticket, lectura dudosa corregida por una persona e imagen no válida).
-
-### Paso 4 · Selecciona marcado y formatos de datos
-
-> Responsable: **Ander**
-
-| Formato | Tipo | Qué es / para qué sirve | Dónde interviene en Matriculator |
-|---|---|---|---|
-| **HTML** | Lenguaje de marcado | | |
-| **XML** | Lenguaje de marcado | | |
-| **JSON** | Intercambio de datos | | |
-| **Markdown** | Marcado ligero | | |
-| **CSV** | Datos tabulares | | |
-
-Notebook: [`demo_lenguajes.ipynb`](demo_lenguajes.ipynb) — librerías de Python para HTML/CSV/JSON, tabla de equivalentes en R, HTML inventado de la interfaz y JSON inventado de datos de entrada sintéticos.
-
-### Paso 5 · Preguntas adicionales
-
-#### ¿La solución es IA débil o se aproxima a IA fuerte? Justifica.
-
-_Respuesta…_
-
-#### ¿Usarías un modelo preentrenado o entrenarías desde cero? Razona la respuesta.
-
-_Respuesta…_
-
-#### Límites de la solución
-
-_Respuesta…_
+También nos ha pasado lo de los CSV de España, que es un despiste tonto pero que nos hizo repetir la interpretación. Para otra vez revisaríamos los filtros antes de descargar nada.
 
 ---
 
-## 📚 3. Fuentes consultadas
+## Resumen del trabajo
 
-> Rúbrica · Criterio 3 (1,5 pt): priorizar **documentación oficial, organismos públicos o fuentes con autoría y fecha**. Cada referencia con **título, entidad, URL y fecha de consulta**.
+La versión completa de cada paso está en la web. Aquí va lo principal.
 
-| # | Título | Entidad / autor | URL | Fecha de consulta | Usada en |
+### Paso 1. La aplicación
+
+Una empresa tiene un parking que comparten tres tipos de usuarios:
+
+- **Empleados:** su matrícula está dada de alta y entran y salen sin pagar.
+- **Clientes del supermercado:** al pagar la compra, el cajero apunta la matrícula en el TPV y se queda asociada al id del ticket. Tienen 90 minutos gratis y después pagan solo el tiempo que se pasen.
+- **Público:** cualquier otro coche paga por tiempo (2,40 €/h, con un máximo de 18 € al día).
+
+Ahora mismo esto se controla con tarjetas y tiques de papel, que se pierden y generan colas. Con una cámara en la entrada y otra en la salida, el sistema lee la matrícula y sabe qué tipo de coche es.
+
+| | |
+|---|---|
+| Entradas | Imágenes de las cámaras de entrada y salida, la matrícula y el id del ticket que mete el cajero, y el alta de empleados que hace Recursos Humanos |
+| Datos | Para la IA, imágenes de matrículas anotadas. Para la aplicación: empleados, tickets del día, entradas y salidas, y tarifas. Todo inventado |
+| Procesamiento | Validar y preparar la imagen, detectar y leer la matrícula (IA), clasificar el coche y calcular cuánto paga |
+| Salida | Barrera abierta, importe a pagar o aviso al personal si la lectura no es fiable. Se guarda un registro sin la imagen |
+| Riesgos | La matrícula es un dato personal y al unirla con el ticket se puede saber qué ha comprado cada cliente. Por eso hay que avisar al cliente, guardar solo el id del ticket, limitar quién lo ve y borrarlo pasado un tiempo. También hay errores de lectura (0/O, 8/B, noche, suciedad) y errores del cajero al teclear |
+| Lo que decide una persona | Las lecturas dudosas, las reclamaciones, la validación en caja y el alta de empleados. La IA solo lee la matrícula, no cobra ni sanciona a nadie |
+
+Algo que tuvimos claro desde el principio es que la IA solo hace una cosa: leer la matrícula. Saber si el coche es de un empleado o de un cliente y calcular el precio son reglas normales que consultan una base de datos.
+
+### Paso 2. Lenguajes
+
+Comparamos Python, JavaScript/Node.js, R, C++, PHP y Java.
+
+**Google Trends.** Descargamos el interés de los seis lenguajes en todo el mundo, desde 2004 en búsqueda web y desde 2008 en YouTube (datos descargados el 23/09/2026, en `data/`). El gráfico de la web se hace leyendo esos CSV.
+
+- En búsqueda web, Java dominaba al principio (93 de media en 2004) y ha ido cayendo hasta unos 12. Python estuvo plano hasta 2013 y desde ahí no ha parado de subir; es el primero desde 2019. JavaScript se mantiene estable y PHP, C++ y R van a menos.
+- En YouTube, Python fue el primero de 2020 a 2023, pero en 2024–2026 Java ha vuelto a pasarle. Creemos que tiene que ver con vídeos para aprender Java, no con la IA.
+- Hay que tener en cuenta que Trends mide interés de búsqueda y no cuánta gente usa cada lenguaje. Además, en YouTube faltan los datos de enero a julio de 2017.
+
+Lo que sacamos de aquí es que Python es el que más ha crecido y que coincide con el auge de la IA, algo que también dicen el informe Octoverse de GitHub y la encuesta de Stack Overflow.
+
+**Comparativa.** Puntuamos cada lenguaje del 1 al 5 pensando en nuestro caso. En la web, al pulsar cada casilla sale por qué tiene esa nota y de qué fuente lo hemos sacado.
+
+| Criterio | Python | JS/Node | R | C++ | PHP | Java |
+|---|---|---|---|---|---|---|
+| Facilidad de aprendizaje | 5 | 4 | 3 | 2 | 4 | 3 |
+| Legibilidad | 5 | 3 | 3 | 2 | 3 | 3 |
+| Mantenimiento | 4 | 3 | 3 | 2 | 3 | 4 |
+| Integración web, APIs y BBDD | 4 | 5 | 2 | 2 | 5 | 4 |
+| Trabajo con imágenes | 5 | 3 | 3 | 4 | 2 | 3 |
+| Análisis estadístico | 4 | 2 | 5 | 2 | 1 | 2 |
+| Librerías y modelos de IA | 5 | 3 | 2 | 4 | 1 | 3 |
+| Reutilizar modelos preentrenados | 5 | 3 | 2 | 4 | 1 | 3 |
+| Rendimiento, despliegue y comunidad | 4 | 4 | 3 | 5 | 3 | 4 |
+| Interfaz web | 2 | 5 | 2 | 1 | 4 | 2 |
+
+**Matriz de decisión.** Usamos dos repartos de pesos distintos, uno pensando en la parte de IA y otro en la aplicación, porque no buscamos lo mismo en cada una.
+
+| Criterio | Peso IA | Peso aplicación |
+|---|---|---|
+| Facilidad de aprendizaje | 5 % | 10 % |
+| Legibilidad | 5 % | 10 % |
+| Mantenimiento | 5 % | 15 % |
+| Integración web, APIs y BBDD | 5 % | 25 % |
+| Trabajo con imágenes | 20 % | 5 % |
+| Análisis estadístico | 5 % | 0 % |
+| Librerías y modelos de IA | 25 % | 0 % |
+| Reutilizar modelos preentrenados | 20 % | 0 % |
+| Rendimiento, despliegue y comunidad | 10 % | 15 % |
+| Interfaz web | 0 % | 20 % |
+
+| Resultado | Python | JS/Node | R | C++ | PHP | Java |
+|---|---|---|---|---|---|---|
+| Parte de IA | **4,75** | 3,20 | 2,60 | 3,60 | 1,95 | 3,15 |
+| Aplicación | 3,85 | **4,15** | 2,55 | 2,35 | 3,75 | 3,35 |
+
+**Decisiones.**
+
+- Para la aplicación, **JavaScript con Node.js**: es el único lenguaje que funciona directamente en el navegador, con Node se usa también en el servidor, y trabaja con JSON de forma natural.
+- Para la IA, **Python**: tiene OpenCV, PyTorch, YOLO y EasyOCR, y muchísimos modelos ya entrenados que se pueden reutilizar.
+- Son dos lenguajes distintos porque cada parte necesita cosas distintas. Se comunicarían mediante una API: la aplicación manda la imagen al servicio de Python y este le devuelve un JSON con la matrícula y la confianza. Hacerlo todo en Python con FastAPI también sería posible, pero la parte web sería más pobre.
+- Para la IA descartamos JavaScript (hay librerías como TensorFlow.js, pero muchos menos modelos de visión), R (muy bueno para estadística, flojo en visión), C++ (rapidísimo, pero mucho más difícil de desarrollar y mantener), PHP (casi no tiene nada de IA) y Java (se puede con DJL, pero con menos modelos y menos ayuda que en Python).
+
+### Paso 3. Partes del programa
+
+**Flujo general.** Lo hemos dividido en 10 etapas, desde que el coche llega a la barrera hasta que sale. En la web se puede reproducir paso a paso.
+
+| # | Etapa | Quién lo hace |
+|---|---|---|
+| 1 | El coche llega a la entrada y la cámara saca una foto | Aplicación |
+| 2 | Se valida y prepara la imagen | Aplicación |
+| 3 | Se detecta y se lee la matrícula | IA |
+| 4 | Si la lectura no es fiable (confianza menor de 0,80), la revisa una persona | Persona |
+| 5 | Se guarda la hora de entrada y se abre la barrera | Aplicación |
+| 6 | Si compra en el súper, el cajero apunta la matrícula y se asocia al ticket (opcional) | Persona |
+| 7 | En la salida se vuelve a leer la matrícula | IA |
+| 8 | Se mira si es empleado, cliente con ticket o público | Aplicación |
+| 9 | Se calcula el importe | Aplicación |
+| 10 | Se paga si toca, se abre la barrera y se guarda el registro | Aplicación |
+
+**Diagrama de decisión en la salida.** En la web está dibujado como diagrama de flujo. En texto sería así:
+
+```
+Coche en la salida → leer matrícula (IA) → ¿confianza ≥ 0,80?
+   no → revisa una persona y confirma la matrícula
+   sí → ¿es empleado?
+          sí → sale gratis
+          no → ¿tiene ticket de hoy?
+                 no → público, paga 2,40 €/h (máx. 18 €)
+                 sí → ¿ha estado 90 min o menos?
+                        sí → gratis
+                        no → paga solo lo que se pasa
+```
+
+**Antes y después de tener el modelo.** Antes habría que juntar imágenes de prueba (de día, de noche, con lluvia), anotarlas, elegir un detector y un OCR ya entrenados, ajustarlos con matrículas españolas, decidir el umbral de confianza y preparar las bases de datos. Después, el servicio de IA carga el modelo, recibe las imágenes de las cámaras, lee la matrícula y la aplicación aplica las reglas. Las correcciones que hace el personal servirían para mejorar el modelo más adelante.
+
+**Pseudocódigo.** El de la web lo hemos escrito basándonos en PSeInt, el programa que se usa para aprender pseudocódigo en español. Por eso usamos palabras como `función`, `si`, `devolver` o `intentar`, aunque la estructura la hemos acercado a Python porque es el lenguaje que hemos elegido para la IA. Ese pseudocódigo describe lo que pasa en la salida: leer la matrícula, clasificar el coche y calcular el importe.
+
+En `pseudocodigo.ipynb` está la parte de IA en Python (unas 48 líneas): lee la entrada, valida la imagen, la prepara, detecta y lee la matrícula, comprueba la confianza y el formato español (4 cifras y 3 consonantes) y guarda un registro sin la imagen. El detector y el OCR están simulados para poder ejecutarlo con datos inventados.
+
+### Paso 4. Formatos
+
+| Formato | Qué es | Dónde lo usaríamos |
+|---|---|---|
+| HTML | Lenguaje de marcado con etiquetas ya definidas para estructurar páginas web | La interfaz: subir la imagen, elegir la cámara, ver el resultado |
+| XML | Lenguaje de marcado en el que las etiquetas las inventa uno mismo, con estructura de árbol estricta | Configuración de las cámaras o intercambio con otros sistemas del parking |
+| JSON | Formato ligero de clave y valor para intercambiar datos | La comunicación entre la web, el servidor Node.js y el servicio de IA |
+| Markdown | Marcado sencillo para dar formato a texto | Este README y las explicaciones de los notebooks |
+| CSV | Datos en tabla separados por comas | Los datos de Trends y el registro de entradas y salidas |
+
+La diferencia principal entre HTML y XML es que HTML sirve para mostrar contenido con etiquetas fijas y XML sirve para describir datos con etiquetas propias.
+
+En `demo_lenguajes.ipynb` están las librerías de Python para leer cada formato (`html.parser`, BeautifulSoup, `lxml`, `csv`, `pandas`, `json`), una tabla con sus equivalentes en R (`rvest`, `readr`, `jsonlite`, `xml2`), un HTML inventado de la interfaz que leemos con BeautifulSoup, un JSON inventado con imágenes de prueba que pasamos a tabla, y ejemplos cortos de XML y CSV.
+
+---
+
+## Preguntas del paso 5
+
+**¿La solución es IA débil o se acerca a IA fuerte?**
+
+Es IA débil. El sistema hace una sola cosa, que es encontrar una matrícula en una foto y leerla, y no sabe hacer nada fuera de eso. Tampoco entiende lo que ve: reconoce patrones porque ha aprendido de muchas imágenes, pero no sabe qué es un coche ni para qué sirve un parking. Las decisiones importantes (si alguien paga, si hay un error) las toman reglas que hemos escrito nosotros o una persona. Una IA fuerte tendría que poder razonar y adaptarse a cualquier tarea como una persona, y esto queda muy lejos de eso.
+
+**¿Usaríais un modelo preentrenado o lo entrenaríais desde cero?**
+
+Preentrenado. Ya existen detectores y OCR entrenados con millones de imágenes, como YOLO o EasyOCR, y lo lógico es partir de uno de ellos y ajustarlo con fotos de matrículas españolas. Entrenar desde cero pediría miles de imágenes anotadas a mano, mucho tiempo de GPU y, aun así, lo más probable es que el resultado fuera peor. Solo tendría sentido si ningún modelo existente funcionara con nuestro tipo de imágenes.
+
+**Límites**
+
+El sistema puede fallar de noche, con lluvia, con matrículas sucias, dobladas o extranjeras, y puede confundir caracteres parecidos. Tampoco sabe nada de lo que pasa dentro del parking: si un cliente compra pero no le validan el ticket, el sistema lo trata como público. Por eso siempre tiene que haber una persona que pueda revisar y corregir.
+
+---
+
+## Fuentes
+
+Hemos intentado usar sobre todo documentación oficial y fuentes con autor y fecha. En la web, cada dato del paso 2 tiene un número que lleva a su fuente.
+
+| # | Título | Autor o entidad | URL | Consultado | Usado en |
 |---|---|---|---|---|---|
 | 1 | Google Trends | Google | https://trends.google.es/trends/ | 23/09/2026 | Paso 2.1 |
-| 2 | Preguntas frecuentes sobre los datos de Google Trends | Google · Ayuda de Tendencias de búsqueda | https://support.google.com/trends/answer/4365533?hl=es | 23/09/2026 | Paso 2.1 |
-| 3 | Octoverse: AI leads Python to top language as the number of global developers surges | GitHub Staff · GitHub Blog, 29/10/2024 | https://github.blog/news-insights/octoverse/octoverse-2024/ | 23/09/2026 | Paso 2.1 · 2.3 |
-| 4 | 2025 Stack Overflow Developer Survey — Technology | Stack Overflow | https://survey.stackoverflow.co/2025/technology | 23/09/2026 | Paso 2.1 · 2.3 |
-| 5 | TIOBE Programming Community Index | TIOBE Software | https://www.tiobe.com/tiobe-index/ | 23/09/2026 | Paso 2.1 · 2.3 |
-| 6 | El tutorial de Python | Python Software Foundation | https://docs.python.org/es/3/tutorial/index.html | 23/09/2026 | Paso 2.2 · 2.3 |
-| 7 | PEP 8 – Style Guide for Python Code | G. van Rossum, B. Warsaw, A. Coghlan · python.org | https://peps.python.org/pep-0008/ | 23/09/2026 | Paso 2.3 |
-| 8 | PEP 20 – The Zen of Python | Tim Peters · python.org | https://peps.python.org/pep-0020/ | 23/09/2026 | Paso 2.2 · 2.3 |
-| 9 | FastAPI | Sebastián Ramírez (tiangolo) | https://fastapi.tiangolo.com/ | 23/09/2026 | Paso 2.3 · 2.5 |
-| 10 | statsmodels documentation | statsmodels (S. Seabold, J. Perktold) | https://www.statsmodels.org/stable/index.html | 23/09/2026 | Paso 2.3 |
-| 11 | OpenCV modules — documentación 4.x | OpenCV | https://docs.opencv.org/4.x/ | 23/09/2026 | Paso 2.2 · 2.3 · 2.5 |
-| 12 | Models and pre-trained weights — TorchVision | PyTorch Foundation | https://docs.pytorch.org/vision/stable/models.html | 23/09/2026 | Paso 2.2 · 2.3 · 2.5 |
-| 13 | Ultralytics YOLO Docs | Ultralytics | https://docs.ultralytics.com/ | 23/09/2026 | Paso 2.2 · 2.3 · 2.5 |
-| 14 | EasyOCR (repositorio oficial) | Jaided AI · GitHub | https://github.com/JaidedAI/EasyOCR | 23/09/2026 | Paso 2.2 · 2.3 · 2.5 |
-| 15 | The Model Hub | Hugging Face | https://huggingface.co/docs/hub/models-the-hub | 23/09/2026 | Paso 2.2 · 2.3 |
-| 16 | JavaScript \| MDN | Mozilla | https://developer.mozilla.org/es/docs/Web/JavaScript | 23/09/2026 | Paso 2.2 · 2.3 · 2.5 |
-| 17 | About Node.js | OpenJS Foundation | https://nodejs.org/en/about | 23/09/2026 | Paso 2.2 · 2.3 · 2.5 |
-| 18 | Express — framework web para Node.js | OpenJS Foundation | https://expressjs.com/ | 23/09/2026 | Paso 2.2 · 2.3 · 2.5 |
-| 19 | TypeScript: JavaScript With Syntax For Types | Microsoft | https://www.typescriptlang.org/ | 23/09/2026 | Paso 2.3 |
-| 20 | TensorFlow.js | Google | https://www.tensorflow.org/js | 23/09/2026 | Paso 2.2 · 2.3 · 2.5 |
-| 21 | ONNX Runtime Web | Microsoft · ONNX Runtime | https://onnxruntime.ai/docs/tutorials/web/ | 23/09/2026 | Paso 2.2 · 2.3 · 2.5 |
-| 22 | Tesseract.js (repositorio oficial) | naptha · GitHub | https://github.com/naptha/tesseract.js | 23/09/2026 | Paso 2.3 |
-| 23 | What is R? | The R Foundation | https://www.r-project.org/about.html | 23/09/2026 | Paso 2.2 · 2.3 · 2.5 |
-| 24 | Shiny | Posit | https://shiny.posit.co/ | 23/09/2026 | Paso 2.2 · 2.3 |
-| 25 | Plumber: an API generator for R | Posit · B. Schloerke | https://www.rplumber.io/ | 23/09/2026 | Paso 2.3 · 2.5 |
-| 26 | torch for R | mlverse · Posit | https://torch.mlverse.org/ | 23/09/2026 | Paso 2.2 · 2.3 |
-| 27 | Getting Started with C++ | Standard C++ Foundation (isocpp.org) | https://isocpp.org/get-started | 23/09/2026 | Paso 2.2 · 2.3 |
-| 28 | PyTorch C++ API | PyTorch Foundation | https://docs.pytorch.org/cppdocs/ | 23/09/2026 | Paso 2.2 · 2.3 · 2.5 |
-| 29 | What is PHP? | The PHP Group · php.net | https://www.php.net/manual/en/intro-whatis.php | 23/09/2026 | Paso 2.2 · 2.3 |
-| 30 | GD — Image Processing and Generation | The PHP Group · php.net | https://www.php.net/manual/en/book.image.php | 23/09/2026 | Paso 2.3 |
-| 31 | Rubix ML (repositorio oficial) | Rubix ML · GitHub | https://github.com/RubixML/ML | 23/09/2026 | Paso 2.2 · 2.3 · 2.5 |
-| 32 | Learn Java — Dev.java | Oracle | https://dev.java/learn/ | 23/09/2026 | Paso 2.2 · 2.3 |
-| 33 | Spring Boot | Spring (Broadcom) | https://spring.io/projects/spring-boot | 23/09/2026 | Paso 2.2 · 2.3 |
-| 34 | Deep Java Library (DJL) | DJL · Amazon Web Services | https://docs.djl.ai/master/index.html | 23/09/2026 | Paso 2.2 · 2.3 · 2.5 |
-
-> En la web, cada dato del Paso 2 lleva un número **[n]** que enlaza a su fuente en la sección **📚 Fuentes**. Las fuentes de los Pasos 1, 3, 4 y 5 (AEPD, Reglamento europeo de IA, W3C, IETF…) se añadirán al trabajarlos.
-
----
-
-## 🤖 4. Evidencias del uso de IA generativa
-
-> Rúbrica · Criterio 4 (2,5 pt). **No bastan capturas sueltas.** Se incluyen los prompts relevantes de cada etapa y de **ambos** miembros, las repreguntas/correcciones, la justificación de las herramientas y una reflexión conjunta.
-
-### 4.1 Herramientas utilizadas y justificación
-
-| Herramienta | Quién la usó | Para qué | Por qué esta herramienta |
-|---|---|---|---|
-| Claude (Anthropic) | Julen | Estructura del repo, README, plantilla web | _…_ |
-| _ChatGPT / Copilot / Gemini…_ | Ander | _…_ | _…_ |
-
-### 4.2 Prompts por etapa
-
-| Paso | Miembro | Prompt (literal) | Qué aportó | Evidencia |
-|---|---|---|---|---|
-| Organización | Julen | _«En el curso de IA y Big Data… queremos que hagas el README.md con la estructura de pasos…»_ | Estructura del repo, README y web base | `assets/ia/…png` |
-| Paso 1 | Julen | _«Nosotros habíamos pensado en un parking de una empresa con muchos empleados… que tenga una parte que sea pública (pago por tiempo) y también una zona para un supermercado… que el cajero tenga un apartado de apuntar la matrícula del cliente… ¿Esto sería posible?»_ | Confirmó la viabilidad, separó parte de IA / parte de aplicación, propuso reglas y un simulador | `assets/ia/…png` |
-| Paso 1 | Julen | _«…quiero también que el sistema guarde el id del ticket y lo asocie a la matrícula del coche del cliente, para que se vincule con lo que ha comprado el cliente.»_ | Añadió el id del ticket a entradas, datos, salida y simulador, y los riesgos de privacidad asociados | `assets/ia/…png` |
-| Paso 2 | | | | |
-| Paso 3 | Julen | | | |
-| Paso 4 | Ander | | | |
-| Paso 5 | | | | |
-
-### 4.3 Repreguntas, cambios y correcciones
-
-| # | Respuesta inicial de la IA | Qué detectamos | Repregunta / corrección | Resultado final |
-|---|---|---|---|---|
-| 1 | La IA propuso guardar solo «validada sí/no» y no vincular la matrícula con la compra (mínimos datos) | Queríamos poder saber qué ha comprado cada cliente | Pedimos guardar el **id del ticket** asociado a la matrícula | **Decisión humana contra la propuesta de la IA:** se guarda el id del ticket; a cambio se añaden medidas de privacidad (aviso al cliente, acceso limitado, borrado) |
-| 2 | Información de «Entradas / Datos / Salida» en párrafos largos | Difícil de leer | Pedimos separar por líneas cada perfil (empleado, cliente, público…) | Cada bloque dividido en filas con listas |
-
-### 4.4 Reflexión conjunta sobre el uso de la IA
-
-> *(1 pt — la parte que más puntúa del criterio 4.)*
-
-- **En qué nos ha ayudado:** _…_
-- **En qué no nos ha ayudado / errores que cometió:** _…_
-- **Errores que evitamos gracias a revisarla:** _…_
-- **Decisiones humanas que tomamos contradiciendo a la IA:** _…_
-- **Conclusión:** _…_
+| 2 | Preguntas frecuentes sobre los datos de Google Trends | Google | https://support.google.com/trends/answer/4365533?hl=es | 23/09/2026 | Paso 2.1 |
+| 3 | Octoverse: AI leads Python to top language as the number of global developers surges | GitHub Staff, GitHub Blog (29/10/2024) | https://github.blog/news-insights/octoverse/octoverse-2024/ | 23/09/2026 | Paso 2 |
+| 4 | 2025 Stack Overflow Developer Survey, Technology | Stack Overflow | https://survey.stackoverflow.co/2025/technology | 23/09/2026 | Paso 2 |
+| 5 | TIOBE Programming Community Index | TIOBE Software | https://www.tiobe.com/tiobe-index/ | 23/09/2026 | Paso 2 |
+| 6 | El tutorial de Python | Python Software Foundation | https://docs.python.org/es/3/tutorial/index.html | 23/09/2026 | Paso 2 |
+| 7 | PEP 8, Style Guide for Python Code | G. van Rossum, B. Warsaw, A. Coghlan | https://peps.python.org/pep-0008/ | 23/09/2026 | Paso 2.3 |
+| 8 | PEP 20, The Zen of Python | Tim Peters | https://peps.python.org/pep-0020/ | 23/09/2026 | Paso 2 |
+| 9 | FastAPI | Sebastián Ramírez | https://fastapi.tiangolo.com/ | 23/09/2026 | Paso 2 |
+| 10 | statsmodels documentation | S. Seabold, J. Perktold | https://www.statsmodels.org/stable/index.html | 23/09/2026 | Paso 2.3 |
+| 11 | OpenCV modules, documentación 4.x | OpenCV | https://docs.opencv.org/4.x/ | 23/09/2026 | Paso 2 |
+| 12 | Models and pre-trained weights, TorchVision | PyTorch Foundation | https://docs.pytorch.org/vision/stable/models.html | 23/09/2026 | Pasos 2 y 5 |
+| 13 | Ultralytics YOLO Docs | Ultralytics | https://docs.ultralytics.com/ | 23/09/2026 | Pasos 2 y 5 |
+| 14 | EasyOCR | Jaided AI (GitHub) | https://github.com/JaidedAI/EasyOCR | 23/09/2026 | Pasos 2 y 5 |
+| 15 | The Model Hub | Hugging Face | https://huggingface.co/docs/hub/models-the-hub | 23/09/2026 | Paso 2 |
+| 16 | JavaScript \| MDN | Mozilla | https://developer.mozilla.org/es/docs/Web/JavaScript | 23/09/2026 | Paso 2 |
+| 17 | About Node.js | OpenJS Foundation | https://nodejs.org/en/about | 23/09/2026 | Paso 2 |
+| 18 | Express | OpenJS Foundation | https://expressjs.com/ | 23/09/2026 | Paso 2 |
+| 19 | TypeScript | Microsoft | https://www.typescriptlang.org/ | 23/09/2026 | Paso 2.3 |
+| 20 | TensorFlow.js | Google | https://www.tensorflow.org/js | 23/09/2026 | Paso 2 |
+| 21 | ONNX Runtime Web | Microsoft | https://onnxruntime.ai/docs/tutorials/web/ | 23/09/2026 | Paso 2 |
+| 22 | Tesseract.js | naptha (GitHub) | https://github.com/naptha/tesseract.js | 23/09/2026 | Paso 2.3 |
+| 23 | What is R? | The R Foundation | https://www.r-project.org/about.html | 23/09/2026 | Paso 2 |
+| 24 | Shiny | Posit | https://shiny.posit.co/ | 23/09/2026 | Paso 2 |
+| 25 | Plumber: an API generator for R | Posit, B. Schloerke | https://www.rplumber.io/ | 23/09/2026 | Paso 2 |
+| 26 | torch for R | mlverse, Posit | https://torch.mlverse.org/ | 23/09/2026 | Paso 2 |
+| 27 | Getting Started with C++ | Standard C++ Foundation | https://isocpp.org/get-started | 23/09/2026 | Paso 2 |
+| 28 | PyTorch C++ API | PyTorch Foundation | https://docs.pytorch.org/cppdocs/ | 23/09/2026 | Paso 2 |
+| 29 | What is PHP? | The PHP Group | https://www.php.net/manual/en/intro-whatis.php | 23/09/2026 | Paso 2 |
+| 30 | GD, Image Processing and Generation | The PHP Group | https://www.php.net/manual/en/book.image.php | 23/09/2026 | Paso 2.3 |
+| 31 | Rubix ML | Rubix ML (GitHub) | https://github.com/RubixML/ML | 23/09/2026 | Paso 2 |
+| 32 | Learn Java, Dev.java | Oracle | https://dev.java/learn/ | 23/09/2026 | Paso 2 |
+| 33 | Spring Boot | Spring (Broadcom) | https://spring.io/projects/spring-boot | 23/09/2026 | Paso 2 |
+| 34 | Deep Java Library (DJL) | Amazon Web Services | https://docs.djl.ai/master/index.html | 23/09/2026 | Paso 2 |
+| 35 | Protección de datos: Guía sobre el uso de videocámaras para seguridad y otras finalidades | Agencia Española de Protección de Datos (2025) | https://www.aepd.es/guias/guia-videovigilancia.pdf | 05/10/2026 | Paso 1 |
+| 36 | Reglamento (UE) 2024/1689 de Inteligencia Artificial | Parlamento Europeo y Consejo, EUR-Lex (13/06/2024) | https://eur-lex.europa.eu/eli/reg/2024/1689/oj | 05/10/2026 | Paso 1 |
+| 37 | PSeInt | Pablo Novara (SourceForge) | https://pseint.sourceforge.net/ | 05/10/2026 | Paso 3.4 |
 
 ---
 
-## 🔗 5. Enlaces verificables
+## Uso de la IA
 
-- 🌐 Web publicada: _https://TU-SITIO.netlify.app_
-- 💾 Repositorio: https://github.com/altu44/proyecto-ra1
-- 📓 [`pseudocodigo.ipynb`](pseudocodigo.ipynb)
-- 📓 [`demo_lenguajes.ipynb`](demo_lenguajes.ipynb)
-- 📊 [`data/trends_web.csv`](data/trends_web.csv) · [`data/trends_youtube.csv`](data/trends_youtube.csv)
+### Herramientas
+
+| Herramienta | Quién | Para qué |
+|---|---|---|
+| Claude (Anthropic), en la app de escritorio | Julen | Montar la estructura del repo y de la web, hacer el código de la web (HTML, CSS y JS), buscar y comprobar fuentes, juntar las ramas y redactar partes del README |
+| _(Ander: añadir la herramienta que ha usado)_ | Ander | |
+
+Elegimos Claude porque podía trabajar directamente con los archivos de la carpeta del proyecto y probar la web en un navegador antes de entregárnosla, así que no teníamos que estar copiando y pegando código.
+
+### Prompts más importantes
+
+| Paso | Quién | Prompt (copiado tal cual o recortado) |
+|---|---|---|
+| Inicio | Julen | «En el curso de IA y Big Data, en la asignatura de programación de IA, tenemos que hacer este trabajo por parejas. Fíjate bien en la estructura que tiene que tener el trabajo, sus objetivos y los entregables. […] Queremos que hagas el README.md con la estructura de pasos tal y como son, mientras que el index.html queremos que sea más dinámica y visual» |
+| Paso 1 | Julen | «Nosotros habíamos pensado en un parking de una empresa con muchos empleados. No solo que sea un parking de muchos empleados, sino que además tenga una parte que sea pública […] y también que tenga una zona para un supermercado. […] Desde tu punto de vista, ¿esto sería posible?» |
+| Paso 1 | Julen | «Quiero también que el sistema guarde el id del ticket y lo asocie a la matrícula del coche del cliente, para que se vincule con lo que ha comprado el cliente» |
+| Paso 2 | Julen | «Solo quiero que la página tenga un apartado de "fuentes" que tenga el link de la fuente (que sean fiables por favor). […] Haz hipervínculos de lo que explicas en cada momento del punto 2» |
+| Paso 2 | Julen | «Antes me he confundido y te he pasado los datos de España. Te paso los archivos correctos. Por otro lado, me gustaría que añadieras una interpretación del gráfico» |
+| Paso 3 | Julen | «En base a lo que hemos hecho hasta ahora, edita el punto 3. Me gustaría ver cómo haces el flujo general, aplicado a lo que te he comentado» |
+| Paso 3 | Julen | «Queremos también que añadas de fuente la página de PSInt y que en el punto 3.4 digas que nos hemos basado en eso» |
+| Pasos 4 y 3 | Ander | _(Ander: añadir aquí sus prompts)_ |
+
+Las capturas de las conversaciones están en `assets/ia/`.
+
+### Cosas que corregimos o pedimos otra vez
+
+| Qué propuso la IA o qué salió mal | Qué hicimos nosotros |
+|---|---|
+| La IA propuso guardar solo si el cliente había sido validado o no, sin relacionar la matrícula con la compra, para guardar los mínimos datos posibles | No le hicimos caso: decidimos guardar el id del ticket porque nos interesaba relacionar la estancia con la compra. A cambio pedimos que se añadieran las medidas de privacidad (avisar al cliente, limitar el acceso y borrar los datos pasado un tiempo) |
+| La primera versión del paso 1 seguía el ejemplo del enunciado, con un operador subiendo imágenes | Le explicamos nuestro caso del parking y le pedimos que lo rehiciera entero |
+| Los apartados de entradas, datos y salida eran párrafos muy largos | Pedimos separarlos por líneas, cada perfil en la suya |
+| En el apartado de viabilidad metía demasiado texto | Le pedimos que dejara solo la diferencia entre la parte de IA y la parte de aplicación |
+| La sección de fuentes ocupaba demasiado | Pedimos mostrar solo tres y un botón de «Ver más», y quitar la fecha de cada tarjeta |
+| Le pasamos por error los CSV de España | Lo vimos nosotros, descargamos los mundiales y le pedimos que rehiciera la interpretación |
+| La tabla de la comparativa costaba leerla | Pedimos colores, de rojo para las notas bajas a verde para las altas |
+| Al juntar las ramas hubo conflicto en el pseudocódigo | La IA nos preguntó cuál dejar y elegimos la versión de Ander |
+
+### Reflexión sobre el uso de la IA
+
+La IA nos ha ayudado sobre todo con la parte técnica de la web. Hacer a mano un gráfico que lee los CSV, una matriz con pesos que se recalcula o un diagrama de flujo nos habría llevado mucho más tiempo del que teníamos. También nos ha venido bien para encontrar documentación oficial de cada lenguaje y para comprobar que los enlaces funcionaban.
+
+Lo que no ha hecho por nosotros es decidir. El caso del parking con empleados, supermercado y público lo pensamos nosotros, igual que lo de guardar el ticket, que fue justo lo contrario de lo que nos proponía. Las puntuaciones de la comparativa y los pesos de la matriz los hemos revisado y tenemos que saber defenderlos, porque al final la nota tiene que tener sentido para nuestro caso y no solo sonar bien.
+
+También hemos visto que hay que revisarlo todo. Muchas veces el resultado era correcto pero no era lo que queríamos (demasiado texto, demasiado largo, cosas que no pegaban con nuestro caso), y hemos tenido que pedir cambios varias veces. Y hay cosas que no puede hacer, como subir los cambios a GitHub con nuestra cuenta, que hemos tenido que hacer nosotros.
+
+En resumen, nos ha servido para ir más rápido y aprender cómo se hacen cosas que no sabíamos, pero las ideas y las decisiones del trabajo son nuestras.
+
+---
+
+## Enlaces
+
+- Web: https://matriculator.netlify.app
+- Repositorio: https://github.com/altu44/proyecto-ra1
+- [`pseudocodigo.ipynb`](pseudocodigo.ipynb)
+- [`demo_lenguajes.ipynb`](demo_lenguajes.ipynb)
+- [`data/trends_web.csv`](data/trends_web.csv) y [`data/trends_youtube.csv`](data/trends_youtube.csv)

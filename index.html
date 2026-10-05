@@ -189,7 +189,7 @@
         <div class="card card--warn">
           <h3>⚠️ Riesgos y límites</h3>
           <ul class="check">
-            <li><b>Privacidad (RGPD):</b> la matrícula es un dato personal. El registro de empleados solo guarda matrícula + id interno; se informa a la plantilla y no se usa para controlar horarios.</li>
+            <li><b>Privacidad (RGPD):</b> la matrícula es un dato personal <sup class="cite" data-src="aepd-video"></sup>. El registro de empleados solo guarda matrícula + id interno; se informa a la plantilla y no se usa para controlar horarios.</li>
             <li><b>Vínculo matrícula ↔ ticket:</b> al asociar la matrícula al id del ticket se puede saber qué ha comprado el cliente. Es un dato personal más sensible: hay que avisar al cliente (cartel y ticket), guardar solo el id del ticket (el detalle de la compra sigue en el sistema del supermercado), limitar quién puede consultarlo y borrarlo pasado un plazo.</li>
             <li><b>Retención mínima:</b> se guarda el resultado, no la imagen; los registros de público y clientes se borran tras un plazo corto.</li>
             <li><b>Errores de lectura:</b> 0/O, 8/B, suciedad, noche, ángulo → umbral de confianza y revisión.</li>
@@ -204,6 +204,7 @@
             <li>Lecturas con <b>confianza baja</b> o que no coinciden con ninguna entrada → aviso al personal por el interfono.</li>
             <li><b>Reclamaciones</b> (p. ej. «compré pero no me validaron»): el personal busca el ticket y corrige la validación. También cualquier <b>cobro o sanción</b> dudosa.</li>
             <li>El <b>alta y baja</b> de matrículas de empleados la gestiona Recursos Humanos.</li>
+            <li>Que una persona supervise lo que hace la IA es una de las ideas del <b>Reglamento europeo de IA</b> <sup class="cite" data-src="ai-act"></sup>, y la hemos querido aplicar aunque nuestro caso sea sencillo.</li>
           </ul>
         </div>
       </div>
@@ -380,7 +381,8 @@
       </div>
       <div class="phase reveal" id="phase"></div>
 
-      <h3 class="sub reveal">3.4 · Pseudocódigo <small>(Python · completo en <a href="pseudocodigo.ipynb">pseudocodigo.ipynb</a>)</small></h3>
+      <h3 class="sub reveal">3.4 · Pseudocódigo</h3>
+      <p class="reveal">Para escribir este pseudocódigo nos hemos basado en <b>PSeInt</b> <sup class="cite" data-src="pseint"></sup>, la herramienta que se usa para aprender a programar con pseudocódigo en español: por eso las instrucciones están en castellano (<code>función</code>, <code>si</code>, <code>devolver</code>, <code>intentar</code>…). La estructura la hemos acercado a Python, que es el lenguaje que elegimos para la IA. Describe lo que pasa cuando un coche llega a la salida. La versión en Python ejecutable del componente de IA (validar la imagen, detectar y leer la matrícula) está en <a href="pseudocodigo.ipynb">pseudocodigo.ipynb</a>.</p>
       <div class="code reveal">
         <div class="code__bar">
           <span>salida_parking.py · pseudocódigo</span>
