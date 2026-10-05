@@ -452,7 +452,11 @@
             <div class="gauge__bar"><div class="gauge__fill" id="gaugeFill"></div><div class="gauge__dot" id="gaugeDot"></div></div>
             <span>IA fuerte</span>
           </div>
-          <p class="todo">✏️ Justificad: ¿resuelve una única tarea concreta? ¿Entiende lo que ve o reconoce patrones? ¿Puede razonar o generalizar fuera de su tarea?</p>
+          <div class="qa__answer">
+            <p>Para nosotros es claramente <b>IA débil</b>. El sistema solo sabe hacer una cosa: encontrar una matrícula en una foto y leerla. Si le pides cualquier otra cosa, no sabe.</p>
+            <p>Además, no entiende lo que ve. Reconoce formas de letras y números porque ha aprendido de muchas imágenes, pero no sabe qué es un coche ni para qué sirve un parking. Las decisiones que importan, como si alguien paga o no, las toman reglas que hemos escrito nosotros o una persona.</p>
+            <p>Una IA fuerte tendría que poder razonar y adaptarse a cualquier tarea como lo haría una persona, y esto queda muy lejos.</p>
+          </div>
         </details>
         <details class="qa__item">
           <summary>🧩 ¿Modelo preentrenado o entrenar desde cero?</summary>
@@ -467,11 +471,18 @@
               <ul><li>Miles de imágenes anotadas</li><li>GPU y semanas de entrenamiento</li><li>Más control total</li><li>Riesgo alto de peor resultado</li></ul>
             </div>
           </div>
-          <p class="todo">✏️ Razonad vuestra elección con fuentes.</p>
+          <div class="qa__answer">
+            <p>Lo tenemos claro: usaríamos un <b>modelo preentrenado</b> y lo ajustaríamos. Ya existen detectores y OCR entrenados con muchísimas imágenes, como YOLO <sup class="cite" data-src="ultralytics"></sup>, los modelos de TorchVision <sup class="cite" data-src="torchvision"></sup> o EasyOCR <sup class="cite" data-src="easyocr"></sup>, y lo lógico es partir de uno de ellos y afinarlo con fotos de matrículas españolas.</p>
+            <p>Entrenar desde cero pediría miles de fotos etiquetadas a mano, mucho tiempo de GPU y, aun así, seguramente saldría peor. Solo lo veríamos con sentido si ningún modelo existente funcionara con nuestras imágenes.</p>
+          </div>
         </details>
         <details class="qa__item">
           <summary>🚧 Límites de la solución</summary>
-          <p class="todo">✏️ Qué no puede hacer, en qué condiciones falla y por qué la revisión humana es necesaria.</p>
+          <div class="qa__answer">
+            <p>El sistema puede fallar de noche, con lluvia, con matrículas sucias, dobladas o extranjeras, y puede confundir caracteres parecidos como el 0 y la O o el 8 y la B.</p>
+            <p>Tampoco sabe nada de lo que pasa dentro del parking: si un cliente compra pero el cajero se olvida de apuntar la matrícula, el sistema lo va a tratar como público.</p>
+            <p>Por eso siempre tiene que haber una persona que pueda revisar y corregir. Preferimos que en caso de duda la barrera no se abra sola a cobrar mal a alguien.</p>
+          </div>
         </details>
       </div>
     </section>

@@ -761,3 +761,7 @@ body.no-scroll { overflow: hidden; }
 .flow-counter { white-space: nowrap; }
 .fc-hint { display: none; font-size: .78rem; color: var(--muted); margin: 0 0 .4rem; }
 @media (max-width: 760px) { .fc-hint { display: block; } .flow-controls .btn { white-space: nowrap; } }
+
+/* Respuestas del paso 5 */
+.qa__answer p { margin: .5rem 0; line-height: 1.65; }
+.qa__answer p:first-child { margin-top: 0; }

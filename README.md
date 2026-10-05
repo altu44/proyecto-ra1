@@ -58,7 +58,7 @@ Los pasos 1, 2 y 5 los hemos hecho entre los dos, repartiéndonos las partes. El
 | T7 | Pseudocódigo | Paso 3 y `pseudocodigo.ipynb` | Julen / Ander | 1,5 h | | | Hecho |
 | T8 | HTML, XML, JSON, Markdown y CSV | Paso 4 | Ander | 1,5 h | | | Hecho |
 | T9 | Notebook de formatos | `demo_lenguajes.ipynb` | Ander | 1,5 h | | | Hecho |
-| T10 | Preguntas del paso 5 | README y web | Los dos | 0,5 h cada uno | | | Falta pasarlo a la web |
+| T10 | Preguntas del paso 5 | README y web | Los dos | 0,5 h cada uno | | | Hecho |
 | T11 | Fuentes y uso de la IA | README | Los dos | 1 h cada uno | | | Hecho |
 | T12 | Juntar las ramas y publicar | `main` y Netlify | Los dos | 1 h cada uno | | | Hecho |
 | T13 | Repaso final con la rúbrica | Todo | Los dos | 0,5 h cada uno | | | En curso |
@@ -284,7 +284,7 @@ Hemos intentado usar sobre todo documentación oficial y fuentes con autor y fec
 | Herramienta | Quién | Para qué |
 |---|---|---|
 | Claude (Anthropic), en la app de escritorio | Julen | Montar la estructura del repo y de la web, hacer el código de la web (HTML, CSS y JS), buscar y comprobar fuentes, juntar las ramas y redactar partes del README |
-| _(Ander: añadir la herramienta que ha usado)_ | Ander | |
+| ChatGPT (OpenAI) y Gemini (Google) | Ander | Hacer los notebooks (`pseudocodigo.ipynb` y `demo_lenguajes.ipynb`) y trabajar sobre el repositorio |
 
 Elegimos Claude porque podía trabajar directamente con los archivos de la carpeta del proyecto y probar la web en un navegador antes de entregárnosla, así que no teníamos que estar copiando y pegando código.
 
