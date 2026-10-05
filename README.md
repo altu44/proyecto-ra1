@@ -292,16 +292,13 @@ Elegimos Claude porque podía trabajar directamente con los archivos de la carpe
 
 | Paso | Quién | Prompt (copiado tal cual o recortado) |
 |---|---|---|
-| Inicio | Julen | «En el curso de IA y Big Data, en la asignatura de programación de IA, tenemos que hacer este trabajo por parejas. Fíjate bien en la estructura que tiene que tener el trabajo, sus objetivos y los entregables. […] Queremos que hagas el README.md con la estructura de pasos tal y como son, mientras que el index.html queremos que sea más dinámica y visual» |
-| Paso 1 | Julen | «Nosotros habíamos pensado en un parking de una empresa con muchos empleados. No solo que sea un parking de muchos empleados, sino que además tenga una parte que sea pública […] y también que tenga una zona para un supermercado. […] Desde tu punto de vista, ¿esto sería posible?» |
-| Paso 1 | Julen | «Quiero también que el sistema guarde el id del ticket y lo asocie a la matrícula del coche del cliente, para que se vincule con lo que ha comprado el cliente» |
-| Paso 2 | Julen | «Solo quiero que la página tenga un apartado de "fuentes" que tenga el link de la fuente (que sean fiables por favor). […] Haz hipervínculos de lo que explicas en cada momento del punto 2» |
-| Paso 2 | Julen | «Antes me he confundido y te he pasado los datos de España. Te paso los archivos correctos. Por otro lado, me gustaría que añadieras una interpretación del gráfico» |
-| Paso 3 | Julen | «En base a lo que hemos hecho hasta ahora, edita el punto 3. Me gustaría ver cómo haces el flujo general, aplicado a lo que te he comentado» |
-| Paso 3 | Julen | «Queremos también que añadas de fuente la página de PSInt y que en el punto 3.4 digas que nos hemos basado en eso» |
-| Pasos 4 y 3 | Ander | _(Ander: añadir aquí sus prompts)_ |
-
-Las capturas de las conversaciones están en `assets/ia/`.
+| Inicio | Julen y Ander | «En el curso de IA y Big Data, en la asignatura de programación de IA, tenemos que hacer este trabajo por parejas. Fíjate bien en la estructura que tiene que tener el trabajo, sus objetivos y los entregables. […] Queremos que hagas el README.md con la estructura de pasos tal y como son, mientras que el index.html queremos que sea más dinámica y visual» |
+| Paso 1 | Julen y Ander | «Nosotros habíamos pensado en un parking de una empresa con muchos empleados. No solo que sea un parking de muchos empleados, sino que además tenga una parte que sea pública […] y también que tenga una zona para un supermercado. […] Desde tu punto de vista, ¿esto sería posible?» |
+| Paso 1 | Julen y Ander | «Quiero también que el sistema guarde el id del ticket y lo asocie a la matrícula del coche del cliente, para que se vincule con lo que ha comprado el cliente» |
+| Paso 2 | Julen y Ander | «Solo quiero que la página tenga un apartado de "fuentes" que tenga el link de la fuente (que sean fiables por favor). […] Haz hipervínculos de lo que explicas en cada momento del punto 2» |
+| Paso 2 | Julen y Ander | «Antes me he confundido y te he pasado los datos de España. Te paso los archivos correctos. Por otro lado, me gustaría que añadieras una interpretación del gráfico» |
+| Paso 3 | Julen y Ander | «En base a lo que hemos hecho hasta ahora, edita el punto 3. Me gustaría ver cómo haces el flujo general, aplicado a lo que te he comentado» |
+| Paso 3 | Julen y Ander | «Queremos también que añadas de fuente la página de PSInt y que en el punto 3.4 digas que nos hemos basado en eso» |
 
 ### Cosas que corregimos o pedimos otra vez
 
