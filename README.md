@@ -3,7 +3,7 @@
 Trabajo grupal del RA1 de Programación de Inteligencia Artificial (Curso de Especialización en IA y Big Data).
 
 **Integrantes:** Julen Altuna y Ander Ameztoy
-**Web:** https://matriculator.netlify.app
+**Web:** https://proyecto-ra1.vercel.app
 **Repositorio:** https://github.com/altu44/proyecto-ra1
 **Fecha de entrega:** 05/10/2026
 
@@ -27,7 +27,7 @@ En este README contamos cómo nos hemos organizado, las fuentes que hemos usado,
 
 ```
 proyecto-ra1/
-├── index.html             la web con todo el desarrollo (está en Netlify)
+├── index.html             la web con todo el desarrollo (está en Vercel)
 ├── styles.css             estilos de la web
 ├── script.js              gráfico de Trends, matriz, simulador, diagramas...
 ├── README.md              este archivo
@@ -39,7 +39,7 @@ proyecto-ra1/
 └── demo_lenguajes.ipynb   paso 4, lectura de HTML, CSV, JSON y XML
 ```
 
-Cada uno ha trabajado en su rama (`julen` y `ander`) y luego lo hemos juntado en `main`, que es la rama que publica Netlify.
+Cada uno ha trabajado en su rama (`julen` y `ander`) y luego lo hemos juntado en `main`, que es la rama que publica Vercel.
 
 ---
 
@@ -49,7 +49,7 @@ Los pasos 1, 2 y 5 los hemos hecho entre los dos, repartiéndonos las partes. El
 
 | # | Tarea | Qué se entrega | Quién | Previsto | Real | Diferencia | Estado |
 |---|---|---|---|---|---|---|---|
-| T1 | Crear el repo, las ramas y publicar en Netlify | Repo y web | Julen | 0,5 h | | | Hecho |
+| T1 | Crear el repo, las ramas y publicar en Vercel | Repo y web | Julen | 0,5 h | | | Hecho |
 | T2 | Definir la aplicación (problema, entradas, datos, salida, riesgos) | Paso 1 | Los dos | 0,5 h cada uno | | | Hecho |
 | T3 | Google Trends: descargar los CSV, gráfico e interpretación | Paso 2.1 | Julen | 1 h | | | Hecho |
 | T4 | Características de los lenguajes y comparativa | Paso 2.2 | Ander | 1,5 h | | | Hecho |
@@ -60,7 +60,7 @@ Los pasos 1, 2 y 5 los hemos hecho entre los dos, repartiéndonos las partes. El
 | T9 | Notebook de formatos | `demo_lenguajes.ipynb` | Ander | 1,5 h | | | Hecho |
 | T10 | Preguntas del paso 5 | README y web | Los dos | 0,5 h cada uno | | | Hecho |
 | T11 | Fuentes y uso de la IA | README | Los dos | 1 h cada uno | | | Hecho |
-| T12 | Juntar las ramas y publicar | `main` y Netlify | Los dos | 1 h cada uno | | | Hecho |
+| T12 | Juntar las ramas y publicar | `main` y Vercel | Los dos | 1 h cada uno | | | Hecho |
 | T13 | Repaso final con la rúbrica | Todo | Los dos | 0,5 h cada uno | | | En curso |
 | | **Total previsto** | | | **unas 9 h cada uno** | | | |
 
@@ -327,7 +327,7 @@ En resumen, nos ha servido para ir más rápido y aprender cómo se hacen cosas 
 
 ## Enlaces
 
-- Web: https://matriculator.netlify.app
+- Web: https://proyecto-ra1.vercel.app
 - Repositorio: https://github.com/altu44/proyecto-ra1
 - [`pseudocodigo.ipynb`](pseudocodigo.ipynb)
 - [`demo_lenguajes.ipynb`](demo_lenguajes.ipynb)

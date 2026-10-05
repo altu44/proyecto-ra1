@@ -453,7 +453,7 @@ function yearly({ dates, series }) {
     const raw = await load(source);
     if (!raw) {
       banner.hidden = false;
-      banner.innerHTML = "⚠️ No se ha podido leer el CSV. Si abres el archivo con doble clic (<code>file://</code>) el navegador bloquea la lectura: usa <b>Live Server</b> en VS Code o la web de Netlify, o pulsa <b>📂 Cargar CSV</b>.";
+      banner.innerHTML = "⚠️ No se ha podido leer el CSV. Si abres el archivo con doble clic (<code>file://</code>) el navegador bloquea la lectura: usa <b>Live Server</b> en VS Code o la web de Vercel, o pulsa <b>📂 Cargar CSV</b>.";
       return;
     }
     banner.hidden = !raw.example;
@@ -1065,7 +1065,7 @@ const PSEUDO = [
   // Horas previstas por tarea (coherente con la tabla del README)
   const who = { J: ["Julen", "--py"], C: ["Ander", "--java"], A: ["Ambos", "--accent"] };
   const tasks = [
-    ["T1 · Repo, ramas y Netlify", "J", 0, 0.5],
+    ["T1 · Repo, ramas y Vercel", "J", 0, 0.5],
     ["T2 · Paso 1 · Definir app", "A", 0.5, 0.5],
     ["T3 · Paso 2 · Google Trends", "J", 1, 1],
     ["T4 · Paso 2 · Comparativa", "C", 1, 1.5],
