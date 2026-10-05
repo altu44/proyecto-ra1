@@ -24,6 +24,7 @@
       <a href="#paso3">3 · Programa</a>
       <a href="#paso4">4 · Formatos</a>
       <a href="#paso5">5 · Preguntas</a>
+      <a href="#fuentes">Fuentes</a>
       <a href="#equipo">Equipo</a>
     </nav>
     <div class="nav__actions">
@@ -97,39 +98,112 @@
 
       <div class="problem reveal">
         <h3>🎯 El problema</h3>
-        <p>Una empresa de aparcamientos quiere <strong>evaluar</strong> si una aplicación de visión por computador podría leer matrículas en imágenes de su banco de pruebas para agilizar el registro de entradas y salidas. <span class="todo">✏️ Completad con vuestras palabras: para quién es, qué necesidad resuelve y qué NO pretende hacer.</span></p>
+        <p>Una empresa con <strong>muchos empleados</strong> tiene un parking, y lo comparte con <strong>clientes de un supermercado</strong> y con <strong>público general</strong>(de la calle) que paga por tiempo. Hoy el control se hace con tarjetas y tiques de papel que se pierden, generan colas en la barrera y obligan a tener personal en la salida.</p>
+        <p>Con matriculator, ponemos una cámara en la entrada y otra en la salida, leen la matrícula y saben <strong>quién es cada coche</strong>:</p>
+        <ul class="check">
+          <li><b>Empleado:</b> su matrícula está dada de alta en el registro de la empresa y entra y sale sin pagar.</li>
+          <li><b>Cliente del supermercado:</b> el cajero apunta la matrícula al cobrar la compra, y a la salida el sistema aplica el tiempo gratuito.</li>
+          <li><b>Público:</b> cualquier otra matrícula paga según el tiempo de estancia.</li>
+        </ul>
       </div>
 
+      <!-- Tres perfiles -->
+      <h3 class="sub reveal">1.1 · Un parking, tres perfiles</h3>
+      <div class="zones reveal">
+        <div class="zone" style="--c: var(--py)">
+          <span class="zone__icon">👔</span>
+          <h4>Empleados</h4>
+          <p>Zona reservada. La matrícula se compara con el <b>registro de empleados</b> (máx. 2 vehículos por persona).</p>
+          <div class="zone__rule"><span>Salida</span><b>Gratis · barrera abierta</b></div>
+        </div>
+        <div class="zone" style="--c: var(--ok)">
+          <span class="zone__icon">🛒</span>
+          <h4>Clientes del supermercado</h4>
+          <p>Cuando el cliente paga, el <b>cajero apunta la matrícula</b> en el TPV y el sistema la <b>asocia al id del ticket</b> de compra. La validación dura solo ese día.</p>
+          <div class="zone__rule"><span>Salida</span><b>Gratis los primeros <span class="js-free">90</span> min</b></div>
+        </div>
+        <div class="zone" style="--c: var(--java)">
+          <span class="zone__icon">🅿️</span>
+          <h4>Público</h4>
+          <p>Cualquier matrícula que no es de un empleado ni se ha validado en caja.</p>
+          <div class="zone__rule"><span>Salida</span><b>Paga por tiempo · <span class="js-rate">2,40</span> €/h</b></div>
+        </div>
+      </div>
+
+      <!-- Simulador -->
+      <h3 class="sub reveal">1.2 · Simula un coche</h3>
+      <div class="card sim reveal">
+        <div class="sim__controls">
+          <div class="sim__field">
+            <label>¿Quién entra?</label>
+            <div class="seg" id="simPerfil">
+              <button class="is-active" data-p="empleado">👔 Empleado</button>
+              <button data-p="cliente">🛒 Cliente</button>
+              <button data-p="publico">🅿️ Público</button>
+            </div>
+          </div>
+          <div class="sim__field">
+            <label for="simTiempo">Tiempo en el parking: <b id="simTiempoOut">60 min</b></label>
+            <input type="range" id="simTiempo" min="5" max="600" step="5" value="60">
+          </div>
+          <div class="sim__field" id="simCajaField">
+            <label>¿El cajero apuntó la matrícula?</label>
+            <label class="switch"><input type="checkbox" id="simCaja" checked><span></span> <em id="simCajaTxt">Sí, validada en caja</em></label>
+          </div>
+          <div class="sim__field">
+            <label for="simConf">Confianza de la lectura en la salida: <b id="simConfOut">0.93</b></label>
+            <input type="range" id="simConf" min="0.40" max="0.99" step="0.01" value="0.93">
+          </div>
+        </div>
+        <div class="sim__result">
+          <ol class="sim__trace" id="simTrace"></ol>
+          <div class="verdict" id="simVerdict"></div>
+        </div>
+      </div>
+
+      <!-- Entradas → salida -->
+      <h3 class="sub reveal">1.3 · Entradas, datos, procesamiento y salida</h3>
       <p class="hint reveal">👆 Pulsa cada bloque del flujo para ver el detalle.</p>
       <div class="ipo reveal" id="ipo">
-        <button class="ipo__card is-active" data-ipo="entrada"><span class="ipo__icon">📷</span><b>Entradas</b><small>Imagen + config. cámara</small></button>
+        <button class="ipo__card is-active" data-ipo="entrada"><span class="ipo__icon">📷</span><b>Entradas</b><small>Imágenes + matrícula y ticket en caja</small></button>
         <span class="ipo__arrow">➜</span>
-        <button class="ipo__card" data-ipo="datos"><span class="ipo__icon">🗂️</span><b>Datos</b><small>Imágenes anotadas</small></button>
+        <button class="ipo__card" data-ipo="datos"><span class="ipo__icon">🗂️</span><b>Datos</b><small>Imágenes anotadas + bases de datos</small></button>
         <span class="ipo__arrow">➜</span>
-        <button class="ipo__card" data-ipo="proceso"><span class="ipo__icon">⚙️</span><b>Procesamiento</b><small>Validar · preparar · modelo</small></button>
+        <button class="ipo__card" data-ipo="proceso"><span class="ipo__icon">⚙️</span><b>Procesamiento</b><small>Leer · clasificar · calcular</small></button>
         <span class="ipo__arrow">➜</span>
-        <button class="ipo__card" data-ipo="salida"><span class="ipo__icon">🧾</span><b>Salida</b><small>Registro o aviso</small></button>
+        <button class="ipo__card" data-ipo="salida"><span class="ipo__icon">🧾</span><b>Salida</b><small>Barrera, importe o aviso</small></button>
         <span class="ipo__arrow">➜</span>
         <button class="ipo__card ipo__card--human" data-ipo="humano"><span class="ipo__icon">🧑‍⚖️</span><b>Decisión humana</b><small>Lo que no se automatiza</small></button>
       </div>
       <div class="ipo__detail reveal" id="ipoDetail"></div>
 
+      <!-- Viabilidad -->
+      <div class="card feas reveal">
+        <div class="feas__split">
+          <div><span class="feas__tag feas__tag--ia">🤖 Parte de IA</span><p>Solo <b>detectar y leer la matrícula</b> en la imagen (visión por computador + OCR). Es la única parte que necesita un modelo.</p></div>
+          <div><span class="feas__tag feas__tag--app">🖥️ Parte de aplicación</span><p><b>Clasificar</b> (empleado / cliente / público), <b>asociar el ticket</b> y <b>calcular el importe</b> son reglas y consultas a una base de datos. No hace falta IA.</p></div>
+        </div>
+      </div>
+
       <div class="grid-2 reveal">
         <div class="card card--warn">
           <h3>⚠️ Riesgos y límites</h3>
           <ul class="check">
-            <li><b>Privacidad:</b> una matrícula es un dato personal indirecto. Solo imágenes ficticias o de banco de pruebas, sin personas identificables.</li>
-            <li><b>Retención mínima:</b> se guarda el resultado, no la imagen; borrado tras un plazo corto.</li>
-            <li><b>Errores de lectura:</b> confusiones 0/O, 8/B, suciedad, noche, ángulo… → umbral de confianza + revisión.</li>
-            <li><span class="todo">✏️ Añadid algún límite más (p. ej. matrículas extranjeras, sesgo del dataset).</span></li>
+            <li><b>Privacidad (RGPD):</b> la matrícula es un dato personal. El registro de empleados solo guarda matrícula + id interno; se informa a la plantilla y no se usa para controlar horarios.</li>
+            <li><b>Vínculo matrícula ↔ ticket:</b> al asociar la matrícula al id del ticket se puede saber qué ha comprado el cliente. Es un dato personal más sensible: hay que avisar al cliente (cartel y ticket), guardar solo el id del ticket (el detalle de la compra sigue en el sistema del supermercado), limitar quién puede consultarlo y borrarlo pasado un plazo.</li>
+            <li><b>Retención mínima:</b> se guarda el resultado, no la imagen; los registros de público y clientes se borran tras un plazo corto.</li>
+            <li><b>Errores de lectura:</b> 0/O, 8/B, suciedad, noche, ángulo → umbral de confianza y revisión.</li>
+            <li><b>Errores humanos:</b> el cajero puede teclear mal la matrícula → el TPV sugiere las matrículas que han entrado hoy para elegirla.</li>
+            <li><b>Casos especiales:</b> coches de empresa compartidos, empleados que cambian de coche, matrículas extranjeras o remolques.</li>
           </ul>
         </div>
         <div class="card card--ok">
           <h3>🧑‍⚖️ Qué sigue siendo humano</h3>
           <ul class="check">
-            <li>Cualquier <b>cobro, sanción o denegación de acceso</b> basada en la lectura.</li>
-            <li>Validar lecturas con <b>confianza baja</b> o imágenes no válidas.</li>
-            <li>Decidir qué datos se guardan y durante cuánto tiempo.</li>
+            <li>La <b>validación en caja</b> (matrícula + ticket) la hace una persona, el cajero, no la IA.</li>
+            <li>Lecturas con <b>confianza baja</b> o que no coinciden con ninguna entrada → aviso al personal por el interfono.</li>
+            <li><b>Reclamaciones</b> (p. ej. «compré pero no me validaron»): el personal busca el ticket y corrige la validación. También cualquier <b>cobro o sanción</b> dudosa.</li>
+            <li>El <b>alta y baja</b> de matrículas de empleados la gestiona Recursos Humanos.</li>
           </ul>
         </div>
       </div>
@@ -163,11 +237,49 @@
         <div class="banner" id="trendsBanner" hidden></div>
         <div class="chart-wrap"><canvas id="trendsChart" aria-label="Gráfico de Google Trends"></canvas></div>
         <div class="legend-toggles" id="trendsLegend"></div>
-        <p class="meta">Fuente: Google Trends · Todo el mundo · 2004–presente · Datos leídos de <code id="trendsFile">data/trends_web.csv</code> (no es una captura).</p>
+        <p class="meta">Fuente: Google Trends <sup class="cite" data-src="trends"></sup> · Todo el mundo · Búsqueda web desde 2004 y YouTube desde 2008 (primer año con datos) · Descargados el 23/09/2026 · Datos leídos de <code id="trendsFile">data/trends_web.csv</code> (no es una captura). En YouTube faltan los datos de enero a julio de 2017 (hueco de Google Trends) y 2026 solo llega hasta septiembre. Los valores van de 0 a 100: 100 es el momento de máximo interés relativo y cada dato se divide entre el total de búsquedas de esa zona y periodo <sup class="cite" data-src="trends-faq"></sup>.</p>
       </div>
       <div class="card reveal">
         <h3>📈 Interpretación y conclusiones</h3>
-        <p class="todo">✏️ Escribid aquí qué muestra el gráfico: tendencia de cada lenguaje, cruces, diferencias entre búsqueda web y YouTube, y qué os sugiere para Matriculator. Recordad que Trends mide <em>interés relativo de búsqueda</em>, no uso real.</p>
+        <p class="interp__lead">Medias anuales calculadas con los CSV de <code>data/</code>. Recordad que Trends mide <em>interés de búsqueda relativo</em> (0–100), no cuánta gente usa cada lenguaje <sup class="cite" data-src="trends-faq"></sup>.</p>
+        <div class="interp">
+          <div class="interp__col">
+            <h4>🔎 Búsqueda web <small>(2004 – 2026)</small></h4>
+            <ul class="check">
+              <li><b>Java</b> dominaba en 2004 (media 93) y cae de forma continua hasta ~12 en 2026.</li>
+              <li><b>Python</b> estuvo plano en torno a 5–6 hasta 2013; desde 2014 sube sin parar y es el <b>primero desde 2019</b> (18 frente a 17 de Java). Alcanza su máximo en 2022 (26,5) y vuelve a subir en 2026 (25; récord mensual de 33 en junio).</li>
+              <li><b>JavaScript</b> es el más estable: entre 10 y 17 desde 2010.</li>
+              <li><b>PHP y C++</b> caen de forma sostenida (PHP de 38 a 5; C++ de 27 a 5) y <b>R</b> siempre está por debajo de 6.</li>
+            </ul>
+          </div>
+          <div class="interp__col">
+            <h4>▶️ YouTube <small>(2008 – 2026)</small></h4>
+            <ul class="check">
+              <li><b>Java</b> tuvo su pico en 2016 (media 90) y sigue muy alto: vuelve a ser el primero en 2024–2026 (~70–75).</li>
+              <li><b>Python</b> crece desde 2018 y lidera de 2020 a 2023, con máximo en 2023 (70).</li>
+              <li><b>JavaScript</b> sube hasta 2023 (48) y después baja a la mitad (24 en 2026).</li>
+              <li><b>R</b> tiene más peso que en la web (15–22 desde 2016), probablemente por los tutoriales de estadística; <b>PHP</b> cae a 5.</li>
+            </ul>
+          </div>
+        </div>
+        <div class="interp__conc">
+          <h4>🎯 ¿Qué nos dice para Matriculator?</h4>
+          <ol>
+            <li><b>Python es la opción con más impulso</b> en las dos fuentes, y su subida coincide con el auge de la IA y la ciencia de datos, como también señalan GitHub y Stack Overflow <sup class="cite" data-src="octoverse,so2025"></sup>. Refuerza elegirlo para la parte de IA.</li>
+            <li><b>JavaScript mantiene un interés estable</b>: es una tecnología madura y con mucho material, adecuada para la parte web de la aplicación.</li>
+            <li><b>Java</b> sigue teniendo mucho interés, sobre todo en vídeos de aprendizaje, pero ese interés no está ligado a la IA; es una alternativa para el backend, no para el modelo.</li>
+            <li><b>PHP, C++ y R</b> tienen poco interés relativo o en descenso, lo que apoya descartarlos para la parte de IA (ver 2.5).</li>
+          </ol>
+          <p class="meta">⚠️ Límites: en YouTube faltan enero–julio de 2017 y después del hueco los valores bajan de golpe (posible cambio de escala de Google), así que conviene comparar tendencias, no cifras exactas. 2026 solo llega a septiembre.</p>
+        </div>
+        <div class="evidence">
+          <p class="evidence__title">📊 Para contrastar con otros indicadores de uso</p>
+          <ul class="check">
+            <li><b>GitHub Octoverse 2024:</b> Python pasa a ser el lenguaje más usado en GitHub y supera a JavaScript tras 10 años en cabeza; lo relaciona con el auge de la IA <sup class="cite" data-src="octoverse"></sup>.</li>
+            <li><b>Stack Overflow Developer Survey 2025:</b> JavaScript (66 %) y Python (57,9 %) son los lenguajes más usados; Python crece 7 puntos respecto a 2024 por la IA y la ciencia de datos <sup class="cite" data-src="so2025"></sup>.</li>
+            <li><b>Índice TIOBE:</b> ranking mensual de popularidad según buscadores <sup class="cite" data-src="tiobe"></sup>.</li>
+          </ul>
+        </div>
       </div>
 
       <!-- 2.2 Características -->
@@ -179,7 +291,7 @@
       <h3 class="sub reveal">2.3 · Comparativa por criterios</h3>
       <div class="card reveal table-card">
         <div class="table-scroll"><table class="heat" id="heatTable"></table></div>
-        <p class="meta">Escala 1 (poco adecuado) – 5 (muy adecuado) para <b>este caso</b>. 👆 <b>Pulsa una casilla</b> para ver por qué tiene esa nota. <span class="todo-inline">✏️ Borrador: revisad y justificad cada puntuación.</span></p>
+        <p class="meta">Escala <span class="heat-legend"><i style="--v:1">1</i><i style="--v:2">2</i><i style="--v:3">3</i><i style="--v:4">4</i><i style="--v:5">5</i></span> de poco adecuado (rojo) a muy adecuado (verde) para <b>este caso</b>. 👆 <b>Pulsa una casilla</b> para ver por qué tiene esa nota. <span class="todo-inline">✏️ Borrador: revisad y justificad cada puntuación.</span></p>
       </div>
 
       <!-- 2.4 Matriz de decisión -->
@@ -207,17 +319,17 @@
         <div class="decision">
           <span class="decision__tag">🖥️ Lenguaje principal · Aplicación</span>
           <div class="decision__lang" style="--c: var(--js)">JavaScript <small>(Node.js + HTML/CSS)</small></div>
-          <p><span class="todo-inline">✏️ Borrador —</span> Mismo lenguaje en navegador y servidor, gran ecosistema web (Express, APIs REST), fácil integración con bases de datos y despliegue sencillo.</p>
+          <p><span class="todo-inline">✏️ Borrador —</span> Mismo lenguaje en navegador y servidor <sup class="cite" data-src="mdn-js,node"></sup>, gran ecosistema web (Express, APIs REST) <sup class="cite" data-src="express"></sup>, fácil integración con bases de datos y despliegue sencillo.</p>
         </div>
         <div class="decision">
           <span class="decision__tag">🤖 Lenguaje principal · IA</span>
           <div class="decision__lang" style="--c: var(--py)">Python</div>
-          <p><span class="todo-inline">✏️ Borrador —</span> Ecosistema de visión y deep learning (OpenCV, PyTorch, YOLO, OCR), modelos preentrenados reutilizables y notebooks para documentar.</p>
+          <p><span class="todo-inline">✏️ Borrador —</span> Ecosistema de visión y deep learning: OpenCV <sup class="cite" data-src="opencv"></sup>, PyTorch <sup class="cite" data-src="torchvision"></sup>, YOLO <sup class="cite" data-src="ultralytics"></sup> y OCR <sup class="cite" data-src="easyocr"></sup>; modelos preentrenados reutilizables <sup class="cite" data-src="hf-hub"></sup> y notebooks para documentar.</p>
         </div>
       </div>
       <div class="card reveal">
         <h3>🔀 ¿Por qué dos lenguajes distintos?</h3>
-        <p><span class="todo-inline">✏️</span> La interfaz y la lógica web se benefician de JavaScript, mientras que la IA depende de librerías que están en Python. Se conectan mediante una <b>API</b> (el servicio de IA en Python recibe la imagen y devuelve un <b>JSON</b>). Alternativa válida: toda la app en Python (FastAPI/Flask) con un front mínimo en HTML/JS — <span class="todo-inline">decidid y justificad.</span></p>
+        <p><span class="todo-inline">✏️</span> La interfaz y la lógica web se benefician de JavaScript, mientras que la IA depende de librerías que están en Python. Se conectan mediante una <b>API</b> (el servicio de IA en Python recibe la imagen y devuelve un <b>JSON</b>). Alternativa válida: toda la app en Python (FastAPI <sup class="cite" data-src="fastapi"></sup>) con un front mínimo en HTML/JS — <span class="todo-inline">decidid y justificad.</span></p>
       </div>
       <div class="discard reveal" id="discard"></div>
     </section>
@@ -230,7 +342,7 @@
         <span class="section__num">03</span>
         <div>
           <h2>Explica las partes del programa</h2>
-          <p class="section__sub">Flujo general, etapas antes y después de integrar el modelo, y pseudocódigo comentado. <span class="ce">CE e</span> <span class="owner">👤 Julen</span></p>
+          <p class="section__sub">Recorrido de un coche por el parking, diagrama de decisión en la salida, etapas antes y después de integrar el modelo y pseudocódigo comentado. <span class="ce">CE e</span> <span class="owner">👤 Julen</span></p>
         </div>
       </div>
 
@@ -239,22 +351,39 @@
         <button class="btn btn--primary btn--small" id="flowPlay">▶ Reproducir flujo</button>
         <button class="btn btn--ghost btn--small" id="flowPrev">←</button>
         <button class="btn btn--ghost btn--small" id="flowNext">→</button>
-        <span class="flow-counter" id="flowCounter">Etapa 1 / 8</span>
+        <span class="flow-counter" id="flowCounter">Etapa 1 / 10</span>
+      </div>
+      <div class="flow-legend reveal">
+        <span style="--kc: var(--py)">🤖 IA</span><span style="--kc: var(--js)">🖥️ Aplicación (reglas y BBDD)</span><span style="--kc: var(--warn)">🧑‍⚖️ Interviene una persona</span><span class="is-opt">Borde discontinuo gris = etapa opcional</span>
       </div>
       <ol class="flow reveal" id="flow"></ol>
       <div class="flow-detail reveal" id="flowDetail"></div>
 
-      <h3 class="sub reveal">3.2 · Etapas y componentes del programa</h3>
+      <h3 class="sub reveal">3.2 · Diagrama de decisión en la salida</h3>
+      <div class="card fc-card reveal">
+        <div class="fc-legend">
+          <span><i class="lg-ia"></i>Parte de IA</span><span><i class="lg-dec"></i>Decisión (reglas)</span><span><i class="lg-human"></i>Revisión humana</span><span><i class="lg-ok"></i>Sale gratis</span><span><i class="lg-pay"></i>Paga</span>
+        </div>
+        <p class="fc-hint">👉 Desliza el diagrama hacia los lados para verlo entero.</p>
+        <div class="fc-scroll"><svg class="fc" viewBox="0 0 960 630" role="img" aria-labelledby="fcTitle fcDesc"><title id="fcTitle">Diagrama de decisión en la salida del parking</title><desc id="fcDesc">Se lee la matrícula; si la confianza es baja revisa una persona; después se comprueba si es empleado, si tiene ticket del supermercado y el tiempo de estancia para decidir el importe.</desc><defs><marker id="fcArrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" class="fc-arrowhead"/></marker></defs><g class="fc-start"><rect x="340.0" y="16.0" width="280" height="48" rx="24"/><text x="480" y="40">🚙 Coche en la salida</text></g><g class="fc-ia"><rect x="320.0" y="97.0" width="320" height="56" rx="12"/><text x="480" y="117">🤖 Leer la matrícula</text><text class="fc-sub" x="480" y="136">detector + OCR · devuelve texto y confianza</text></g><g class="fc-dec"><polygon points="480,183 630,225 480,267 330,225"/><text x="480" y="225">¿Confianza ≥ 0,80?</text></g><g class="fc-human"><rect x="695.0" y="193.0" width="240" height="64" rx="12"/><text x="815" y="217">🧑‍⚖️ Revisión humana</text><text class="fc-sub" x="815" y="236">el personal comprueba y corrige</text></g><g class="fc-dec"><polygon points="480,303 630,345 480,387 330,345"/><text x="480" y="345">¿Está en empleados?</text></g><g class="fc-end fc-ok"><rect x="30.0" y="315.0" width="230" height="60" rx="12"/><text x="145" y="337">👔 Empleado</text><text class="fc-sub" x="145" y="356">0 € · barrera abierta</text></g><g class="fc-dec"><polygon points="480,423 630,465 480,507 330,465"/><text x="480" y="465">¿Tiene ticket hoy?</text></g><g class="fc-end fc-pay"><rect x="30.0" y="435.0" width="230" height="60" rx="12"/><text x="145" y="457">🅿️ Público</text><text class="fc-sub" x="145" y="476">2,40 €/h · tope 18 €/día</text></g><g class="fc-dec"><polygon points="480,543 630,585 480,627 330,585"/><text x="480" y="585">¿Estancia ≤ 90 min?</text></g><g class="fc-end fc-ok"><rect x="695.0" y="555.0" width="240" height="60" rx="12"/><text x="815" y="577">🛒 Cliente · gratis</text><text class="fc-sub" x="815" y="596">se guarda el id del ticket</text></g><g class="fc-end fc-pay"><rect x="30.0" y="555.0" width="230" height="60" rx="12"/><text x="145" y="577">🛒 Cliente · paga</text><text class="fc-sub" x="145" y="596">solo el tiempo que excede</text></g><path class="fc-arrow " d="M480 64 V95" marker-end="url(#fcArrow)"/><path class="fc-arrow " d="M480 153 V181" marker-end="url(#fcArrow)"/><path class="fc-arrow " d="M630 225 H693" marker-end="url(#fcArrow)"/><text class="fc-label" x="660" y="215">No</text><path class="fc-arrow fc-arrow--human" d="M815 257 V345 H632" marker-end="url(#fcArrow)"/><text class="fc-label" x="860" y="300">confirmada</text><path class="fc-arrow " d="M480 267 V301" marker-end="url(#fcArrow)"/><text class="fc-label" x="495" y="285.0">Sí</text><path class="fc-arrow " d="M330 345 H262" marker-end="url(#fcArrow)"/><text class="fc-label" x="298" y="335">Sí</text><path class="fc-arrow " d="M480 387 V421" marker-end="url(#fcArrow)"/><text class="fc-label" x="497" y="405.0">No</text><path class="fc-arrow " d="M330 465 H262" marker-end="url(#fcArrow)"/><text class="fc-label" x="298" y="455">No</text><path class="fc-arrow " d="M480 507 V541" marker-end="url(#fcArrow)"/><text class="fc-label" x="495" y="525.0">Sí</text><path class="fc-arrow " d="M630 585 H693" marker-end="url(#fcArrow)"/><text class="fc-label" x="660" y="575">Sí</text><path class="fc-arrow " d="M330 585 H262" marker-end="url(#fcArrow)"/><text class="fc-label" x="298" y="575">No</text></svg></div>
+        <div class="fc-notes">
+          <p><b>Cómo se lee:</b> la IA solo interviene en el primer bloque (leer la matrícula). Todo lo demás son <b>reglas</b> que consultan la base de datos: primero se descarta que sea un empleado, después se busca si el cajero asoció un ticket ese día y, por último, se mira cuánto tiempo ha estado.</p>
+          <p><b>Revisión humana:</b> si la lectura no es fiable, una persona confirma la matrícula y el coche continúa por el mismo camino. También resuelve las reclamaciones (por ejemplo, un cliente que compró pero no le validaron).</p>
+          <p><b>En todos los casos</b> se guarda un registro mínimo (matrícula, perfil, horas, importe e id del ticket si lo hay), nunca la imagen.</p>
+        </div>
+      </div>
+
+      <h3 class="sub reveal">3.3 · Etapas y componentes del programa</h3>
       <div class="tabs tabs--big reveal" id="phaseTabs">
         <button class="tab is-active" data-phase="antes">🛠️ Antes de integrar el modelo</button>
         <button class="tab" data-phase="despues">🚀 Después de integrar el modelo</button>
       </div>
       <div class="phase reveal" id="phase"></div>
 
-      <h3 class="sub reveal">3.3 · Pseudocódigo <small>(Python · completo en <a href="pseudocodigo.ipynb">pseudocodigo.ipynb</a>)</small></h3>
+      <h3 class="sub reveal">3.4 · Pseudocódigo <small>(Python · completo en <a href="pseudocodigo.ipynb">pseudocodigo.ipynb</a>)</small></h3>
       <div class="code reveal">
         <div class="code__bar">
-          <span>matriculator.py · pseudocódigo</span>
+          <span>salida_parking.py · pseudocódigo</span>
           <div class="code__legend">
             <span class="lg lg--in">entrada</span><span class="lg lg--fn">función</span><span class="lg lg--if">condición/error</span><span class="lg lg--out">salida</span>
           </div>
@@ -346,11 +475,27 @@
     </section>
 
     <!-- ================================================= -->
+    <!-- FUENTES                                           -->
+    <!-- ================================================= -->
+    <section class="section" id="fuentes">
+      <div class="section__head reveal">
+        <span class="section__num section__num--emoji">📚</span>
+        <div>
+          <h2>Fuentes</h2>
+          <p class="section__sub">Documentación oficial, fundaciones y organismos responsables de cada tecnología, e informes con autoría y fecha. Los números <b>[n]</b> del Paso 2 enlazan a esta lista. Fecha de consulta de todas: 23/09/2026. <span class="ce">Criterio 3</span></p>
+        </div>
+      </div>
+      <div class="src-filter reveal" id="srcFilter"></div>
+      <div class="src-grid" id="srcGrid"></div>
+      <div class="src-more-wrap"><button class="btn src-more" id="srcMore" aria-controls="srcGrid" aria-expanded="false">Ver más…</button></div>
+    </section>
+
+    <!-- ================================================= -->
     <!-- EQUIPO                                            -->
     <!-- ================================================= -->
     <section class="section" id="equipo">
       <div class="section__head reveal">
-        <span class="section__num">👥</span>
+        <span class="section__num section__num--emoji">👥</span>
         <div>
           <h2>Organización del equipo</h2>
           <p class="section__sub">Detalle completo, tiempos reales, fuentes y evidencias de IA en el <a href="https://github.com/altu44/proyecto-ra1#readme" target="_blank" rel="noopener">README</a>.</p>

@@ -4,7 +4,7 @@
      0. Utilidades
      1. Tema, navegación, progreso, reveal
      2. Hero: escáner animado
-     3. Paso 1: entradas → salida
+     3. Paso 1: escenario, simulador y entradas → salida
      4. Paso 2: Google Trends, lenguajes, heatmap, matriz, descartes
      5. Paso 3: flujo, fases, pseudocódigo
      6. Paso 4: formatos
@@ -32,6 +32,73 @@ const LANGS = [
   { id: "java", name: "Java", logo: "Jv", color: "--java" },
 ];
 const langById = Object.fromEntries(LANGS.map((l) => [l.id, l]));
+
+/* ---------- Fuentes (Paso 2) ----------
+   Cada fuente tiene un id que se usa para citarla con cite(["id"]).
+   El número [n] es su posición en esta lista. Fecha de consulta común. */
+const FECHA_CONSULTA = "23/09/2026";
+const SRC_CATS = {
+  tend: ["📈 Tendencias y uso", "--accent-2"], py: ["Python", "--py"], js: ["JavaScript / Node.js", "--js"],
+  r: ["R", "--r"], cpp: ["C++", "--cpp"], php: ["PHP", "--php"], java: ["Java", "--java"],
+};
+const SOURCES = [
+  // Tendencias y uso
+  { id: "trends", cat: "tend", title: "Google Trends", org: "Google", url: "https://trends.google.es/trends/", used: "2.1" },
+  { id: "trends-faq", cat: "tend", title: "Preguntas frecuentes sobre los datos de Google Trends", org: "Google · Ayuda de Tendencias de búsqueda", url: "https://support.google.com/trends/answer/4365533?hl=es", used: "2.1" },
+  { id: "octoverse", cat: "tend", title: "Octoverse: AI leads Python to top language as the number of global developers surges", org: "GitHub Staff · GitHub Blog, 29/10/2024", url: "https://github.blog/news-insights/octoverse/octoverse-2024/", used: "2.1 · 2.3" },
+  { id: "so2025", cat: "tend", title: "2025 Stack Overflow Developer Survey — Technology", org: "Stack Overflow", url: "https://survey.stackoverflow.co/2025/technology", used: "2.1 · 2.3" },
+  { id: "tiobe", cat: "tend", title: "TIOBE Programming Community Index", org: "TIOBE Software", url: "https://www.tiobe.com/tiobe-index/", used: "2.1 · 2.3" },
+  // Python
+  { id: "py-tut", cat: "py", title: "El tutorial de Python", org: "Python Software Foundation", url: "https://docs.python.org/es/3/tutorial/index.html", used: "2.2 · 2.3" },
+  { id: "pep8", cat: "py", title: "PEP 8 – Style Guide for Python Code", org: "G. van Rossum, B. Warsaw, A. Coghlan · python.org", url: "https://peps.python.org/pep-0008/", used: "2.3" },
+  { id: "pep20", cat: "py", title: "PEP 20 – The Zen of Python", org: "Tim Peters · python.org", url: "https://peps.python.org/pep-0020/", used: "2.2 · 2.3" },
+  { id: "fastapi", cat: "py", title: "FastAPI", org: "Sebastián Ramírez (tiangolo)", url: "https://fastapi.tiangolo.com/", used: "2.3 · 2.5" },
+  { id: "statsmodels", cat: "py", title: "statsmodels documentation", org: "statsmodels (S. Seabold, J. Perktold)", url: "https://www.statsmodels.org/stable/index.html", used: "2.3" },
+  { id: "opencv", cat: "py", title: "OpenCV modules — documentación 4.x", org: "OpenCV", url: "https://docs.opencv.org/4.x/", used: "2.2 · 2.3 · 2.5" },
+  { id: "torchvision", cat: "py", title: "Models and pre-trained weights — TorchVision", org: "PyTorch Foundation", url: "https://docs.pytorch.org/vision/stable/models.html", used: "2.2 · 2.3 · 2.5" },
+  { id: "ultralytics", cat: "py", title: "Ultralytics YOLO Docs", org: "Ultralytics", url: "https://docs.ultralytics.com/", used: "2.2 · 2.3 · 2.5" },
+  { id: "easyocr", cat: "py", title: "EasyOCR (repositorio oficial)", org: "Jaided AI · GitHub", url: "https://github.com/JaidedAI/EasyOCR", used: "2.2 · 2.3 · 2.5" },
+  { id: "hf-hub", cat: "py", title: "The Model Hub", org: "Hugging Face", url: "https://huggingface.co/docs/hub/models-the-hub", used: "2.2 · 2.3" },
+  // JavaScript
+  { id: "mdn-js", cat: "js", title: "JavaScript | MDN", org: "Mozilla", url: "https://developer.mozilla.org/es/docs/Web/JavaScript", used: "2.2 · 2.3 · 2.5" },
+  { id: "node", cat: "js", title: "About Node.js", org: "OpenJS Foundation", url: "https://nodejs.org/en/about", used: "2.2 · 2.3 · 2.5" },
+  { id: "express", cat: "js", title: "Express — framework web para Node.js", org: "OpenJS Foundation", url: "https://expressjs.com/", used: "2.2 · 2.3 · 2.5" },
+  { id: "ts", cat: "js", title: "TypeScript: JavaScript With Syntax For Types", org: "Microsoft", url: "https://www.typescriptlang.org/", used: "2.3" },
+  { id: "tfjs", cat: "js", title: "TensorFlow.js", org: "Google", url: "https://www.tensorflow.org/js", used: "2.2 · 2.3 · 2.5" },
+  { id: "ort-web", cat: "js", title: "ONNX Runtime Web", org: "Microsoft · ONNX Runtime", url: "https://onnxruntime.ai/docs/tutorials/web/", used: "2.2 · 2.3 · 2.5" },
+  { id: "tesseractjs", cat: "js", title: "Tesseract.js (repositorio oficial)", org: "naptha · GitHub", url: "https://github.com/naptha/tesseract.js", used: "2.3" },
+  // R
+  { id: "r-about", cat: "r", title: "What is R?", org: "The R Foundation", url: "https://www.r-project.org/about.html", used: "2.2 · 2.3 · 2.5" },
+  { id: "shiny", cat: "r", title: "Shiny", org: "Posit", url: "https://shiny.posit.co/", used: "2.2 · 2.3" },
+  { id: "plumber", cat: "r", title: "Plumber: an API generator for R", org: "Posit · B. Schloerke", url: "https://www.rplumber.io/", used: "2.3 · 2.5" },
+  { id: "torch-r", cat: "r", title: "torch for R", org: "mlverse · Posit", url: "https://torch.mlverse.org/", used: "2.2 · 2.3" },
+  // C++
+  { id: "isocpp", cat: "cpp", title: "Getting Started with C++", org: "Standard C++ Foundation (isocpp.org)", url: "https://isocpp.org/get-started", used: "2.2 · 2.3" },
+  { id: "libtorch", cat: "cpp", title: "PyTorch C++ API", org: "PyTorch Foundation", url: "https://docs.pytorch.org/cppdocs/", used: "2.2 · 2.3 · 2.5" },
+  // PHP
+  { id: "php-what", cat: "php", title: "What is PHP?", org: "The PHP Group · php.net", url: "https://www.php.net/manual/en/intro-whatis.php", used: "2.2 · 2.3" },
+  { id: "php-gd", cat: "php", title: "GD — Image Processing and Generation", org: "The PHP Group · php.net", url: "https://www.php.net/manual/en/book.image.php", used: "2.3" },
+  { id: "rubix", cat: "php", title: "Rubix ML (repositorio oficial)", org: "Rubix ML · GitHub", url: "https://github.com/RubixML/ML", used: "2.2 · 2.3 · 2.5" },
+  // Java
+  { id: "devjava", cat: "java", title: "Learn Java — Dev.java", org: "Oracle", url: "https://dev.java/learn/", used: "2.2 · 2.3" },
+  { id: "spring", cat: "java", title: "Spring Boot", org: "Spring (Broadcom)", url: "https://spring.io/projects/spring-boot", used: "2.2 · 2.3" },
+  { id: "djl", cat: "java", title: "Deep Java Library (DJL)", org: "DJL · Amazon Web Services", url: "https://docs.djl.ai/master/index.html", used: "2.2 · 2.3 · 2.5" },
+];
+const srcIndex = Object.fromEntries(SOURCES.map((s, i) => [s.id, i + 1]));
+const srcById = Object.fromEntries(SOURCES.map((s) => [s.id, s]));
+
+/* Devuelve el HTML de una cita: [1, 4] con enlaces a la sección de fuentes */
+function cite(ids) {
+  const list = (Array.isArray(ids) ? ids : String(ids).split(",")).map((x) => x.trim()).filter((x) => srcById[x]);
+  if (!list.length) return "";
+  return `<sup class="cite">[${list.map((id) =>
+    `<a href="#src-${id}" data-src="${id}" title="${escapeHTML(srcById[id].title)} — ${escapeHTML(srcById[id].org)}">${srcIndex[id]}</a>`).join(", ")}]</sup>`;
+}
+/* Lista de enlaces externos (para la ventana del heatmap) */
+function srcLinks(ids) {
+  return ids.filter((id) => srcById[id]).map((id) =>
+    `<a href="${srcById[id].url}" target="_blank" rel="noopener">[${srcIndex[id]}] ${escapeHTML(srcById[id].title)} ↗</a>`).join("");
+}
 
 /* ---------- 1. Tema, navegación, progreso, reveal ---------- */
 (function ui() {
@@ -139,25 +206,126 @@ const langById = Object.fromEntries(LANGS.map((l) => [l.id, l]));
   window.addEventListener("resize", placeBox);
 })();
 
-/* ---------- 3. Paso 1: entradas → salida ---------- */
+/* ---------- 3. Paso 1: escenario, simulador y entradas → salida ---------- */
+
+// ✏️ Reglas de negocio de ejemplo: decidid vuestros valores
+const REGLAS = {
+  UMBRAL: 0.80,            // confianza mínima de la lectura
+  MIN_GRATIS_CLIENTE: 90,  // minutos gratis si el cajero validó la matrícula
+  TARIFA_HORA: 2.40,       // €/hora para público (se cobra por minuto)
+  TOPE_DIARIO: 18,         // € máximo por día
+};
+
 (function paso1() {
-  // ✏️ Borrador: ampliad o corregid cada bloque
+  const eur = (n) => n.toLocaleString("es-ES", { style: "currency", currency: "EUR" });
+  $$(".js-free").forEach((e) => (e.textContent = REGLAS.MIN_GRATIS_CLIENTE));
+  $$(".js-rate").forEach((e) => (e.textContent = REGLAS.TARIFA_HORA.toFixed(2).replace(".", ",")));
+
+  // ✏️ Borrador: ampliad o corregid cada bloque.
+  // Cada bloque se divide en filas: [título de la fila, [líneas]]
   const info = {
-    entrada: { t: "📷 Entradas", d: "Imagen ficticia o de un banco de pruebas público (JPG/PNG) y la configuración de la cámara: resolución, ángulo, distancia, iluminación (día/noche) e identificador del punto de captura.", tags: ["imagen .jpg/.png", "config. cámara (JSON)", "sin personas identificables"] },
-    datos: { t: "🗂️ Datos necesarios", d: "Conjunto de imágenes de prueba anotadas: caja (bounding box) de la matrícula y el texto correcto. Sirven para validar y, si hiciera falta, ajustar un modelo preentrenado. Datos abiertos o sintéticos, nunca imágenes reales de clientes.", tags: ["anotaciones (XML/JSON)", "dataset abierto", "datos sintéticos"] },
-    proceso: { t: "⚙️ Procesamiento", d: "1) Validar el fichero (tipo, tamaño, que no esté corrupto). 2) Preparar la imagen (redimensionar, normalizar, mejorar contraste). 3) Modelo ya entrenado detecta la matrícula. 4) OCR lee los caracteres. 5) Se comprueba el formato y la confianza.", tags: ["OpenCV", "detector (YOLO)", "OCR", "umbral de confianza"] },
-    salida: { t: "🧾 Salida", d: "Si la confianza supera el umbral: registro de prueba (matrícula, confianza, fecha/hora, cámara). Si no: aviso de validación humana con la región recortada. Nunca se toma una decisión automática sobre la persona.", tags: ["registro (JSON/CSV)", "aviso de revisión"] },
-    humano: { t: "🧑‍⚖️ Decisión que sigue siendo humana", d: "Confirmar lecturas dudosas y cualquier acción con consecuencias (cobro, sanción, denegar acceso). La IA propone; la persona decide.", tags: ["human-in-the-loop", "RGPD", "AI Act"] },
+    entrada: { t: "📷 Entradas", rows: [
+      ["Cámara de entrada", ["Imagen del coche al entrar (en el estudio: imágenes ficticias o de un banco de pruebas).", "Configuración de la cámara: id, resolución, ángulo e iluminación."]],
+      ["Cámara de salida", ["Imagen del coche al salir, con la misma configuración."]],
+      ["TPV del supermercado", ["Matrícula que teclea el cajero al cobrar.", "Id del ticket de esa compra, que el TPV añade automáticamente."]],
+      ["Recursos Humanos", ["Alta y baja de las matrículas de los empleados."]],
+    ], tags: ["imagen .jpg/.png", "config. cámara (JSON)", "matrícula + id ticket", "registro de empleados"] },
+    datos: { t: "🗂️ Datos necesarios", rows: [
+      ["Para la IA", ["Imágenes de prueba anotadas: caja de la matrícula + texto correcto.", "Sin personas identificables; datos abiertos o sintéticos."]],
+      ["Empleados", ["Matrícula + id interno del empleado (máx. 2 vehículos por persona)."]],
+      ["Validaciones de clientes", ["Matrícula + id del ticket + fecha y hora + caja.", "El detalle de la compra se queda en el sistema del supermercado y se consulta con el id del ticket."]],
+      ["Movimientos", ["Registro de entradas y salidas: matrícula, hora, cámara y confianza de la lectura."]],
+      ["Tarifas", ["Minutos gratuitos para clientes, precio por hora y tope diario."]],
+    ], tags: ["anotaciones (XML/JSON)", "BBDD empleados", "validaciones + tickets", "tarifas"] },
+    proceso: { t: "⚙️ Procesamiento", rows: [
+      ["1 · Imagen", ["Validar el fichero (tipo, tamaño, que no esté dañado).", "Preparar la imagen: redimensionar, normalizar y mejorar el contraste."]],
+      ["2 · Lectura (IA)", ["El modelo detecta dónde está la matrícula.", "El OCR lee los caracteres.", "Se comprueba el formato y la confianza de la lectura."]],
+      ["3 · Clasificación", ["¿Está en el registro de empleados? → empleado.", "Si no, ¿tiene hoy un ticket asociado? → cliente.", "Si no → público."]],
+      ["4 · Cálculo", ["En la salida se calcula el tiempo de estancia y el importe según el perfil."]],
+    ], tags: ["OpenCV", "detector (YOLO)", "OCR", "reglas de negocio", "cálculo de tarifa"] },
+    salida: { t: "🧾 Salida", rows: [
+      ["👔 Empleado", ["Barrera abierta, sin pagar."]],
+      ["🛒 Cliente validado", ["Gratis si no supera el tiempo gratuito.", "Si lo supera, paga solo el exceso.", "Se guarda el id del ticket junto al movimiento."]],
+      ["🅿️ Público", ["Paga según el tiempo, en el cajero automático o en la barrera, con tope diario."]],
+      ["⚠️ Lectura dudosa", ["Confianza baja o matrícula sin entrada registrada → aviso al personal por el interfono."]],
+      ["📝 Registro", ["De cada movimiento se guarda: matrícula, perfil, horas, importe e id del ticket (si lo hay)."]],
+    ], tags: ["barrera", "importe", "aviso al personal", "registro JSON/CSV"] },
+    humano: { t: "🧑‍⚖️ Decisión que sigue siendo humana", rows: [
+      ["Cajero", ["Decide validar al cliente y apunta la matrícula con su ticket."]],
+      ["Personal del parking", ["Resuelve lecturas dudosas y reclamaciones (busca el ticket y corrige la validación)."]],
+      ["Recursos Humanos", ["Da de alta y de baja las matrículas de los empleados."]],
+      ["La IA", ["Solo lee la matrícula: no decide cobros ni sanciones."]],
+    ], tags: ["human-in-the-loop", "RGPD", "AI Act"] },
   };
   const detail = $("#ipoDetail");
   const show = (k) => {
     const x = info[k];
-    detail.innerHTML = `<h4>${x.t}</h4><p>${x.d}</p><div class="chips">${x.tags.map((t) => `<span class="chip">${t}</span>`).join("")}</div>`;
+    detail.innerHTML = `<h4>${x.t}</h4><dl class="ipo__rows">${x.rows.map(([h, items]) =>
+      `<div class="ipo__row"><dt>${h}</dt><dd><ul>${items.map((i) => `<li>${i}</li>`).join("")}</ul></dd></div>`).join("")}</dl>
+      <div class="chips">${x.tags.map((t) => `<span class="chip">${t}</span>`).join("")}</div>`;
     detail.style.animation = "none"; void detail.offsetWidth; detail.style.animation = "";
     $$(".ipo__card").forEach((c) => c.classList.toggle("is-active", c.dataset.ipo === k));
   };
   $$(".ipo__card").forEach((c) => c.addEventListener("click", () => show(c.dataset.ipo)));
   show("entrada");
+
+  // ---- Simulador ----
+  const PLACAS = { empleado: "1234 BCD", cliente: "5678 FGH", publico: "9012 JKL" }; // ficticias
+  const TICKET = "T-2026-004817"; // id de ticket ficticio
+  let perfil = "empleado";
+  const tiempo = $("#simTiempo"), conf = $("#simConf"), caja = $("#simCaja");
+
+  function tarifa(min) { return Math.min(REGLAS.TOPE_DIARIO, (min / 60) * REGLAS.TARIFA_HORA); }
+  const fmtMin = (m) => (m < 60 ? `${m} min` : `${Math.floor(m / 60)} h ${String(m % 60).padStart(2, "0")} min`);
+
+  function simular() {
+    const min = +tiempo.value, c = +conf.value, validada = caja.checked;
+    const placa = PLACAS[perfil];
+    $("#simTiempoOut").textContent = fmtMin(min);
+    $("#simConfOut").textContent = c.toFixed(2);
+    $("#simCajaField").classList.toggle("is-off", perfil !== "cliente");
+    $("#simCajaTxt").textContent = validada ? "Sí, validada en caja" : "No (se le olvidó o no compró)";
+
+    const steps = [];
+    let verdict;
+    steps.push(["📷", `Entrada: la cámara lee <code>${placa}</code> y se guarda la hora de entrada.`]);
+    if (perfil === "cliente") {
+      steps.push(["🛒", validada ? `El cajero apunta <code>${placa}</code> en el TPV y se asocia al ticket <code>${TICKET}</code>.` : "El cajero <b>no</b> apunta la matrícula: no hay ticket asociado."]);
+    }
+    steps.push(["📷", `Salida tras ${fmtMin(min)}: lectura con confianza <b>${c.toFixed(2)}</b>.`]);
+
+    if (c < REGLAS.UMBRAL) {
+      steps.push(["⚠️", `Confianza &lt; ${REGLAS.UMBRAL.toFixed(2)}: no se puede asegurar qué matrícula es.`]);
+      verdict = { cls: "warn", icon: "🧑‍⚖️", t: "Revisión humana", d: "La barrera no se abre sola: el personal comprueba la matrícula por el interfono o la cámara." };
+    } else if (perfil === "empleado") {
+      steps.push(["🔎", "Consulta: la matrícula <b>está</b> en el registro de empleados."]);
+      verdict = { cls: "ok", icon: "👔", t: "Empleado · barrera abierta", d: "No paga. Se guarda solo la hora de salida." };
+    } else {
+      steps.push(["🔎", "Consulta: la matrícula <b>no</b> está en el registro de empleados."]);
+      if (perfil === "cliente" && validada) {
+        steps.push(["🛒", `Consulta: la matrícula tiene hoy el ticket <code>${TICKET}</code> asociado.`]);
+        const exceso = Math.max(0, min - REGLAS.MIN_GRATIS_CLIENTE);
+        verdict = exceso === 0
+          ? { cls: "ok", icon: "🛒", t: "Cliente · gratis", d: `Ha estado ${fmtMin(min)}, dentro de los ${REGLAS.MIN_GRATIS_CLIENTE} min gratuitos. Se registra la salida con el ticket ${TICKET}.` }
+          : { cls: "pay", icon: "🛒", t: `Cliente · paga ${eur(tarifa(exceso))}`, d: `Supera el tiempo gratuito en ${fmtMin(exceso)}; se cobra solo el exceso. Se registra con el ticket ${TICKET}.` };
+      } else {
+        if (perfil === "cliente") steps.push(["🛒", "Consulta: la matrícula <b>no</b> tiene ningún ticket hoy → se trata como público."]);
+        verdict = { cls: "pay", icon: "🅿️", t: `Público · paga ${eur(tarifa(min))}`, d: `${fmtMin(min)} × ${eur(REGLAS.TARIFA_HORA)}/h${tarifa(min) === REGLAS.TOPE_DIARIO ? " (tope diario)" : ""}.` +
+          (perfil === "cliente" ? " Si compró y no le validaron, puede reclamar al personal enseñando el ticket." : "") };
+      }
+    }
+    $("#simTrace").innerHTML = steps.map(([i, t], k) => `<li style="--i:${k}"><span>${i}</span><p>${t}</p></li>`).join("");
+    $("#simVerdict").className = "verdict verdict--" + verdict.cls;
+    $("#simVerdict").innerHTML = `<span class="verdict__icon">${verdict.icon}</span><div><b>${verdict.t}</b><p>${verdict.d}</p></div>`;
+  }
+
+  $$("#simPerfil button").forEach((b) => b.addEventListener("click", () => {
+    perfil = b.dataset.p;
+    $$("#simPerfil button").forEach((x) => x.classList.toggle("is-active", x === b));
+    simular();
+  }));
+  [tiempo, conf, caja].forEach((el) => el.addEventListener("input", simular));
+  simular();
 })();
 
 /* ---------- 4. Paso 2 ---------- */
@@ -202,8 +370,10 @@ function splitCSV(line) {
 }
 
 function parseTrends(text) {
-  const lines = text.replace(/\r/g, "").split("\n").filter((l) => l.trim() !== "");
-  const hIdx = lines.findIndex((l, k) => l.includes(",") && /^\d{4}-\d{2}/.test(lines[k + 1] || ""));
+  // Admite el formato clásico (Mes,Python: (Todo el mundo),...) y el nuevo con comillas ("Time","Python",...)
+  const lines = text.replace(/\r/g, "").replace(/^\uFEFF/, "").split("\n").filter((l) => l.trim() !== "");
+  const isDate = (l) => /^\d{4}-\d{2}/.test(splitCSV(l || "")[0] || "");
+  const hIdx = lines.findIndex((l, k) => l.includes(",") && !isDate(l) && isDate(lines[k + 1]));
   if (hIdx === -1) throw new Error("Formato CSV no reconocido");
   const headers = splitCSV(lines[hIdx]);
   const series = headers.slice(1).map((h) => ({ label: h.replace(/:\s*\(.*\)$/, "").trim(), lang: detectLang(h), data: [] }));
@@ -211,11 +381,11 @@ function parseTrends(text) {
   for (const l of lines.slice(hIdx + 1)) {
     const cells = splitCSV(l);
     if (!/^\d{4}-\d{2}/.test(cells[0])) continue;
-    dates.push(cells[0]);
-    series.forEach((s, k) => {
-      const v = cells[k + 1];
-      s.data.push(v === "<1" ? 0.5 : Number(v) || 0);
-    });
+    dates.push(cells[0].slice(0, 7)); // 2008-01-01 → 2008-01
+    const vals = cells.slice(1).map((v) => (v === "<1" ? 0.5 : Number(v) || 0));
+    // Mes con todo a 0 = hueco de datos de Google (p. ej. YouTube ene-jul 2017) → sin dato
+    const gap = vals.every((v) => v === 0);
+    series.forEach((s, k) => s.data.push(gap ? null : vals[k]));
   }
   return { dates, series };
 }
@@ -234,8 +404,8 @@ function yearly({ dates, series }) {
     series: series.map((s) => ({
       ...s,
       data: years.map((y) => {
-        const vals = s.data.filter((_, k) => dates[k].startsWith(y));
-        return +(vals.reduce((a, b) => a + b, 0) / vals.length).toFixed(1);
+        const vals = s.data.filter((v, k) => dates[k].startsWith(y) && v !== null);
+        return vals.length ? +(vals.reduce((a, b) => a + b, 0) / vals.length).toFixed(1) : null;
       }),
     })),
   };
@@ -289,7 +459,7 @@ function yearly({ dates, series }) {
     const grid = css("--grid");
     const datasets = view.series.map((s, k) => ({
       label: s.label, data: s.data, borderColor: colorFor(s, k), backgroundColor: colorFor(s, k) + "22",
-      borderWidth: 2.5, pointRadius: 0, pointHoverRadius: 5, tension: 0.35, hidden: hidden.has(s.label),
+      borderWidth: 2.5, pointRadius: 0, pointHoverRadius: 5, tension: 0.35, spanGaps: false, hidden: hidden.has(s.label),
     }));
     if (chart) chart.destroy();
     chart = new Chart(canvas, {
@@ -360,6 +530,15 @@ const LANG_INFO = {
 };
 
 (function langCards() {
+  // Fuentes de cada tarjeta
+  const SRC = {
+    python: ["py-tut", "pep20", "opencv", "torchvision", "ultralytics", "easyocr", "hf-hub"],
+    js: ["mdn-js", "node", "express", "tfjs", "ort-web"],
+    r: ["r-about", "shiny", "torch-r"],
+    cpp: ["isocpp", "libtorch", "opencv"],
+    php: ["php-what", "rubix"],
+    java: ["devjava", "spring", "djl"],
+  };
   const roleLabel = { app: ["role--app", "App"], ia: ["role--ia", "IA"], no: ["role--no", "Descartado"] };
   $("#langGrid").innerHTML = LANGS.map((l) => {
     const i = LANG_INFO[l.id];
@@ -373,6 +552,7 @@ const LANG_INFO = {
         <div class="lang__face lang__back">
           <h4>✅ A favor</h4><ul>${i.pros.map((p) => `<li>${p}</li>`).join("")}</ul>
           <h4>❌ En contra</h4><ul>${i.cons.map((p) => `<li>${p}</li>`).join("")}</ul>
+          <p class="lang__src">📚 Fuentes ${cite(SRC[l.id])}</p>
         </div>
       </div></div>`;
   }).join("");
@@ -489,6 +669,17 @@ const JUSTIF = {
   ],
 };
 
+/* Fuentes de cada casilla (mismo orden que CRITERIA). [] = valoración del equipo sin fuente directa */
+const JUSTIF_SRC = {
+  //       aprender     legible            manten    integ                 datos       estad            libs                                     pre                                  rend                      ui
+  python: [["py-tut"], ["pep8", "pep20"], ["pep8"], ["fastapi"],           ["opencv"], ["statsmodels"], ["torchvision", "ultralytics", "easyocr"], ["hf-hub", "torchvision", "ultralytics"], ["octoverse", "so2025"], []],
+  js:     [["mdn-js"], ["mdn-js"],        ["ts"],   ["node", "express"],   [],         [],              ["tfjs", "ort-web", "tesseractjs"],        ["tfjs", "ort-web"],                  ["node", "so2025"],       ["mdn-js"]],
+  r:      [["r-about"], [],               [],       ["plumber", "shiny"],  ["r-about"], ["r-about"],    ["torch-r"],                               ["torch-r"],                          [],                       ["shiny"]],
+  cpp:    [["isocpp"], ["isocpp"],        [],       [],                    ["opencv"], [],              ["libtorch", "opencv"],                    ["libtorch"],                         ["isocpp", "tiobe"],      []],
+  php:    [["php-what"], [],              [],       ["php-what"],          ["php-gd"], [],              ["rubix"],                                 ["rubix"],                            [],                       ["php-what"]],
+  java:   [["devjava"], ["devjava"],      ["devjava"], ["spring"],         [],         [],              ["djl"],                                   ["djl"],                              ["tiobe"],                []],
+};
+
 (function heatmap() {
   const head = `<thead><tr><th>Criterio</th>${LANGS.map((l) => `<th style="color:var(${l.color})">${l.short || l.name}</th>`).join("")}</tr></thead>`;
   const body = CRITERIA.map((c, k) => `<tr><th>${c.name}</th>${LANGS.map((l) => {
@@ -511,7 +702,7 @@ const JUSTIF = {
       </div>
       <div class="modal__score"><b id="modalScore"></b><span>/ 5</span><div class="modal__dots" id="modalDots"></div></div>
       <p class="modal__text" id="modalText"></p>
-      <p class="modal__note">✏️ Borrador: revisad la justificación y apoyadla en una fuente.</p>
+      <div class="modal__src" id="modalSrc"></div>
       <div class="modal__nav">
         <button class="btn btn--small btn--ghost" data-move="-1,0">↑ Criterio anterior</button>
         <button class="btn btn--small btn--ghost" data-move="1,0">↓ Criterio siguiente</button>
@@ -536,6 +727,10 @@ const JUSTIF = {
     $("#modalScore").textContent = v;
     $("#modalDots").innerHTML = [1, 2, 3, 4, 5].map((i) => `<i class="${i <= v ? "on" : ""}"></i>`).join("");
     $("#modalText").textContent = (JUSTIF[l.id] || [])[cur.k] || "✏️ Pendiente de justificar.";
+    const ids = (JUSTIF_SRC[l.id] || [])[cur.k] || [];
+    $("#modalSrc").innerHTML = ids.length
+      ? `<span>📚 Fuentes</span>${srcLinks(ids)}`
+      : `<span>📚 Fuentes</span><em>Valoración del equipo, sin fuente directa. ✏️ Añadid una si la encontráis.</em>`;
     $$("#heatTable td").forEach((td) => td.classList.toggle("is-selected", td.dataset.l === l.id && +td.dataset.k === cur.k));
     card.style.animation = "none"; void card.offsetWidth; card.style.animation = "";
   }
@@ -608,31 +803,36 @@ const JUSTIF = {
 (function discard() {
   // ✏️ Borrador: motivos de descarte para la PARTE DE IA
   const items = [
-    ["js", "Hay IA en el navegador (TensorFlow.js, ONNX), pero con muchos menos modelos de visión y OCR listos. Se queda para la app."],
-    ["r", "Muy bueno en estadística, pero pobre en visión por computador y en servir modelos por API."],
-    ["cpp", "Rendimiento máximo, pero desarrollar y mantener es mucho más costoso. Útil solo si se llevara a hardware embebido."],
-    ["php", "Prácticamente sin ecosistema de IA ni de visión."],
-    ["java", "Viable (DJL), pero con menos modelos, tutoriales y comunidad de IA que Python."],
+    ["js", "Hay IA en el navegador (TensorFlow.js, ONNX), pero con muchos menos modelos de visión y OCR listos. Se queda para la app.", ["tfjs", "ort-web"]],
+    ["r", "Muy bueno en estadística, pero pobre en visión por computador y en servir modelos por API.", ["r-about", "torch-r", "plumber"]],
+    ["cpp", "Rendimiento máximo, pero desarrollar y mantener es mucho más costoso. Útil solo si se llevara a hardware embebido.", ["libtorch"]],
+    ["php", "Prácticamente sin ecosistema de IA ni de visión.", ["rubix"]],
+    ["java", "Viable (DJL), pero con menos modelos, tutoriales y comunidad de IA que Python.", ["djl"]],
   ];
-  $("#discard").innerHTML = items.map(([id, t]) =>
-    `<div class="discard__item" style="--c: var(${langById[id].color})"><b>❌ ${langById[id].name}</b>${t}</div>`).join("");
+  $("#discard").innerHTML = items.map(([id, t, src]) =>
+    `<div class="discard__item" style="--c: var(${langById[id].color})"><b>❌ ${langById[id].name}</b>${t} ${cite(src)}</div>`).join("");
 })();
 
 /* ---------- 5. Paso 3 ---------- */
 (function flow() {
-  // ✏️ Paso 3 (Julen): flujo de 8 etapas, desde que la persona llega hasta el resultado
+  // ✏️ Paso 3 (Julen): flujo de 10 etapas, desde que el coche llega a la barrera hasta que sale.
+  // kind: "ia" = parte de IA · "app" = reglas y base de datos · "humano" = decide una persona
+  const KIND = { ia: ["🤖 IA", "--py"], app: ["🖥️ Aplicación", "--js"], humano: ["🧑‍⚖️ Humano", "--warn"] };
   const stages = [
-    { ico: "🧑‍💻", t: "Acceso", d: "El operador del parking abre la aplicación web por primera vez y ve el panel para subir una imagen de prueba.", tags: ["HTML/CSS/JS"] },
-    { ico: "📤", t: "Subida", d: "Selecciona una imagen ficticia y la cámara/configuración. El navegador la envía al servidor.", tags: ["formulario", "JSON"] },
-    { ico: "🛡️", t: "Validación", d: "Se comprueba tipo de fichero, tamaño y que la imagen no esté dañada. Si falla → mensaje de error y fin.", tags: ["control de errores"] },
-    { ico: "🖼️", t: "Preparación", d: "Redimensionar, normalizar y mejorar contraste para que el modelo reciba lo que espera.", tags: ["OpenCV"] },
-    { ico: "🎯", t: "Detección", d: "El modelo ya entrenado localiza la matrícula en la imagen (bounding box + confianza).", tags: ["YOLO", "modelo preentrenado"] },
-    { ico: "🔤", t: "Lectura OCR", d: "Se recorta la región y un OCR lee los caracteres; se comprueba que siga el formato de matrícula.", tags: ["OCR", "regex"] },
-    { ico: "🧑‍⚖️", t: "Revisión humana", d: "Si la confianza está por debajo del umbral o el formato no encaja, una persona valida o corrige la lectura.", tags: ["human-in-the-loop"], human: true },
-    { ico: "🧾", t: "Resultado", d: "Se muestra la matrícula, la confianza y se guarda un registro de prueba (sin la imagen original).", tags: ["JSON/CSV", "retención mínima"] },
+    { ico: "🚗", t: "Llegada a la entrada", kind: "app", d: "Un coche se detiene ante la barrera de entrada. Un sensor detecta el vehículo y la cámara de entrada toma una imagen (en el estudio: imágenes de prueba).", tags: ["sensor", "cámara de entrada"] },
+    { ico: "🖼️", t: "Validar y preparar", kind: "app", d: "Se comprueba que la imagen es válida (formato, tamaño, no dañada) y se prepara: redimensionar, normalizar y mejorar el contraste para que el modelo reciba lo que espera.", tags: ["OpenCV", "control de errores"] },
+    { ico: "🎯", t: "Leer la matrícula", kind: "ia", d: "El detector localiza la matrícula en la imagen y el OCR lee los caracteres. Se comprueba el formato (4 números + 3 letras) y la confianza de la lectura.", tags: ["YOLO", "OCR", "modelo preentrenado"] },
+    { ico: "⚠️", t: "¿Lectura fiable?", kind: "humano", human: true, d: "Si la confianza es menor que 0,80 o el formato no encaja, la barrera no decide sola: el personal del parking comprueba la matrícula por interfono o cámara y la corrige.", tags: ["umbral 0,80", "interfono"] },
+    { ico: "📝", t: "Registrar la entrada", kind: "app", d: "Se guarda la matrícula y la hora de entrada (no la imagen) y se abre la barrera. Todos los coches entran igual; el perfil se decide al salir.", tags: ["BBDD movimientos", "retención mínima"] },
+    { ico: "🛒", t: "Validación en caja", kind: "humano", human: true, optional: true, d: "Solo si el conductor compra en el supermercado: al cobrar, el cajero apunta la matrícula en el TPV y el sistema la asocia al id del ticket de esa compra.", tags: ["TPV", "matrícula + id ticket", "opcional"] },
+    { ico: "🚙", t: "Llegada a la salida", kind: "ia", d: "La cámara de salida toma una imagen y se repite la lectura (etapas 2–4): detección, OCR y comprobación de confianza, con revisión humana si hace falta.", tags: ["cámara de salida", "mismo modelo"] },
+    { ico: "🔎", t: "Clasificar el coche", kind: "app", d: "Se consulta la base de datos: ¿la matrícula está en el registro de empleados? → empleado. Si no, ¿tiene hoy un ticket asociado? → cliente. Si no → público.", tags: ["BBDD empleados", "BBDD tickets"] },
+    { ico: "💶", t: "Calcular el importe", kind: "app", d: "Con la hora de entrada y la de salida se calcula la estancia. Empleado: 0 €. Cliente: gratis los primeros 90 min y después solo el exceso. Público: 2,40 €/h con tope de 18 €/día.", tags: ["reglas de tarifa"] },
+    { ico: "🧾", t: "Resultado y salida", kind: "app", d: "Si hay importe, el conductor paga en la barrera o en el cajero; después se abre la barrera. Se guarda un registro mínimo: matrícula, perfil, horas, importe e id del ticket. Las reclamaciones las resuelve el personal.", tags: ["barrera", "pago", "registro JSON/CSV"] },
   ];
   const ol = $("#flow");
-  ol.innerHTML = stages.map((s, k) => `<li data-k="${k}" class="${s.human ? "is-human" : ""}"><span class="f-ico">${s.ico}</span>${s.t}</li>`).join("");
+  ol.innerHTML = stages.map((s, k) => `<li data-k="${k}" class="${s.human ? "is-human" : ""}${s.optional ? " is-optional" : ""}" style="--kc: var(${KIND[s.kind][1]})">
+    <span class="f-ico">${s.ico}</span>${s.t}<span class="f-kind">${KIND[s.kind][0]}</span></li>`).join("");
   let cur = 0; let timer = null;
 
   function go(k) {
@@ -642,8 +842,8 @@ const JUSTIF = {
       li.classList.toggle("is-current", j === cur);
     });
     const s = stages[cur];
-    $("#flowDetail").innerHTML = `<div class="big">${s.ico}</div><div><h4>${cur + 1}. ${s.t}</h4><p>${s.d}</p>
-      ${s.human ? '<p class="human-note">⚠️ Aquí interviene la revisión humana.</p>' : ""}
+    $("#flowDetail").innerHTML = `<div class="big">${s.ico}</div><div><h4>${cur + 1}. ${s.t} <span class="f-kind f-kind--big" style="--kc: var(${KIND[s.kind][1]})">${KIND[s.kind][0]}</span></h4><p>${s.d}</p>
+      ${s.human ? '<p class="human-note">⚠️ Aquí interviene una persona.</p>' : ""}
       <div class="tagline">${s.tags.map((t) => `<span>${t}</span>`).join("")}</div></div>`;
     $("#flowCounter").textContent = `Etapa ${cur + 1} / ${stages.length}`;
   }
@@ -652,7 +852,7 @@ const JUSTIF = {
     if (timer) return stop();
     $("#flowPlay").textContent = "⏸ Pausar";
     if (cur === stages.length - 1) go(0);
-    timer = setInterval(() => { if (cur === stages.length - 1) return stop(); go(cur + 1); }, 1800);
+    timer = setInterval(() => { if (cur === stages.length - 1) return stop(); go(cur + 1); }, 2200);
   });
   $("#flowPrev").addEventListener("click", () => { stop(); go(cur - 1); });
   $("#flowNext").addEventListener("click", () => { stop(); go(cur + 1); });
@@ -664,20 +864,20 @@ const JUSTIF = {
   // ✏️ Paso 3 (Julen): componentes antes / después de integrar el modelo
   const data = {
     antes: [
-      ["Recogida de datos", "Buscar un dataset abierto de matrículas o generar imágenes sintéticas. Sin personas identificables.", "datasets abiertos"],
-      ["Anotación", "Marcar la caja de cada matrícula y su texto correcto.", "XML (Pascal VOC) / JSON"],
-      ["Preparación", "Limpiar, redimensionar y dividir en entrenamiento / validación / test.", "pandas · OpenCV"],
-      ["Elegir modelo", "Seleccionar un detector y un OCR preentrenados en lugar de crear uno desde cero.", "YOLO · EasyOCR"],
-      ["Ajuste y evaluación", "Ajuste fino con nuestras imágenes y medir precisión, errores y confianza.", "PyTorch · métricas"],
-      ["Exportar", "Guardar el modelo en un formato que la aplicación pueda cargar.", ".pt · ONNX"],
+      ["Recoger imágenes de prueba", "Dataset abierto de matrículas o imágenes sintéticas de entrada y salida: de día, de noche, con lluvia y en ángulo. Sin personas identificables.", "datasets abiertos"],
+      ["Anotar", "Marcar la caja de cada matrícula y su texto correcto para poder medir si el modelo acierta.", "XML (Pascal VOC) / JSON"],
+      ["Preparar los datos", "Limpiar, redimensionar y dividir en entrenamiento / validación / test.", "pandas · OpenCV"],
+      ["Elegir modelos preentrenados", "Un detector de objetos y un OCR ya entrenados, en lugar de crearlos desde cero.", "YOLO · EasyOCR"],
+      ["Ajustar y evaluar", "Ajuste fino con matrículas españolas; medir el % de matrículas bien leídas y elegir el umbral de confianza (0,80).", "PyTorch · métricas"],
+      ["Preparar la aplicación", "Exportar el modelo y crear las bases de datos de prueba: empleados, tickets, movimientos y tarifas.", ".pt / ONNX · BBDD"],
     ],
     despues: [
-      ["Cargar modelo", "El servicio de IA carga el modelo una vez al arrancar.", "Python · FastAPI"],
-      ["Recibir petición", "La app (Node.js) envía la imagen y la configuración al servicio de IA.", "HTTP · JSON"],
-      ["Inferencia", "Preprocesado → detección → OCR → comprobación de formato.", "OpenCV · YOLO · OCR"],
-      ["Decidir según umbral", "Confianza alta → registro. Baja → aviso de revisión humana.", "if / else"],
-      ["Responder y registrar", "Devolver JSON con el resultado y guardar un registro mínimo.", "JSON · CSV"],
-      ["Monitorizar", "Revisar errores y correcciones humanas para mejorar el modelo en el futuro.", "logs"],
+      ["Cargar el modelo", "El servicio de IA carga el detector y el OCR una sola vez al arrancar.", "Python · FastAPI"],
+      ["Recibir la imagen", "Cuando una cámara detecta un coche, la aplicación envía la imagen al servicio de IA.", "HTTP · JSON"],
+      ["Leer la matrícula", "Preparar → detectar → OCR → comprobar formato y confianza. Devuelve matrícula + confianza.", "OpenCV · YOLO · OCR"],
+      ["Decidir según el umbral", "Confianza ≥ 0,80 → sigue sola. Menor → aviso al personal para revisión humana.", "if / else"],
+      ["Aplicar las reglas", "Entrada: registrar. Salida: clasificar (empleado / cliente / público) y calcular el importe.", "Node.js · BBDD"],
+      ["Registrar y mejorar", "Guardar un registro mínimo y revisar las correcciones humanas para mejorar el modelo más adelante.", "JSON · CSV · logs"],
     ],
   };
   const render = (k) => {
@@ -694,48 +894,54 @@ const JUSTIF = {
 /* Pseudocódigo: cada línea con su tipo (in/fn/if/out) para colorear la leyenda.
    ✏️ Julen: debe coincidir con pseudocodigo.ipynb */
 const PSEUDO = [
-  ["", "# Matriculator · pseudocódigo (NO es código ejecutable)"],
+  ["", "# Matriculator · pseudocódigo de la SALIDA del parking (NO es código ejecutable)"],
   ["", "UMBRAL_CONFIANZA = 0.80"],
-  ["", "FORMATOS = ['.jpg', '.png']"],
+  ["", "MIN_GRATIS_CLIENTE = 90      # minutos"],
+  ["", "TARIFA_HORA = 2.40           # €/hora"],
+  ["", "TOPE_DIARIO = 18.00          # €"],
   ["", ""],
-  ["fn", "función validar_imagen(ruta):"],
-  ["if", "    si extensión(ruta) no está en FORMATOS: lanzar Error('Formato no válido')"],
-  ["if", "    si tamaño(ruta) > 5 MB: lanzar Error('Imagen demasiado grande')"],
-  ["fn", "    devolver leer_imagen(ruta)"],
-  ["", ""],
-  ["fn", "función preparar(imagen):"],
-  ["fn", "    imagen = redimensionar(imagen, 640, 640)"],
-  ["fn", "    devolver normalizar(imagen)"],
-  ["", ""],
-  ["fn", "función leer_matricula(imagen, detector, ocr):"],
-  ["fn", "    cajas = detector.detectar(imagen)"],
+  ["fn", "función leer_matricula(imagen, detector, ocr):          # parte de IA"],
+  ["if", "    si no es_imagen_valida(imagen): lanzar Error('Imagen no válida')"],
+  ["fn", "    cajas = detector.detectar(preparar(imagen))"],
   ["if", "    si cajas está vacío: devolver None, 0.0"],
   ["fn", "    mejor = caja con mayor confianza de cajas"],
-  ["fn", "    texto = ocr.leer(recortar(imagen, mejor))"],
-  ["fn", "    devolver limpiar(texto), mejor.confianza"],
+  ["fn", "    texto = limpiar(ocr.leer(recortar(imagen, mejor)))"],
+  ["fn", "    devolver texto, mejor.confianza"],
   ["", ""],
-  ["", "# ---- Programa principal ----"],
-  ["fn", "detector = cargar_modelo('modelos/detector.pt')"],
-  ["fn", "ocr = cargar_ocr(idioma='es')"],
-  ["in", "entrada = leer_json('data/entrada_prueba.json')   # ruta imagen + cámara"],
+  ["fn", "función clasificar(matricula, dia):                      # reglas"],
+  ["if", "    si matricula en bd.empleados: devolver 'EMPLEADO', None"],
+  ["fn", "    ticket = bd.tickets.buscar(matricula, dia)"],
+  ["if", "    si ticket: devolver 'CLIENTE', ticket.id"],
+  ["fn", "    devolver 'PUBLICO', None"],
   ["", ""],
+  ["fn", "función calcular_importe(perfil, minutos):"],
+  ["if", "    si perfil == 'EMPLEADO': devolver 0"],
+  ["if", "    si perfil == 'CLIENTE': minutos = max(0, minutos - MIN_GRATIS_CLIENTE)"],
+  ["fn", "    devolver min(TOPE_DIARIO, minutos / 60 * TARIFA_HORA)"],
+  ["", ""],
+  ["", "# ---- Programa principal: un coche llega a la salida ----"],
+  ["in", "evento = recibir_evento('camara_salida')      # imagen + cámara + hora"],
   ["if", "intentar:"],
-  ["fn", "    imagen = preparar(validar_imagen(entrada.ruta_imagen))"],
-  ["fn", "    matricula, conf = leer_matricula(imagen, detector, ocr)"],
-  ["if", "    si matricula es None o conf < UMBRAL_CONFIANZA o no cumple formato:"],
-  ["out", "        resultado = {estado: 'REVISION_HUMANA', confianza: conf}"],
-  ["if", "    si no:"],
-  ["out", "        resultado = {estado: 'OK', matricula: matricula, confianza: conf}"],
+  ["fn", "    matricula, conf = leer_matricula(evento.imagen, detector, ocr)"],
+  ["if", "    si matricula es None o conf < UMBRAL_CONFIANZA:"],
+  ["out", "        avisar_personal(evento)                 # revisión humana"],
+  ["in", "        matricula = esperar_confirmacion_humana()"],
+  ["fn", "    entrada = bd.movimientos.ultima_entrada(matricula)"],
+  ["if", "    si entrada es None: lanzar Error('Sin entrada registrada')"],
+  ["fn", "    perfil, id_ticket = clasificar(matricula, hoy())"],
+  ["fn", "    minutos = minutos_entre(entrada.hora, evento.hora)"],
+  ["fn", "    importe = calcular_importe(perfil, minutos)"],
+  ["if", "    si importe > 0: esperar_pago(importe)"],
+  ["out", "    abrir_barrera()"],
+  ["out", "    resultado = {matricula, perfil, id_ticket, minutos, importe, estado: 'OK'}"],
   ["if", "capturar Error como e:"],
+  ["out", "    avisar_personal(evento, e.mensaje)"],
   ["out", "    resultado = {estado: 'ERROR', mensaje: e.mensaje}"],
-  ["", ""],
-  ["out", "resultado.fecha = ahora(); resultado.camara = entrada.camara_id"],
-  ["out", "guardar_registro('registros.csv', resultado)   # sin guardar la imagen"],
-  ["out", "mostrar(resultado)"],
+  ["out", "guardar_registro('movimientos.csv', resultado)   # sin guardar la imagen"],
 ];
 
 (function pseudo() {
-  const KW = /\b(función|devolver|si no|si|intentar|capturar|lanzar|como|no está en|está vacío|o|es|None|en)\b/g;
+  const KW = /\b(función|devolver|si no|si|intentar|capturar|lanzar|como|no|está vacío|o|es|None|en)\b/g;
   const hl = (line) => {
     let h = escapeHTML(line);
     const ci = h.indexOf("#");
@@ -870,4 +1076,74 @@ const PSEUDO = [
       <div class="tl-seg" style="left:${(s / max) * 100}%; width:${(d / max) * 100}%; --c: var(${who[w][1]})">${d}h</div>
     </div></div>`).join("") +
     `<div class="tl-legend">${Object.values(who).map(([n, c]) => `<span><i style="--c: var(${c})"></i>${n}</span>`).join("")}<span>· eje en horas acumuladas (≈ 9 h por persona)</span></div>`;
+})();
+
+/* ---------- Fuentes: citas estáticas, sección y navegación ---------- */
+(function fuentes() {
+  // Citas escritas en el HTML: <sup class="cite" data-src="id1,id2"></sup>
+  $$("sup.cite[data-src]").forEach((s) => { s.outerHTML = cite(s.dataset.src); });
+
+  // Tarjetas de la sección de fuentes
+  const grid = $("#srcGrid");
+  if (!grid) return;
+  grid.innerHTML = SOURCES.map((s, i) => {
+    const [cat, color] = SRC_CATS[s.cat];
+    let domain = "";
+    try { domain = new URL(s.url).hostname.replace(/^www\./, ""); } catch { /* url no válida */ }
+    return `<article class="src reveal is-visible" id="src-${s.id}" data-cat="${s.cat}" style="--c: var(${color})">
+      <span class="src__n">${i + 1}</span>
+      <div class="src__body">
+        <span class="src__cat">${cat}</span>
+        <h4><a href="${s.url}" target="_blank" rel="noopener">${escapeHTML(s.title)} <span aria-hidden="true">↗</span></a></h4>
+        <p class="src__org">${escapeHTML(s.org)}</p>
+        <div class="src__meta"><span>🔗 ${domain}</span><span>📍 Citada en ${s.used}</span></div>
+      </div>
+    </article>`;
+  }).join("");
+
+  // Filtros por categoría
+  const counts = SOURCES.reduce((a, s) => ((a[s.cat] = (a[s.cat] || 0) + 1), a), {});
+  $("#srcFilter").innerHTML = `<button class="is-active" data-cat="all">Todas <b>${SOURCES.length}</b></button>` +
+    Object.entries(SRC_CATS).map(([k, [n, c]]) => `<button data-cat="${k}" style="--c: var(${c})"><i></i>${n} <b>${counts[k] || 0}</b></button>`).join("");
+  // Solo se muestran las primeras VISIBLES fuentes; el botón «Ver más» despliega el resto
+  const VISIBLES = 3;
+  const more = $("#srcMore");
+  let current = "all", expanded = false;
+  const render = () => {
+    const match = $$("#srcGrid .src").filter((c) => current === "all" || c.dataset.cat === current);
+    $$("#srcGrid .src").forEach((c) => (c.hidden = true));
+    match.forEach((c, i) => {
+      c.hidden = !expanded && i >= VISIBLES;
+      if (!c.hidden && i >= VISIBLES) { c.classList.remove("is-in"); void c.offsetWidth; c.classList.add("is-in"); }
+    });
+    const rest = match.length - VISIBLES;
+    more.hidden = rest <= 0;
+    more.innerHTML = expanded ? "Ver menos <span>▴</span>" : `Ver más… <b>+${rest}</b> <span>▾</span>`;
+    more.setAttribute("aria-expanded", expanded);
+  };
+  const filter = (cat, open = expanded) => {
+    current = cat; expanded = open;
+    $$("#srcFilter button").forEach((b) => b.classList.toggle("is-active", b.dataset.cat === cat));
+    render();
+  };
+  $$("#srcFilter button").forEach((b) => b.addEventListener("click", () => filter(b.dataset.cat, false)));
+  more.addEventListener("click", () => {
+    expanded = !expanded;
+    render();
+    if (!expanded) $("#fuentes").scrollIntoView({ behavior: "smooth", block: "start" });
+  });
+  render();
+
+  // Clic en una cita [n] → baja a la fuente y la resalta
+  document.addEventListener("click", (e) => {
+    const a = e.target.closest(".cite a[data-src]");
+    if (!a) return;
+    e.preventDefault();
+    e.stopPropagation();
+    const card = document.getElementById("src-" + a.dataset.src);
+    if (!card) return;
+    if (card.hidden) filter("all", true);
+    card.scrollIntoView({ behavior: "smooth", block: "center" });
+    card.classList.remove("is-flash"); void card.offsetWidth; card.classList.add("is-flash");
+  }, true);
 })();
